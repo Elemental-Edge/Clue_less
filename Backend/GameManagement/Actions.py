@@ -4,7 +4,8 @@ from abc import ABC, abstractmethod
 import Backend
 from Backend.GameManagement.player import Player
 from Backend.GameManagement.player_turn import Player_Turn
-from Backend.GameManagement.space import space
+from Backend.GameManagement.gameboardGrouping import game_board, game_processor, space
+from Backend.cardGroupings import Card, Deck, Hand, CardType
 
 class Actions():
     p: Player
@@ -52,14 +53,14 @@ class Accusation(Actions):
         suspectCorrect = False
         weaponCorrect = False
         roomCorrect = False
-        if (nextCard.getCardType() == Suspect):
+        if nextCard.getCardType() == CardType.SUSPECT:
             if self.suspect == nextCard.getCardName():
                 suspectCorrect = True
-        else if nextCard.getCardType() == Weapon:
+        elif nextCard.getCardType() == CardType.WEAPON:
             if self.weapon == nextCard.getCardName():
                 weaponCorrect = True
-        else if nextCard.getCardType() == Room:
-            if self.room = nextCard.getCardName():
+        elif nextCard.getCardType() == CardType.ROOM:
+            if self.room == nextCard.getCardName():
                 roomCorrect = True
 
         if (suspectCorrect and weaponCorrect and roomCorrect):
@@ -102,29 +103,24 @@ class Suggestion(Actions):
                 if curr_card == self.suspect or curr_card == self.weapon or curr_card == self.room:
                     disproveCards.append(curr_card)
 
-            if disproveCards is empty:
+            if not disproveCards:
                 return False
             else:
                 # have them select one
                 # wait for them to accept then broadcast event (not card)
+                disproveFinished = True
 
         self.pt.hasMadeSuggestion = True
 
 
     def create_suggestion(self, suspect: str, weap: str, room_suggest: str):
-        # output to GUI/client list of options for suspect, have them choose one
-
         self.suspect = suspect
-
-        # output to GUI/client list of options for weapon, have them choose one
-
         self.weapon = weap
-
-        # output to GUI/client list of options for room, have them choose one
-
         self.room = room_suggest
 
         # move player and weapon tokens to the room suggested
+        Player susp = game_processor.get_player_associated_with_character(self.suspect)
+        game_processor.move_player(susp, self.room)
 
 
 class Move(Actions):
