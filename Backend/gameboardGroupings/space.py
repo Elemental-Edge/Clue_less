@@ -2,9 +2,11 @@ from __future__ import annotations
 from enum import Enum, auto
 from typing import List
 from GameManagement.player import Player
+from cardGroupings.Card import CardType, Card
 
 SPACE_NAME = ""
 CREATE_BIDIRECTIONAL_CONN = True
+CREATE_BIDIRECTION_SECRET = False
 
 
 class SpaceType(Enum):
@@ -107,8 +109,66 @@ class Space:
             current_index = -1
         return current_index
 
-
     def clear_players(self):
         """Clears players list in the space and sets player count to 0"""
         self._players.clear()
         self._player_count = 0
+
+
+class Room(Space):
+    """Represents a standard room on a game board"""
+    def __init__(self, name: str):
+        super().__init__(name)
+        self._space_type: SpaceType = SpaceType.ROOM
+        self._secret_passages: List[Space] = []
+        self._weapons: List[Card] = []
+        self._weapon_count: int = 0
+    
+    def get_secret_passages(self) -> List[Space]:
+        return self._secret_passages
+    
+    def get_weapons(self) -> List[Card] | None:
+        """Returns a list of weapons in the room or None, if no
+           weapon is found in the room"""
+        return self._weapons
+    
+    def add_secret_passage(self, secret_passage: Space, create_bidirectional: CREATE_BIDIRECTION_SECRET):
+        """Adds a secrete passage to the room"""
+        if create_bidirectional:
+            if isinstance(secret_passage, Room):
+                secret_passage._secret_passages.append(self)
+
+        self._secret_passages.append(secret_passage)
+    
+    def add_weapon(self, weapon: Card):
+        """Adds a weapon to the room"""
+        if weapon.get_card_type() == CardType.WEAPON:
+            self._weapons.append(weapon)
+
+    def remove_weapon(self, weapon_name: str) -> Card | None:
+        """Removes a weapon from the room and returns it"""
+        weapon_index = self.get_weapon_index(weapon_name)
+        weapon = None
+        if weapon_index != -1:
+            weapon = self._weapons.pop(weapon_index)
+        return weapon
+    
+    def get_weapon_index(self, weapon_name: str) -> int:
+        """Gets a player index based on the playerID"""
+        current_index = 0
+        is_found = False
+        while current_index < self._weapon_count and not is_found:
+            if self._weapons[current_index].get_name == weapon_name:
+                is_found = True
+            else:
+                current_index += 1
+        if not is_found:
+            current_index = -1
+        return current_index
+
+    def has_secret_passage(self):
+        """Returns True if the Room has a secret passage"""
+        return bool(self._secret_passage)
+    
+    
+
