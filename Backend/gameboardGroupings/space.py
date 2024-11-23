@@ -95,17 +95,15 @@ class Space:
                 break
         return in_room
 
-
-    def remove_player(self, player_id: int) -> bool:
+    def remove_player(self, player_id: int) -> Player | None:
         """Removes a player from the space, based on the player's associated ID
            number."""
         player_index = self.get_player_index(player_id)
-        is_success = False
+        player = None
         if player_index != -1:
-            del self._players[player_index]
+            player = self._players.pop(player_index)
             self._player_count -= 1
-            is_success = True
-        return is_success
+        return player
     
     def get_player_index(self, player_id: int) -> int:
         """Gets a player index based on the playerID"""
@@ -124,6 +122,24 @@ class Space:
         """Clears players list in the space and sets player count to 0"""
         self._players.clear()
         self._player_count = 0
+    
+    def get_player_by_id(self, player_id: int) -> Player | None:
+        """Gets the player associated with a player id"""
+        found_player = None
+        for player in self._players:
+            if player.playerID == player_id:
+                found_player = player
+                break
+        return found_player
+    
+    def get_player_by_character(self, character_name: str) -> Player | None:
+        """Gets the player associated with a specific character name"""
+        found_player = None
+        for player in self._players:
+            if player.character == character_name:
+                found_player = player
+                break
+        return found_player
 
 
 class Room(Space):
@@ -136,6 +152,7 @@ class Room(Space):
         self._weapon_count: int = 0
     
     def get_secret_passages(self) -> List[Space]:
+        """Returns a list of secret passages"""
         return self._secret_passages
     
     def get_weapons(self) -> List[Card] | None:
@@ -189,17 +206,15 @@ class Hallway(Space):
     def __init__(self, name: str = SPACE_NAME):
         super().__init__(SPACE_NAME)  # Hallways don't need names
         self.space_type = SpaceType.HALLWAY
-        self._must_leave = False
     
     def is_empty(self) -> bool:
         """Returns True if no players are in the hallway"""
         return self._player_count == 0
     
-    def add_player(self, player: Player):
+    def add_player(self, player: Player) -> bool:
         """Overrides the base class function to add a player. Only adds
            a player if the hallway is empty."""
+        is_success = False
         if self.is_empty():
-            super().add_player(player)
-        else:
-            connected_rooms = [space.name for space in self._adjacent_spaces]
-            raise ValueError(f"Cannot add player:'{player.playerName}' to the hallway:'{self._name} between {connected_rooms}")
+            is_success = super().add_player(player)
+        return is_success
