@@ -14,7 +14,6 @@ class SpaceType(Enum):
     """Enum that Represents the different types of spaces on the game board."""
 
     ROOM = auto()
-    CORNER_ROOM = auto()
     HALLWAY = auto()
 
     def __str__(self) -> str:
@@ -31,17 +30,23 @@ class Space:
         self._space_type: SpaceType = None
         self._players: List[Player] = []
         self._adjacent_spaces: List[Space] = []
+        # represents all spaces adjacent to the space
         self._player_count: int = 0
+        # stores player count to prevent constant calls to len() to get _players
+        # list length
 
     def __eq__(self, other: object) -> bool:
         """Overloads the equal operator and establishes that two spaces are
         equal if both spaces have the same space type, name (rooms), or
         same adjacent spaces(hallways)."""
         if not isinstance(other, Space):
+            # Returns False, if compared object is not of type Space
             return False
         if self._space_type != other._space_type:
+            # Returns False, if both Space types are not the same
             return False
         if self._space_type == SpaceType.HALLWAY:
+            # Returns True, if _adjacent_space are exactly the same.
             return self._adjacent_spaces == other._adjacent_spaces
         return self._name == other._name
 
@@ -63,17 +68,22 @@ class Space:
 
     def add_adjacent_space(self, space: Space, create_bidirectional: bool = CREATE_BIDIRECTIONAL_CONN) -> None:
         """Adds a space to adjacent spaces list and creates reciprocal connection by default""" 
-        if create_bidirectional:
-            space._adjacent_spaces.append(self)
+        if space is not self:
+            if create_bidirectional:
+                space._adjacent_spaces.append(self)
 
-        self._adjacent_spaces.append(space)
-    
-    def add_player(self, player: Player):
+            self._adjacent_spaces.append(space)
+        else:
+            raise ValueError(f"{space._name} cannot be adjacent to itself")
+        
+    def add_player(self, player: Player) -> bool:
         """Adds a player to the space"""
+        is_success = False
         if not self.is_player_in_room(player):
             self._players.append(player)
             self._player_count += 1
-
+            is_success = True
+        return is_success
     
     def is_player_in_room(self, player_id: int) -> bool:
         """Returns True if the player's associated ID is found in the players
@@ -145,6 +155,8 @@ class Room(Space):
         """Adds a weapon to the room"""
         if weapon.get_card_type() == CardType.WEAPON:
             self._weapons.append(weapon)
+        else:
+            raise ValueError("Card is not type Weapon")
 
     def remove_weapon(self, weapon_name: str) -> Card | None:
         """Removes a weapon from the room and returns it"""
@@ -171,14 +183,6 @@ class Room(Space):
         """Returns True if the Room has a secret passage"""
         return bool(self._secret_passage)
     
-
-class CornerRoom(Room):
-    """Represents a corner room in the game."""
-    
-    def __init__(self, name: str):
-        super().__init__(name)
-        self.space_type = SpaceType.CORNER_ROOM
-
 
 class Hallway(Space):
     """Represents a hallway space in the game. Can only hold one player"""
