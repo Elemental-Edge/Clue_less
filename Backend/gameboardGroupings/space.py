@@ -7,6 +7,7 @@ from cardGroupings.Card import CardType, Card
 SPACE_NAME = ""
 CREATE_BIDIRECTIONAL_CONN = True
 CREATE_BIDIRECTION_SECRET = False
+MAX_HALLWAY_OCCUPANTS = 1
 
 
 class SpaceType(Enum):
@@ -170,5 +171,31 @@ class Room(Space):
         """Returns True if the Room has a secret passage"""
         return bool(self._secret_passage)
     
-    
 
+class CornerRoom(Room):
+    """Represents a corner room in the game."""
+    
+    def __init__(self, name: str):
+        super().__init__(name)
+        self.space_type = SpaceType.CORNER_ROOM
+
+
+class Hallway(Space):
+    """Represents a hallway space in the game. Can only hold one player"""
+    def __init__(self, name: str = SPACE_NAME):
+        super().__init__(SPACE_NAME)  # Hallways don't need names
+        self.space_type = SpaceType.HALLWAY
+        self._must_leave = False
+    
+    def is_empty(self) -> bool:
+        """Returns True if no players are in the hallway"""
+        return self._player_count == 0
+    
+    def add_player(self, player: Player):
+        """Overrides the base class function to add a player. Only adds
+           a player if the hallway is empty."""
+        if self.is_empty():
+            super().add_player(player)
+        else:
+            connected_rooms = [space.name for space in self._adjacent_spaces]
+            raise ValueError(f"Cannot add player:'{player.playerName}' to the hallway:'{self._name} between {connected_rooms}")
