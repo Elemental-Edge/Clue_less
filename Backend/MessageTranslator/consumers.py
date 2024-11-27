@@ -1,6 +1,9 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
+from channels.generic.websocket import WebsocketConsumer
+from django.db import transaction
+
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     """
