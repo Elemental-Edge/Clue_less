@@ -6,7 +6,7 @@ from cardGroupings.Card import CardType, Card
 
 SPACE_NAME = ""
 CREATE_BIDIRECTIONAL_CONN = True
-CREATE_BIDIRECTION_SECRET = False
+CREATE_BIDIRECTION_SECRET = True
 MAX_HALLWAY_OCCUPANTS = 1
 
 
@@ -14,6 +14,7 @@ class SpaceType(Enum):
     """Enum that Represents the different types of spaces on the game board."""
 
     ROOM = auto()
+    CornerRoom = auto()
     HALLWAY = auto()
 
     def __str__(self) -> str:
@@ -147,26 +148,13 @@ class Room(Space):
     def __init__(self, name: str):
         super().__init__(name)
         self._space_type: SpaceType = SpaceType.ROOM
-        self._secret_passages: List[Space] = []
         self._weapons: List[Card] = []
         self._weapon_count: int = 0
-    
-    def get_secret_passages(self) -> List[Space]:
-        """Returns a list of secret passages"""
-        return self._secret_passages
     
     def get_weapons(self) -> List[Card] | None:
         """Returns a list of weapons in the room or None, if no
            weapon is found in the room"""
         return self._weapons
-    
-    def add_secret_passage(self, secret_passage: Space, create_bidirectional: CREATE_BIDIRECTION_SECRET):
-        """Adds a secrete passage to the room"""
-        if create_bidirectional:
-            if isinstance(secret_passage, Room):
-                secret_passage._secret_passages.append(self)
-
-        self._secret_passages.append(secret_passage)
     
     def add_weapon(self, weapon: Card):
         """Adds a weapon to the room"""
@@ -196,10 +184,29 @@ class Room(Space):
             current_index = -1
         return current_index
 
+
+class CornerRoom(Room):
+    def __init__(self, name: str):
+        super().__init__(name)
+        self._secret_passages: List[Space] = []
+        self._space_type = SpaceType.CornerRoom
+
+    def get_secret_passages(self) -> List[Space]:
+        """Returns a list of secret passages"""
+        return self._secret_passages
+        
+    def add_secret_passage(self, secret_passage: Space, create_bidirectional: CREATE_BIDIRECTION_SECRET):
+        """Adds a secrete passage to the room"""
+        if create_bidirectional:
+            if isinstance(secret_passage, Room):
+                secret_passage._secret_passages.append(self)
+
+        self._secret_passages.append(secret_passage)
+    
     def has_secret_passage(self):
         """Returns True if the Room has a secret passage"""
         return bool(self._secret_passage)
-    
+
 
 class Hallway(Space):
     """Represents a hallway space in the game. Can only hold one player"""
