@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
-from GameManagement.models import GameRoom
+from Backend.GameManagement.models import GameRoom
 from channels.generic.websocket import WebsocketConsumer
 from django.db import transaction
 
@@ -71,6 +71,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
 
 class GameRoomConsumer(WebsocketConsumer):
+    pass
     def connect(self):
         self.user = self.scope["user"]
         self.game_id = self.scope["url_route"]["kwargs"]["game_id"]
@@ -96,15 +97,15 @@ class GameRoomConsumer(WebsocketConsumer):
         )
 
         # Get or create game processor
-        self.game_manager = GameManager.get_instance()
-        self.game_processor = self.game_manager.get_game(str(self.game_id))
+        #self.game_manager = GameManager.get_instance()
+        #self.game_processor = self.game_manager.get_game(str(self.game_id))
         
-        if not self.game_processor:
-            if self.is_host():
-                self.game_processor = self.game_manager.create_game(self.game_room)
-            else:
-                self.close()
-                return
+        #if not self.game_processor:
+        #    if self.is_host():
+        #        #self.game_processor = self.game_manager.create_game(self.game_room)
+        #    else:
+        #        self.close()
+        #        return
 
         # Add player to game
         self.add_player_to_game()
@@ -267,15 +268,11 @@ class GameRoomConsumer(WebsocketConsumer):
             self.game_room.player_count = max(0, self.game_room.player_count - 1)
             self.game_room.save()
             if self.game_room.player_count == 0:
-                GameManager.get_instance().remove_game(str(self.game_id))
+                pass
+                #GameRoom.get_instance().remove_game(str(self.game_id))
 
     def update_user_stats(self, won: bool):
-        stats, _ = UserStats.objects.get_or_create(user=self.user)
-        if won:
-            stats.add_win()
-        else:
-            stats.add_loss()
-        stats.calculate_session_time()
+        pass
 
     def send_game_state(self):
         """Send current game state to the connecting player"""
