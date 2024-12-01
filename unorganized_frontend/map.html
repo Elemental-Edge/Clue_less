@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draggable Textured Circle</title>
-	<base href="http://test.hyrule.kingdom/software-engineering/" />
+	<base href="http://test.hyrule.kingdom/" />
     <link rel="stylesheet" href="map.css">
 	<script src="scripts/jquery.js"></script>
 </head>
@@ -169,6 +169,19 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
+
+		<!-- LOADING POPUP -->
+		<div id="loading" class="cl-loading-wrapper popup-wrapper">
+			<div class="loader-mid">
+				<img class="title-image" src="assets/title.png">
+				<div class="title-text no-select">Cl<span class="red">u</span>e-Le<span class="red">s</span>s</div>
+				<div class="loader-stripe">
+					<div class="loader">
+					</div>
+				</div>
+			</div>
+			<div class="fog-overlay dark-overlay">&nbsp;</div>
+		</div>
 		
 		<!-- LOSE POPUP -->
 		<div id="cl-lose-wrapper" class="cl-lose-wrapper popup-wrapper hide">
@@ -306,6 +319,19 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
+
+		<!-- TEST COMMAND POPUP -->
+		<div id="cl-test-command-wrapper" class="cl-test-command-wrapper popup-wrapper hide">
+			<div class="cl-test-command-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-test-command-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Send command to backend</h3>
+				<hr />
+				<p>Command:</p>
+				<input type="text" id="command-to-backend"><br />
+				<input type="submit" id="command-to-backend-submit" value="Make Suggestion">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
 		
 		<!-- WIN POPUP -->
 		<div id="cl-win-wrapper" class="cl-win-wrapper popup-wrapper hide">
@@ -320,6 +346,15 @@
 		</div>
 
 		<canvas id="glCanvas" class="cl-canvas" width="600" height="600"></canvas>
+		<script>
+			// DECLARE GAME VARS
+			var game_started;
+			var your_username;
+			var your_turn = false;
+			var current_characters_turn;
+			var enforce_valid_character_move = false;
+			var unavailable_characters = [];
+		</script>
 		<script src="map.js"></script>
 	</div>
 	<div class="cl-panel">
@@ -336,7 +371,15 @@
 		<button onclick="$('#cl-move-token-to-room-wrapper').removeClass('hide');">Move Token to Room</button><br />
 		<button onclick="$('#cl-start-lobby-wrapper').removeClass('hide');">Start Lobby Popup</button><br />
 		<button onclick="$('#cl-suggestion-wrapper').removeClass('hide');">Suggestion Popup</button><br />
+		<button onclick="$('#cl-test-command-wrapper').removeClass('hide');">Test Command Popup</button><br />
 		<button onclick="$('#cl-win-wrapper').removeClass('hide');">Win Popup</button><br />
+		<div>---</div>
+		<button id="allow-map-interact" onclick="$('#disallow-map-interact').removeClass('hide'); $('#allow-map-interact').addClass('hide'); your_turn = true;">Set "Your Turn"</button>
+		<button id="disallow-map-interact" class="hide" onclick="$('#allow-map-interact').removeClass('hide'); $('#disallow-map-interact').addClass('hide'); your_turn = false;">Set "Not Your Turn"</button><br />
+		<button id="enforce-valid-character-move" onclick="$('#no-enforce-valid-character-move').removeClass('hide'); $('#enforce-valid-character-move').addClass('hide'); enforce_valid_character_move = true;">Enforce Valid Character Move</button>
+		<button id="no-enforce-valid-character-move" class="hide" onclick="$('#enforce-valid-character-move').removeClass('hide'); $('#no-enforce-valid-character-move').addClass('hide'); enforce_valid_character_move = false;">Do Not Enforce Valid Character Move</button><br />
+		<button id="open-loading-window" onclick="$('#loading').removeClass('hide');">Open Loading Popup</button><br />
+		<button id="close-loading-window" onclick="$('#loading').addClass('hide');">Close Loading Popup</button><br />
 	</div>
 </body>
 </html>

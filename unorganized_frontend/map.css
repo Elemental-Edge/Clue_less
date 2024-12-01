@@ -90,13 +90,19 @@ canvas {
 
 /* Fog overlay for dimming the background */
 .fog-overlay {
-	background-color: rgba(0, 0, 0, 0.3); /* 30% opaque black overlay */
 	width: 100%;
 	height: 100%;
 	position: absolute;
 	top: 0;
 	left: 0;
 	z-index: 450; /* Positioned below popup-inner but above cl-board */
+}
+	.fog-overlay:not(.dark-overlay) {
+		background-color: rgba(0, 0, 0, 0.3); /* 30% opaque black overlay */
+	}
+
+.dark-overlay {
+	background-color: rgba(0, 0, 0, 0.95); 
 }
 
 input[type="radio"] {
@@ -107,4 +113,73 @@ input[type="radio"] {
 
 .hide {
 	display: none;
+}
+
+.loader-mid {
+	color: #eeeeee;
+	text-align: center; /* Optional: Center text inside the div */
+    padding: 20px; /* Optional: Add some padding */
+	position: fixed;
+	z-index: 500;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the div by offsetting */
+}
+
+.loader-stripe {
+	width: 1800px;
+	height: 20px;
+    padding: 20px; /* Optional: Add some padding */
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.8); 
+	z-index: 500;
+    bottom: 12%;
+	left: 0;
+}
+
+.title-image {
+	width: 1800px;
+}
+
+.title-text,
+.title-text.red {
+	position: absolute;
+	top: 130px;
+	left: 200px;
+	font-size: 200px;
+	font-weight: bold;
+	text-shadow: 0 0 5px black, 0 0 10px black, 0 0 15px black;
+}
+
+.title-text:not(.red) {
+	color: #eeeeee;
+}
+
+.red {
+	font-size: 100%;
+	color: red;
+}
+
+/* HTML: <div class="loader"></div> */
+/* CSS modified from: https://css-loaders.com/progress/#l17 */
+.loader {
+	width: 120px;
+	height: 20px;
+    left: 50%;
+	bottom: 0;
+    transform: translate(-50%, 0); /* Center the div by offsetting */
+	position: relative;
+	-webkit-mask: radial-gradient(circle closest-side,#eee 94%,#0000) left/20% 100%;
+	background: linear-gradient(#eee 0 0) left/0% 100% no-repeat #333;
+	animation: l17 2s infinite steps(6);
+  }
+  @keyframes l17 {
+	  100% {background-size:120% 100%}
+  }
+
+.no-select {
+    user-select: none; /* Prevent text selection */
+    -webkit-user-select: none; /* For Safari */
+    -moz-user-select: none; /* For Firefox */
+    -ms-user-select: none; /* For IE */
 }
