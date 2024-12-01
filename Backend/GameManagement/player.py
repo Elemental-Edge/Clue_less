@@ -2,12 +2,13 @@
 from Backend.cardGroupings.Card import Card
 import Backend.GameManagement.gameboardGrouping
 from Backend.GameManagement.gameboardGrouping.space import Space, SpaceType
+from Backend.cardGroupings import Hand
 
 class Player():
     playerName: str
     playerID: int
     character: str
-    playerHand: list
+    playerHand: Hand
     currLocation: Space
     prevLocation: Space
     isEliminated: bool
@@ -27,6 +28,7 @@ class Player():
             if s.get_space_type() == SpaceType.HALLWAY and is_instance(s, Hallway) and s.is_empty():
                 h =
                 returnList.append(s)
+            #
 
         return returnList
 

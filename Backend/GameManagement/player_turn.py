@@ -34,6 +34,7 @@ class Player_Turn():
 
     def take_action(self, action: Actions):
         action.perform_action()
+        end_turn()
 
     def end_turn(self):
         self.isActive = False
