@@ -1,0 +1,39 @@
+name: Unit Tests
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.12]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        auto-update-conda: true
+        environment-file: clue_env_release.yml  # Use your environment file here
+        environment-name: clue_env
+
+    - name: Install dependencies
+      run: |
+        conda init bash  # Initialize Conda for bash
+        source ~/.bashrc  # Source the bash configuration
+        conda env list
+        conda activate test  # Activate your custom Conda environment
+        conda install flake8 pytest pylint # Install flake8 and pytest using conda
+    - name: Run Tests
+      run: |
+        conda init bash  # Initialize Conda for bash
+        source ~/.bashrc  # Source the bash configuration
+        conda activate test  # Activate your custom Conda environment
+        pytest
