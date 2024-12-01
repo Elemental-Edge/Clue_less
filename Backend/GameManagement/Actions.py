@@ -28,12 +28,9 @@ class Accusation(Actions):
     room: str
 
     def validate(self):
-        if self.pt.hasMadeAccusation:
-            return False
-        else:
-            return True
+        return self.pt.hasMadeAccusation
 
-    def perform_action(self):
+    def perform_action(self, deck: Deck):
         # enter checking win conditions
         winningCards_iter = iter(list(Backend.GameManagement.GameProcessor.winningCards))
         nextCard = next(winningCards_iter)
@@ -53,15 +50,12 @@ class Accusation(Actions):
         suspectCorrect = False
         weaponCorrect = False
         roomCorrect = False
-        if nextCard.getCardType() == CardType.SUSPECT:
-            if self.suspect == nextCard.getCardName():
-                suspectCorrect = True
-        elif nextCard.getCardType() == CardType.WEAPON:
-            if self.weapon == nextCard.getCardName():
-                weaponCorrect = True
-        elif nextCard.getCardType() == CardType.ROOM:
-            if self.room == nextCard.getCardName():
-                roomCorrect = True
+
+        # loop
+        # use has_card() from Hand to check membership of winningHand/case_file
+        case_file.has_card(self.suspect)
+        case_file.has_card(self.weapon)
+        case_file.has_card(self.room)
 
         if (suspectCorrect and weaponCorrect and roomCorrect):
             # player wins game, enter win game state
@@ -93,27 +87,27 @@ class Suggestion(Actions):
         while (nextPlayer != p):
             nextPlayer = next(turnList_iter)
 
-        while(not disproveFinished):
-            nextPlayer = next(turnList_iter)
-            # ask player to disprove
-            # output list of player's cards that match suggestion
-            disproveCards = []
-            for card in self.p.playerHand:
-                curr_card = card.get_name()
-                if curr_card == self.suspect or curr_card == self.weapon or curr_card == self.room:
-                    disproveCards.append(curr_card)
+            while(not disproveFinished):
+                # ask player to disprove
+                # output list of player's cards that match suggestion
+                disproveCards = []
+                for card in self.p.playerHand:
+                    curr_card = card.get_name()
+                    if curr_card == self.suspect or curr_card == self.weapon or curr_card == self.room:
+                        disproveCards.append(curr_card)
 
-            if not disproveCards:
-                return False
-            else:
-                # have them select one
-                # wait for them to accept then broadcast event (not card)
-                disproveFinished = True
+                if not disproveCards:
+                    return False
+                else:
+                    # have them select one
+                    # wait for them to accept then broadcast event (not card)
+                    disproveFinished = True
 
         self.pt.hasMadeSuggestion = True
 
 
     def create_suggestion(self, suspect: str, weap: str, room_suggest: str):
+        # change to card instead of String
         self.suspect = suspect
         self.weapon = weap
         self.room = room_suggest
