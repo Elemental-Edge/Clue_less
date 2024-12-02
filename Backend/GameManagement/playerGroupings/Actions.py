@@ -1,11 +1,13 @@
 
 from abc import ABC, abstractmethod
+from typing import Optional
 
-import Backend
-from Backend.GameManagement.player import Player
-from Backend.GameManagement.player_turn import Player_Turn
-from Backend.GameManagement.gameboardGrouping import game_board, game_processor, space
-from Backend.cardGroupings import Card, Deck, Hand, CardType
+from Backend.GameManagement.playerGroupings.player import Player
+from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
+from Backend.gameboardGroupings.turn_order import TurnOrder
+from Backend.cardGroupings.Card import Card, CardType
+from Backend.cardGroupings.Hand import Hand
+from Backend.gameboardGroupings.space import SpaceType,Space
 
 class Actions():
     p: Player
@@ -15,137 +17,100 @@ class Actions():
         p = player
         pt = playerTurn
 
-    @abstractmethod
-    def validate(self):
 
-    @abstractmethod
-    def perform_action(self):
+class Accusation(Actions) :
 
+    def __init__(self, aCaseFile: Hand):
+        self.case_file = aCaseFile
 
-class Accusation(Actions):
-    suspect: str
-    weapon: str
-    room: str
+    def makeAccusation(self, aSuspect: str, aWeapon: str, aRoom: str) -> bool:
+        """
+        Checks if the accusation made by the user was correct.
 
-    def validate(self):
-        return self.pt.hasMadeAccusation
+        Attributes:
+            aSuspect (str): Represents cards that depict suspects involved in the game.
+            aRoom (str): Represents cards that indicate various locations or rooms.
+            aWeapon (str): Represents cards that depict weapons that can be used in the game.
+        """
 
-    def perform_action(self, deck: Deck):
-        # enter checking win conditions
-        winningCards_iter = iter(list(Backend.GameManagement.GameProcessor.winningCards))
-        nextCard = next(winningCards_iter)
+        suspect = Card(aSuspect, card_type = CardType.SUSPECT)
+        weapon = Card(aWeapon, card_type=CardType.WEAPON)
+        room = Card(aRoom, card_type=CardType.ROOM)
 
-        # output to GUI/client list of options for suspect, have them choose one
-
-        self.suspect = selected_suspect
-
-        # output to GUI/client list of options for weapon, have them choose one
-
-        self.weapon = selected_weapon
-
-        # output to GUI/client list of options for room, have them choose one
-
-        self.room = selected_room
-
-        suspectCorrect = False
-        weaponCorrect = False
-        roomCorrect = False
-
-        # loop
-        # use has_card() from Hand to check membership of winningHand/case_file
-        case_file.has_card(self.suspect)
-        case_file.has_card(self.weapon)
-        case_file.has_card(self.room)
-
-        if (suspectCorrect and weaponCorrect and roomCorrect):
-            # player wins game, enter win game state
-        else:
-            # output player eliminated
-            p.isEliminated = True
+        # Check if accusation hands matches the case file
+        return ( self.case_file.has_card(suspect)
+            and self.case_file.has_card(weapon)
+            and self.case_file.has_card(room))
 
 class Suggestion(Actions):
-    suspect: str
-    weapon: str
-    room: str
+    def __init__(self, aPlayer: Player, aTurnOrder: TurnOrder):
+        super().__init__(aPlayer)
+        self.turnOrder = aTurnOrder
 
-    def validate(self):
-        if self.pt.hasEnteredRoom:
-            if not self.pt.hasMadeAccusation and not self.pt.hasMadeSuggestion:
-                return True
-        return False
+    def makeSuggestion(self, aSuspect: str, aWeapon: str, aRoom: str) -> tuple[Player, Hand]:
+        """
+        Checks if the accusation made by the user was correct.
 
-    def perform_action(self):
-        # prompt for susepct, weapon, room
+        Attributes:
+            aSuspect (str): Represents cards that depict suspects involved in the game.
+            aRoom (str): Represents cards that indicate various locations or rooms.
+            aWeapon (str): Represents cards that depict weapons that can be used in the game.
+        """
+        suggestedCards = Hand()
+        suggestedCards.add_card(Card(aSuspect, card_type = CardType.SUSPECT))
+        suggestedCards.add_card(Card(aWeapon, card_type=CardType.WEAPON))
+        suggestedCards.add_card(Card(aRoom, card_type=CardType.ROOM))
 
-        self.create_suggestion(suspect, weap, room_suggest)
+        #TODO: Verify that turnOrder is a list
+        turnList_iter = iter(self.turnOrder)
+        nextPlayer: Optional[Player] = None
+        if (None != self.p):
+            raise ValueError("Current Player not defined! :-(")
+        # output list of player's cards that match suggestion
+        disproveCards = Hand()
+        nextPlayer = next(turnList_iter)
+        while (nextPlayer != self.p):
+            if (None == nextPlayer):
+                break
+            if (nextPlayer.isEliminated):
+                continue
+            # Check player's hand for matching cards
+            for card in suggestedCards.get_hand():
+                if (nextPlayer.playerHand.hand.has_card(card)):
+                    disproveCards.add_card(card)
 
-        disproveFinished = False
-
-        turnList = Backend.GameManagement.GameProcessor.turnOrder
-        turnList_iter = iter(turnList)
-        nextPlayer = None
-        while (nextPlayer != p):
+            if (not disproveCards.isEmpty()):
+                break
             nextPlayer = next(turnList_iter)
-
-            while(not disproveFinished):
-                # ask player to disprove
-                # output list of player's cards that match suggestion
-                disproveCards = []
-                for card in self.p.playerHand:
-                    curr_card = card.get_name()
-                    if curr_card == self.suspect or curr_card == self.weapon or curr_card == self.room:
-                        disproveCards.append(curr_card)
-
-                if not disproveCards:
-                    return False
-                else:
-                    # have them select one
-                    # wait for them to accept then broadcast event (not card)
-                    disproveFinished = True
-
-        self.pt.hasMadeSuggestion = True
-
-
-    def create_suggestion(self, suspect: str, weap: str, room_suggest: str):
-        # change to card instead of String
-        self.suspect = suspect
-        self.weapon = weap
-        self.room = room_suggest
-
-        # move player and weapon tokens to the room suggested
-        Player susp = game_processor.get_player_associated_with_character(self.suspect)
-        game_processor.move_player(susp, self.room)
-
+        return (nextPlayer, disproveCards)
 
 class Move(Actions):
 
-    def validate(self):
-        if self.p.get_valid_moves():
-            return True
-        return False
+    def makeMove(self, aDest: Space) -> bool:
 
-    def perform_action(self):
-        moves_list = self.p.get_valid_moves()
+        if None == aDest:
+            return False
+        if (SpaceType.HALLWAY == aDest.get_space_type()):
+            return False
 
-        # output possible moves
-        adj = self.p.currLocation.get_adjacent_spaces()
-
-        possible_dest = []
-        # check if adjacent spaces are empty
-        for sp in adj:
-            if sp.is_empty():
-                possible_dest.append(sp)
-
+        # Check if Destination is in Adjacent Spaces
+        if not aDest in self.p.currLocation.get_adjacent_spaces():
+            return False
         # have player select a move
-        selected_destination
+        selected_destination = aDest
 
-        if(selected_destination.get_space_type() == ROOM):
+        if(selected_destination.get_space_type() == SpaceType.ROOM):
             self.pt.hasEnteredRoom = True
 
         selected_destination.add_player(self.p)
+
+        self.p.prevLocation = self.p.currLocation
         self.p.currLocation.remove_player(self.p)
 
-        # broadcast move
+        self.p.currLocation = selected_destination
+
+        # TODO: broadcast move
+        return True
 
 
 

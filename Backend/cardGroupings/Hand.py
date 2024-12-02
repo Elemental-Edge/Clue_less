@@ -50,6 +50,10 @@ class Hand():
     def display_hand(self):
         """Display the cards in hand."""
         return ', '.join(str(card) for card in self._cards)
+
+    def isEmpty(self):
+        "Returns true if the list is empty"
+        return(0 == len(self._cards))
 # Sample
 if __name__ == "__main__":
     hand = Hand()

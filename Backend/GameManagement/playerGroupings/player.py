@@ -1,7 +1,6 @@
 
 from Backend.cardGroupings.Card import Card
-import Backend.GameManagement.gameboardGrouping
-from Backend.GameManagement.gameboardGrouping.space import Space, SpaceType
+from Backend.gameboardGroupings.space import Space, SpaceType
 from Backend.cardGroupings import Hand
 
 class Player():
@@ -20,16 +19,18 @@ class Player():
     def receive_card_dealt(self, card: Card):
         self.playerHand.add_card(card)
 
-    def get_valid_moves(self):
+    def get_valid_moves(self) -> list[Space]:
         # returns a list of Space objects
-        adj = self.currLocation.adjacent_spaces()
-        returnList = []
-        for s in adj:
-            if s.get_space_type() == SpaceType.HALLWAY and is_instance(s, Hallway) and s.is_empty():
-                h =
-                returnList.append(s)
-            #
+        adj: list[Space] = self.p.currLocation.get_adjacent_spaces()
 
-        return returnList
+        possible_dest = []
+        # check if adjacent spaces are empty
+        for sp in adj:
+            if SpaceType.HALLWAY == sp.get_space_type():
+                if sp.is_empty():
+                    possible_dest.append(sp)
+            else:
+                possible_dest.append(sp)
+        return possible_dest
 
 
