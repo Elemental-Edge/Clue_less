@@ -31,9 +31,15 @@ jobs:
         conda env list
         conda activate test  # Activate your custom Conda environment
         conda install flake8 pytest pylint # Install flake8 and pytest using conda
-    - name: Run Tests
+    - name: Run PyTest
       run: |
         conda init bash  # Initialize Conda for bash
         source ~/.bashrc  # Source the bash configuration
         conda activate test  # Activate your custom Conda environment
-        pytest
+        pytest -s
+    - name: Run Django Unit Test
+      run: |
+        conda init bash  # Initialize Conda for bash
+        source ~/.bashrc  # Source the bash configuration
+        conda activate test  # Activate your custom Conda environment
+        python3 manage.py test
