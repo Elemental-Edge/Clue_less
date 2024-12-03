@@ -37,7 +37,7 @@ class GameRoom(models.Model):
     def is_id_used(self, game_id: str) -> bool:
         return GameRoom.objects.select_for_update(skip_locked=True).filter(game_id=game_id).exists()
 
-# may be better to use uuid and make it smaller
+    # may be better to use uuid and make it smaller
     def generate_game_id(self, id_len: int = GAME_ID_LEN, max_attempts: int = MAX_ATTEMPTS) -> str:
         characters = string.ascii_uppercase + string.digits
         attempts = 0

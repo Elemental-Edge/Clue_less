@@ -1,0 +1,286 @@
+* {
+	font-size: 32px;
+	line-height: 1.5;
+}
+
+/* Remove default margins and ensure body takes full height */
+body, html {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden; /* Prevent scrolling */
+	box-sizing: border-box;
+	background-color: #5db567;
+}
+
+/* Make the canvas fill the entire window */
+canvas {
+    display: block; /* Remove any extra space below the canvas */
+}
+
+.cl-board {
+	height: 2160px;
+	width: 2960px;
+	overflow: auto;
+	position: relative;
+	float: left;
+	z-index: 200;
+}
+
+.cl-panel {
+	width: 800px;
+	height: 100vh;
+	padding: 20px;
+	border-left: 1px solid black;
+	background-color: #faebd7;
+	float: left;
+}
+	
+.cl-canvas {
+	width: 2960px;
+	height: 2160px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-image: url("assets/board.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	z-index: 300;
+}
+
+/* Updated popup-wrapper for absolute positioning */
+.popup-wrapper {
+	position: fixed; /* Changed from relative to absolute */
+	width: 100%;
+	height: 100%;
+	background-color: transparent; /* Transparent background */
+	top: 0;
+	left: 0;
+	z-index: 400; /* Above cl-board but below popup-inner */
+}
+
+/* Inner content centered inside popup wrapper */
+.popup-inner {
+	background-color: #333333; /* Optional background for content area */
+	z-index: 500; /* Above fog overlay */
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow */
+	padding: 20px;
+	text-align: center; /* Optional: Center text inside the div */
+	position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the div by offsetting */
+	max-width: 50vw;
+}
+
+.popup-inner,
+.popup-inner a,
+.popup-inner a:hover,
+.popup-inner a:link,
+.popup-inner a:active,
+.popup-inner h1,
+.popup-inner p,
+.popup-inner div,
+.popup-inner span,
+.popup-inner td,
+.popup-inner th,
+.popup-inner td.label {
+	font-size: 20px;
+	color: #eeeeee;
+	line-height: 1.1;
+	margin: 0;
+}
+
+.popup-control {
+	height: 32px;
+	width: 32px;
+	position: absolute;
+	right: 30px;
+	top: 35px;
+	cursor: pointer;
+}
+
+.popup-submit {
+	background-color: #5db567;
+	color: #2f5b34;
+	border: 1px solid #2f5b34;
+}
+
+/* Fog overlay for dimming the background */
+.fog-overlay {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 450; /* Positioned below popup-inner but above cl-board */
+}
+	.fog-overlay:not(.dark-overlay) {
+		background-color: rgba(0, 0, 0, 0.3); /* 30% opaque black overlay */
+	}
+
+.dark-overlay {
+	background-color: black;
+}
+
+input[type="radio"] {
+	width: 30px;
+	height: 30px;
+	margin-right: 20px;
+}
+
+.hide {
+	display: none;
+}
+
+.loader-mid {
+	color: #eeeeee;
+	text-align: center; /* Optional: Center text inside the div */
+    padding: 20px; /* Optional: Add some padding */
+	position: fixed;
+	z-index: 500;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the div by offsetting */
+}
+
+.loader-stripe {
+	width: 1000px;
+	height: 20px;
+    padding: 20px; /* Optional: Add some padding */
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.8); 
+	z-index: 500;
+    bottom: 12%;
+	left: 0;
+}
+
+#login-popup-button {
+	width: 200px;
+	font-size: 30px;
+	border-radius: 7px;
+	height: 50px;
+    line-height: 50px; /* Optional: Add some padding */
+	position: absolute;
+	background-color: red;
+	color: #eeeeee; 
+	z-index: 500;
+    bottom: 13%;
+	left: 50%;
+	transform: translate(-50%, 0);
+	text-shadow: 0 0 5px black, 0 0 10px black, 0 0 15px black;
+	box-shadow: 0 0 5px black, 0 0 10px black, 0 0 15px black;
+	cursor: pointer;
+}
+
+.title-image {
+	width: 1000px;
+}
+
+.title-text,
+.title-text.red {
+	position: absolute;
+	top: 65px;
+	left: 100px;
+	font-size: 100px;
+	font-weight: bold;
+	text-shadow: 0 0 5px black, 0 0 10px black, 0 0 15px black;
+}
+
+.title-text:not(.red) {
+	color: #eeeeee;
+}
+
+.red {
+	font-size: 100%;
+	color: red;
+}
+
+/* HTML: <div class="loader"></div> */
+/* CSS modified from: https://css-loaders.com/progress/#l17 */
+.loader {
+	width: 120px;
+	height: 20px;
+    left: 50%;
+	bottom: 0;
+    transform: translate(-50%, 0); /* Center the div by offsetting */
+	position: relative;
+	-webkit-mask: radial-gradient(circle closest-side,#eee 94%,#0000) left/20% 100%;
+	background: linear-gradient(#eee 0 0) left/0% 100% no-repeat #333;
+	animation: l17 2s infinite steps(6);
+  }
+  @keyframes l17 {
+	  100% {background-size:120% 100%}
+  }
+
+.no-select {
+    user-select: none; /* Prevent text selection */
+    -webkit-user-select: none; /* For Safari */
+    -moz-user-select: none; /* For Firefox */
+    -ms-user-select: none; /* For IE */
+}
+
+#chat-window {
+	margin: 10px;
+	border: 1px solid black;
+	position: fixed;
+	width: 100%;
+	height: 90vh;
+}
+
+.formless {
+	display: block;            /* Explicitly make the table a block-level element */
+    border-collapse: collapse; /* Collapses borders */
+    border: none;              /* Removes the table's outer border */
+}
+
+
+td.label {
+	text-align: right;
+    vertical-align: middle;  /* Vertical centering */
+	line-height: 100%;
+}
+
+th.center, 
+td.center {
+    text-align: center;      /* Horizontal centering */
+    vertical-align: middle;  /* Vertical centering */
+	line-height: 100%;
+}
+
+input.text-input {
+	font-size: 20px;
+	color: #111111;
+}
+
+input.input-submit {
+	font-size: 20px;
+	line-height: 130%;
+	border-radius: 5px;
+	background-color: red;
+	color: #eeeeee; 
+	cursor: pointer;
+}
+
+.error:not(.hide) {
+	font-style: italic;
+	margin: 10px 0 0 0;
+	display: inline-block;
+	font-size: 80% important;
+	color: red !important;
+}
+
+a {
+	cursor: pointer;
+}
+
+.mt-10 {
+	margin-top: 10px;
+}
+
+.block-center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}

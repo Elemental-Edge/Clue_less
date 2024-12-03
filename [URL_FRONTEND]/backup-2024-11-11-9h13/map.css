@@ -1,0 +1,110 @@
+* {
+	font-size: 32px;
+	line-height: 1.5;
+}
+
+/* Remove default margins and ensure body takes full height */
+body, html {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden; /* Prevent scrolling */
+	box-sizing: border-box;
+	background-color: #5db567;
+}
+
+/* Make the canvas fill the entire window */
+canvas {
+    display: block; /* Remove any extra space below the canvas */
+}
+
+.cl-board {
+	height: 2160px;
+	width: 2960px;
+	overflow: auto;
+	position: relative;
+	float: left;
+	z-index: 200;
+}
+
+.cl-panel {
+	width: 800px;
+	height: 100vh;
+	padding: 20px;
+	border-left: 1px solid black;
+	background-color: #faebd7;
+	float: left;
+}
+	
+.cl-canvas {
+	width: 2960px;
+	height: 2160px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-image: url("assets/board.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	z-index: 300;
+}
+
+/* Updated popup-wrapper for absolute positioning */
+.popup-wrapper {
+	position: absolute; /* Changed from relative to absolute */
+	width: 100%;
+	height: 100%;
+	background-color: transparent; /* Transparent background */
+	top: 0;
+	left: 0;
+	z-index: 400; /* Above cl-board but below popup-inner */
+}
+
+/* Inner content centered inside popup wrapper */
+.popup-inner {
+	width: 50%;              
+	height: 50%;
+	position: absolute;
+	left: 25%;
+	top: 25%;
+	background-color: white; /* Optional background for content area */
+	z-index: 500; /* Above fog overlay */
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow */
+	padding: 20px;
+}
+
+.popup-control {
+	height: 32px;
+	width: 32px;
+	position: absolute;
+	right: 30px;
+	top: 35px;
+	cursor: pointer;
+}
+
+.popup-submit {
+	background-color: #5db567;
+	color: #2f5b34;
+	border: 1px solid #2f5b34;
+}
+
+/* Fog overlay for dimming the background */
+.fog-overlay {
+	background-color: rgba(0, 0, 0, 0.3); /* 30% opaque black overlay */
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 450; /* Positioned below popup-inner but above cl-board */
+}
+
+input[type="radio"] {
+	width: 30px;
+	height: 30px;
+	margin-right: 20px;
+}
+
+.hide {
+	display: none;
+}

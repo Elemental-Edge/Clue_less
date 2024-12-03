@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Textured Circle</title>
+	<base href="http://test.hyrule.kingdom/software-engineering/" />
+    <link rel="stylesheet" href="map.css">
+	<script src="scripts/jquery.js"></script>
+</head>
+<body>
+
+	<div id="cl-board" class="cl-board">
+
+		<!-- ACCUSATION POPUP -->
+		<div id="cl-accusation-wrapper" class="cl-accusation-wrapper popup-wrapper hide">
+			<div class="cl-accusation-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-accusation-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Accusation</h3>
+				<hr />
+				<p>So, detective, you're ready to make arrests??</p>
+				<table>
+					<tr>
+						<td>
+							<input type="radio" id="accusation_who" name="accusation_who" value="mustard"><label for="accusation_who">Col. Mustard</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="green"><label for="accusation_who">Mr. Green</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="peacock"><label for="accusation_who">Mrs. Peacock</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="scarlet"><label for="accusation_who">Mrs. Scarlet</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="white"><label for="accusation_who">Mrs. White</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="plum"><label for="accusation_who">Prof. Plum</label><br />
+						</td>
+						<td>
+							<input type="radio" id="accusation_with" name="accusation_with" value="candlestick"><label for="accusation_with">Candlestick</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="knife"><label for="accusation_with">Knife</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="pipe"><label for="accusation_with">Lead Pipe</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="revolver"><label for="accusation_with">Revolver</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="rope"><label for="accusation_with">Rope</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="wrench"><label for="accusation_with">Wrench</label><br />
+						</td>
+						<td>
+							<input type="radio" id="accusation_where" name="accusation_where" value="ballroom"><label for="accusation_where">Ballroom</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="billiards"><label for="accusation_where">Billard's Room</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="Conservatory"><label for="accusation_where">Conservatory</label><br />							
+							<input type="radio" id="accusation_where" name="accusation_where" value="dining"><label for="accusation_where">Dining Room</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="hall"><label for="accusation_where">Hall</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="kitchen"><label for="accusation_where">Kitchen</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="library"><label for="accusation_where">Library</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="lounge"><label for="accusation_where">Lounge</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="study"><label for="accusation_where">Study</label><br />
+						</td>
+					<tr>
+				</table>
+				<input type="submit" id="make_accusation" class="popup-submit" name="make_accusation" value="Make Accusation">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- BAD-ACCUSATION POPUP -->
+		<div id="cl-bad-accusation-wrapper" class="cl-bad-accusation-wrapper popup-wrapper hide">
+			<div class="cl-disprove-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-bad-accusation-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Bad Accusation!</h3>
+				<hr />
+				<p>Detective!  You've missed critical evidence that can clearly be proven wrong.</p>
+				<p>You may close this window to watch other detectives crack the case, but you are suspended!</p>
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- CARDS POPUP -->
+		<div id="cl-cards-wrapper" class="cl-cards-wrapper popup-wrapper hide">
+			<div class="cl-disprove-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-cards-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Cards</h3>
+				<hr />
+				<p>Here is the evidence you've collected, Detective.  You know these people, items, and places were not involved in the murder.</p>
+				<ul>
+					<li>Billard's Room</li>
+					<li>Col. Mustard</li>
+					<li>Kitchen</li>
+					<li>Knife</li>
+					<li>Prof. Plum</li>
+					<li>Study</li>
+				</ul>
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- CHARACTER SELECTION POPUP -->
+		<div id="cl-character-selection-wrapper" class="cl-character-selection-wrapper popup-wrapper hide">
+			<div class="cl-character-selection-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-character-selection-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Character Selection</h3>
+				<hr />
+				<p>Who are you again, detective?</p>
+				<table>
+					<tr>
+						<td>
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="mustard"><label for="suggestion_who">Col. Mustard</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="green"><label for="suggestion_who">Mr. Green</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="peacock"><label for="suggestion_who">Mrs. Peacock</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="scarlet"><label for="suggestion_who">Mrs. Scarlet</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="white"><label for="suggestion_who">Mrs. White</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="plum"><label for="suggestion_who">Prof. Plum</label><br />
+						</td>
+					<tr>
+				</table>
+				<input type="submit" id="choose_detective" class="popup-submit" name="choose_detective" value="Choose Detective">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- DISPROVE POPUP -->
+		<div id="cl-disprove-wrapper" class="cl-disprove-wrapper popup-wrapper hide">
+			<div class="cl-disprove-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-disprove-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Disprove</h3>
+				<hr />
+				<p>So what evidence would you like to show to prove him wrong?</p>
+				<table>
+					<tr>
+						<td>
+							<input type="radio" id="evidence" name="evidence" value="billiards"><label for="evidence">Billard's Room</label><br />
+							<input type="radio" id="evidence" name="evidence" value="mustard"><label for="evidence">Col. Mustard</label><br />
+							<input type="radio" id="evidence" name="evidence" value="kitchen"><label for="evidence">Kitchen</label><br />
+							<input type="radio" id="evidence" name="evidence" value="knife"><label for="evidence">Knife</label><br />
+							<input type="radio" id="evidence" name="evidence" value="plum"><label for="evidence">Prof. Plum</label><br />
+							<input type="radio" id="evidence" name="evidence" value="study"><label for="evidence">Study</label><br />
+						</td>
+					<tr>
+				</table>
+				<input type="submit" id="disprove" class="popup-submit" name="disprove" value="Disprove">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- DISPROVEN POPUP -->
+		<div id="cl-disproven-wrapper" class="cl-disproven-wrapper popup-wrapper hide">
+			<div class="cl-disproven-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-disproven-wrapper"><img src="assets/control/close.png"></div>
+				<h1>New Evidence Emerges</h3>
+				<hr />
+				<p>Detective!  Your investigation is moving forward.  You've learned new evidence.</p>
+				<p>##CHARACTER## has an alibi!</p>
+				<p>There's compelling evidence that ##ROOM## was not the place of the murder!</p>
+				<p>##WEAPON## was seen somewhere else at the time of the murder!</p>
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- GAME IN PROGRESS POPUP -->
+		<div id="cl-game-in-progress-wrapper" class="cl-game-in-progress-wrapper popup-wrapper hide">
+			<div class="cl-game-in-progress-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-game-in-progress-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Investigation in Progress</h3>
+				<hr />
+				<p>You're too late to join this investigation, detective.  But you can join the next!</p>
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- GOOD-SUGGESTION POPUP -->
+		<div id="cl-good-suggestion-wrapper" class="cl-good-suggestion-wrapper popup-wrapper hide">
+			<div class="cl-good-suggestion-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-good-suggestion-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Good Suggestion!</h3>
+				<hr />
+				<p>Detective!  You're onto something!  No one can prove you wrong!</p>
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- LOSE POPUP -->
+		<div id="cl-lose-wrapper" class="cl-lose-wrapper popup-wrapper hide">
+			<div class="cl-lose-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-lose-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Lose</h3>
+				<hr />
+				<p>By jove, ##PLAYER## has cracked the case!</p>
+				<input type="submit" id="play_again" class="popup-submit" name="play_again" value="Play Again">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- MOVE TOKEN TO HALLWAY -->
+		<div id="cl-move-token-to-hallway-wrapper" class="cl-move-token-to-hallway-wrapper popup-wrapper hide">
+			<div class="cl-move-token-to-hallway-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-move-token-to-hallway-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Move Token to Hallway</h3>
+				<hr />
+				<p>This is an admin function to demonstrate this functionality of the frontend is working.</p>
+				<table>
+					<tr>
+						<td>
+							<input type="radio" id="token_to_move" name="token_to_move" value="mustard"><label for="token_to_move">Col. Mustard</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="green"><label for="token_to_move">Mr. Green</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="peacock"><label for="token_to_move">Mrs. Peacock</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="scarlet"><label for="token_to_move">Mrs. Scarlet</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="white"><label for="token_to_move">Mrs. White</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="plum"><label for="token_to_move">Prof. Plum</label><br />
+						</td>
+						<td>
+							<input type="radio" id="move_to_where" name="move_to_where" value="study-hall"><label for="move_to_where">study-hall</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="study-library"><label for="move_to_where">study-library</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="hall-lounge"><label for="move_to_where">hall-lounge</label><br />							
+							<input type="radio" id="move_to_where" name="move_to_where" value="hall-billiards"><label for="move_to_where">hall-billiards</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="lounge-dining"><label for="move_to_where">lounge-dining</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="library-billiards"><label for="move_to_where">library-billiards</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="billiards-dining"><label for="move_to_where">billiards-dining</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="library-conservatory"><label for="move_to_where">library-conservatory</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="billiards-ballroom"><label for="move_to_where">billiards-ballroom</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="dining-kitchen"><label for="move_to_where">dining-kitchen</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="conservatory-ballroom"><label for="move_to_where">conservatory-ballroom</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="ballroom-kitchen"><label for="move_to_where">ballroom-kitchen</label><br />
+						</td>
+					<tr>
+				</table>
+				<input type="submit" id="move_to_hallway" class="popup-submit" name="move_to_hallway" value="Move Token to Hallway">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- MOVE TOKEN TO ROOM -->
+		<div id="cl-move-token-to-room-wrapper" class="cl-move-token-to-room-wrapper popup-wrapper hide">
+			<div class="cl-move-token-to-room-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-move-token-to-room-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Move Token to Room</h3>
+				<hr />
+				<p>This is an admin function to demonstrate this functionality of the frontend is working.</p>
+				<table>
+					<tr>
+						<td>
+							<input type="radio" id="token_to_move" name="token_to_move" value="candlestick"><label for="token_to_move">Candlestick</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="mustard"><label for="token_to_move">Col. Mustard</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="knife"><label for="token_to_move">Knife</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="pipe"><label for="token_to_move">Lead Pipe</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="green"><label for="token_to_move">Mr. Green</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="peacock"><label for="token_to_move">Mrs. Peacock</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="scarlet"><label for="token_to_move">Mrs. Scarlet</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="white"><label for="token_to_move">Mrs. White</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="plum"><label for="token_to_move">Prof. Plum</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="revolver"><label for="token_to_move">Revolver</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="rope"><label for="token_to_move">Rope</label><br />
+							<input type="radio" id="token_to_move" name="token_to_move" value="wrench"><label for="token_to_move">Wrench</label><br />
+						</td>
+						<td>
+							<input type="radio" id="move_to_where" name="move_to_where" value="ballroom"><label for="move_to_where">Ballroom</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="billiards"><label for="move_to_where">Billard's Room</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="Conservatory"><label for="move_to_where">Conservatory</label><br />							
+							<input type="radio" id="move_to_where" name="move_to_where" value="dining"><label for="move_to_where">Dining Room</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="hall"><label for="move_to_where">Hall</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="kitchen"><label for="move_to_where">Kitchen</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="library"><label for="move_to_where">Library</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="lounge"><label for="move_to_where">Lounge</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="study"><label for="move_to_where">Study</label><br />
+						</td>
+					<tr>
+				</table>
+				<input type="submit" id="move_to_room" class="popup-submit" name="move_to_room" value="Move Token to Room">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- START LOBBY POPUP -->
+		<div id="cl-start-lobby-wrapper" class="cl-start-lobby-wrapper popup-wrapper hide">
+			<div class="cl-start-lobby-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-start-lobby-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Start Lobby</h3>
+				<hr />
+				<p>All, hello there ##DETECTIVE##!  Once the other detectives join us, we can start the investigation.</p>
+				<input type="submit" id="start_game" class="popup-submit" name="start_game" value="Start Game">
+				<input type="submit" id="change_detective" class="popup-submit" name="change_detective" value="Change Detective">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- SUGGESTION POPUP -->
+		<div id="cl-suggestion-wrapper" class="cl-suggestion-wrapper popup-wrapper hide">
+			<div class="cl-suggestion-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-suggestion-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Suggestion</h3>
+				<hr />
+				<p>What is your theory, detective?</p>
+				<table>
+					<tr>
+						<td>
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="mustard"><label for="suggestion_who">Col. Mustard</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="green"><label for="suggestion_who">Mr. Green</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="peacock"><label for="suggestion_who">Mrs. Peacock</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="scarlet"><label for="suggestion_who">Mrs. Scarlet</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="white"><label for="suggestion_who">Mrs. White</label><br />
+							<input type="radio" id="suggestion_who" name="suggestion_who" value="plum"><label for="suggestion_who">Prof. Plum</label><br />
+						</td>
+						<td>
+							<input type="radio" id="suggestion_with" name="suggestion_with" value="candlestick"><label for="suggestion_with">Candlestick</label><br />
+							<input type="radio" id="suggestion_with" name="suggestion_with" value="knife"><label for="suggestion_with">Knife</label><br />
+							<input type="radio" id="suggestion_with" name="suggestion_with" value="pipe"><label for="suggestion_with">Lead Pipe</label><br />
+							<input type="radio" id="suggestion_with" name="suggestion_with" value="revolver"><label for="suggestion_with">Revolver</label><br />
+							<input type="radio" id="suggestion_with" name="suggestion_with" value="rope"><label for="suggestion_with">Rope</label><br />
+							<input type="radio" id="suggestion_with" name="suggestion_with" value="wrench"><label for="suggestion_with">Wrench</label><br />
+						</td>
+					<tr>
+				</table>
+				<p>in ##ROOM##.</p>
+				<input type="submit" id="make_suggestion" class="popup-submit" name="make_suggestion" value="Make Suggestion">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+		
+		<!-- WIN POPUP -->
+		<div id="cl-win-wrapper" class="cl-win-wrapper popup-wrapper hide">
+			<div class="cl-win-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-win-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Win</h3>
+				<hr />
+				<p>By jove, you've done it!  You've cracked the case!</p>
+				<input type="submit" id="play_again" class="popup-submit" name="play_again" value="Play Again">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+
+		<canvas id="glCanvas" class="cl-canvas" width="600" height="600"></canvas>
+		<script src="map.js"></script>
+	</div>
+	<div class="cl-panel">
+		<button onclick="$('#cl-accusation-wrapper').removeClass('hide');">Accusation Popup</button><br />
+		<button onclick="$('#cl-bad-accusation-wrapper').removeClass('hide');">Bad Accusation Popup</button><br />
+		<button onclick="$('#cl-cards-wrapper').removeClass('hide');">Cards Popup</button><br />
+		<button onclick="$('#cl-character-selection-wrapper').removeClass('hide');">Character Selection Popup</button><br />
+		<button onclick="$('#cl-disprove-wrapper').removeClass('hide');">Disprove Popup</button><br />
+		<button onclick="$('#cl-disproven-wrapper').removeClass('hide');">Disproven Popup</button><br />
+		<button onclick="$('#cl-game-in-progress-wrapper').removeClass('hide');">Game in Progress Popup</button><br />
+		<button onclick="$('#cl-good-suggestion-wrapper').removeClass('hide');">Good Suggestion Popup</button><br />
+		<button onclick="$('#cl-lose-wrapper').removeClass('hide');">Lose Popup</button><br />
+		<button onclick="$('#cl-move-token-to-hallway-wrapper').removeClass('hide');">Move Token to Hallway</button><br />
+		<button onclick="$('#cl-move-token-to-room-wrapper').removeClass('hide');">Move Token to Room</button><br />
+		<button onclick="$('#cl-start-lobby-wrapper').removeClass('hide');">Start Lobby Popup</button><br />
+		<button onclick="$('#cl-suggestion-wrapper').removeClass('hide');">Suggestion Popup</button><br />
+		<button onclick="$('#cl-win-wrapper').removeClass('hide');">Win Popup</button><br />
+	</div>
+</body>
+</html>
