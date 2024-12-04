@@ -1,5 +1,5 @@
 from typing import List
-from GameManagement.player import Player
+from Backend.GameManagement.playerGroupings.player import Player
 
 DEFAULT_LIST = []
 
@@ -7,7 +7,7 @@ class TurnOrder():
     """Manages the order of turnsin the game."""
     def __init__(self, turn_order: List[Player] = DEFAULT_LIST):
         self._turn_order: List[Player] = turn_order
-    
+
     def add_player(self, player: Player):
         pass
 

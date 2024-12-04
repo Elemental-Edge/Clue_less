@@ -1,6 +1,6 @@
 # tests/test_card.py
 import pytest
-from Card import CardType, Card
+from Backend.cardGroupings.Card import CardType, Card
 
 @pytest.fixture
 def card():

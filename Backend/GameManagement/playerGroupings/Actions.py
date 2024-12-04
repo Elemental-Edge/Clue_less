@@ -1,26 +1,24 @@
 
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional
 
 from Backend.GameManagement.playerGroupings.player import Player
-from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
 from Backend.gameboardGroupings.turn_order import TurnOrder
 from Backend.cardGroupings.Card import Card, CardType
 from Backend.cardGroupings.Hand import Hand
 from Backend.gameboardGroupings.space import SpaceType,Space
 
 class Actions():
-    p: Player
-    pt: Player_Turn
-
-    def __init__(self, player: Player, playerTurn: Player_Turn):
-        p = player
-        pt = playerTurn
+    def __init__(self, player: 'Player', playerTurn: 'Player_Turn'):
+        from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
+        p : 'Player' = player
+        pt : 'Player_Turn' = playerTurn
 
 
 class Accusation(Actions) :
 
-    def __init__(self, aCaseFile: Hand):
+    def __init__(self, aCaseFile: 'Hand'):
         self.case_file = aCaseFile
 
     def makeAccusation(self, aSuspect: str, aWeapon: str, aRoom: str) -> bool:
@@ -43,11 +41,11 @@ class Accusation(Actions) :
             and self.case_file.has_card(room))
 
 class Suggestion(Actions):
-    def __init__(self, aPlayer: Player, aTurnOrder: TurnOrder):
+    def __init__(self, aPlayer: 'Player', aTurnOrder: 'TurnOrder'):
         super().__init__(aPlayer)
         self.turnOrder = aTurnOrder
 
-    def makeSuggestion(self, aSuspect: str, aWeapon: str, aRoom: str) -> tuple[Player, Hand]:
+    def makeSuggestion(self, aSuspect: str, aWeapon: str, aRoom: str) -> tuple['Player', 'Hand']:
         """
         Checks if the accusation made by the user was correct.
 
@@ -63,7 +61,7 @@ class Suggestion(Actions):
 
         #TODO: Verify that turnOrder is a list
         turnList_iter = iter(self.turnOrder)
-        nextPlayer: Optional[Player] = None
+        nextPlayer: Optional['Player'] = None
         if (None != self.p):
             raise ValueError("Current Player not defined! :-(")
         # output list of player's cards that match suggestion
@@ -86,7 +84,7 @@ class Suggestion(Actions):
 
 class Move(Actions):
 
-    def makeMove(self, aDest: Space) -> bool:
+    def makeMove(self, aDest: 'Space') -> bool:
 
         if None == aDest:
             return False
