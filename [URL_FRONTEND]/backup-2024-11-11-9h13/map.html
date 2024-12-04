@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draggable Textured Circle</title>
-	<base href="http://test.hyrule.kingdom/software-engineering/" />
     <link rel="stylesheet" href="map.css">
 	<script src="scripts/jquery.js"></script>
 </head>
@@ -73,7 +72,7 @@
 				<div class="popup-control popup-close" closes="#cl-cards-wrapper"><img src="assets/control/close.png"></div>
 				<h1>Cards</h3>
 				<hr />
-				<p>Here is the evidence you've collected, Detective.  You know these people, items, and places were not involved in the murder.</p>
+				<p>Here is the evidence you've collected, Detective. You know these people, items, and places were not involved in the murder.</p>
 				<ul>
 					<li>Billard's Room</li>
 					<li>Col. Mustard</li>
@@ -319,6 +318,40 @@
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
 
+		<!-- SHOW VALID ACTIONS POPUP -->
+		<div id="cl-actions-wrapper" class="cl-actions-wrapper popup-wrapper hide">
+			<div class="cl-actions-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-actions-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Pick an action</h3>
+				<hr />
+				<p>So what's the plan, detective?</p>
+				<table>
+					<tr>
+						<td width="20%"></td>
+						<td>
+							<span class="selected_move hide"><input type="radio" id="selected_action" name="suggestion_who" value="move"><label for="suggestion_who">Move</label></span><br />
+							<span class="selected_suggestion hide"><input type="radio" id="selected_action" name="suggestion_who" value="suggestion"><label for="suggestion_who">Make a suggestion</label></span><br />
+							<span class="selected_accusation hide"><input type="radio" id="selected_action" name="suggestion_who" value="accusation"><label for="suggestion_who">Make an accusation</label></span><br />
+						</td>
+					<tr>
+				</table>
+				<p>in ##ROOM##.</p>
+				<input type="submit" id="chosen_action" class="popup-submit" name="chosen_action" value="Chosen Action">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+
+		<!-- ACTION INVALID POPUP -->
+		<div id="cl-action-invalid-wrapper" class="cl-action-invalid-wrapper popup-wrapper hide">
+			<div class="cl-actions-invalid-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-action-invalid-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Invalid Action Selected</h3>
+				<hr />
+				<p>What's that detective? You know better than that. You can't perform that action right now.</p>
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+
 		<canvas id="glCanvas" class="cl-canvas" width="600" height="600"></canvas>
 		<script src="map.js"></script>
 	</div>
@@ -337,6 +370,8 @@
 		<button onclick="$('#cl-start-lobby-wrapper').removeClass('hide');">Start Lobby Popup</button><br />
 		<button onclick="$('#cl-suggestion-wrapper').removeClass('hide');">Suggestion Popup</button><br />
 		<button onclick="$('#cl-win-wrapper').removeClass('hide');">Win Popup</button><br />
+		<button onclick="$('#cl-actions-wrapper').removeClass('hide');">Show Available Actions</button><br />
+		<button onclick="$('#cl-action-invalid-wrapper').removeClass('hide');">Action Invalid</button><br />
 	</div>
 </body>
 </html>

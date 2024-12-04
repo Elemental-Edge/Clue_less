@@ -371,7 +371,8 @@ const initializeDjangoChannels = (ws_url) => {
 		
 		// parse JSON
         let data = JSON.parse(event.data);
-
+		
+		// SWITCH FOR COMMANDS RECEIVED
 		switch(data.command) {
 			case "add-game-to-list":
 				$("#join-game-no-games").addClass("hide");
@@ -412,7 +413,50 @@ const initializeDjangoChannels = (ws_url) => {
 				$("#select-game-welcome-message").html(`Congratulations, detective ${your_username}!<br />Which case would you like to start with?`);
 				$("#select-game-wrapper").removeClass("hide");
 				return;
+
+			case "enter-disprove-action":
+				$('#cl-disprove-wrapper').removeClass('hide');
+				return;
+			
+			case "show-valid-actions":
+				// need to check which valid actions and adjust/hide appropriately
+				for (element in data.actions) {
+					if (element == "move") {
+						$('#selected_move').removeClass('hide');
+					}
+					if (element == "suggestion") {
+						$('#selected_suggestion').removeClass('hide');
+					}
+					if (element == "accusation") {
+						$('#selected_accusation').removeClass('hide');
+					}
+				}
+				$('#cl-actions-wrapper').removeClass('hide');
+				return;
+			
+			case "disprove-select":
+				// unhide possible disprove cards
+				for (card in data.disproveCards) {
+					$('#disprove_' + card).removeClass('hide');
+				}
+				$("#cl-disprove-wrapper").removeClass('hide');
 				
+			case "makeAccusation":
+				// unhide accusation popup
+				$("#cl-accusation-wrapper").removeClass('hide');
+				
+			case "makeSuggestion":
+				// unhide suggestion popup
+				$("#cl-suggestion-wrapper").removeClass('hide');
+
+			case "win":
+				// unhide win popup
+				$("#cl-suggestion-wrapper").removeClass('hide');
+
+			case "selected-action-invalid":
+				$('#cl-win-wrapper').removeClass('hide');
+				return;
+
 			
 			default:
 				console.error(`Unknown command from server: ${data.command}.`);
@@ -453,6 +497,7 @@ $("#command-to-backend-submit").on("click", function() {
 	sendMessageToBackend(socket, $("#command-to-backend").val());
 });
 
+// COMMANDS TO SEND FROM CLI TO BACK END
 $("form").on("submit", function(e) {
 
 	// stop form submission
@@ -483,6 +528,27 @@ $("form").on("submit", function(e) {
 		$("#login-password").val("");
 		return;
 	}
+
+	// make accusation
+	if ($(this).attr("id") == "make_accusation") {
+		sendMessageToBackend(socket, `makeAccusation ${$("#accusation-who").val()} ${$("#accusation_with").val()} ${$("#accusation-where").val()}`);
+		return;
+	}
+
+	// make suggestion
+	if ($(this).attr("id") == "make_suggestion") {
+		sendMessageToBackend(socket, `getPlayerLocation` selected_character.currLocation);
+		sendMessageToBackend(socket, `makeSuggestion ${$("#suggestion-who").val()} ${$("#suggestion_with").val()} ${getCurrentRoom()}`);
+		return;
+	}
+
+	// action chosen
+	if ($(this).attr("id") == "chosen_action") {
+		// make a check to see if suggestion is valid
+		sendMessageToBackend(socket, `checkValidAction ${$("#selected_action"}).val()}`);
+		return;
+	}
+
 	
 	console.error(`Unknown form.`);
 });

@@ -6,6 +6,7 @@ from django.db import transaction
 from django.http import JsonResponse
 from..GameManagement.models import GameRoom
 from asgiref.sync import sync_to_async
+from Backend.gameboardGroupings.game_processor import GameProcessor
 import re
 import string
 import uuid
@@ -55,6 +56,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             # Log the error or handle it appropriately
             print(f"Error while disconnecting from notifications group: {e}")
+
 
     async def receive(self, text_data):
         try:
@@ -298,6 +300,57 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             }))
 
                     return;
+
+                case "getValidActions":
+                    actions_list = GameProcessor.get_valid_actions()
+
+                    session = self.scope["session"]
+                    await sync_to_async(session.save)()
+
+                    return await self.send(json.dumps({
+                        "command": "show-valid-actions"
+                        "actions": actions_list.toString()  # TODO: need to implement toString for Actions
+                    }))
+
+                case "makeAccusation":
+                    suspect = command[1]
+                    weapon = command[2]
+                    room = command[3]
+                    result = GameProcessor.handle_accusation(GameProcessor.get_current_player(), suspect, weapon, room)
+
+                    session = self.scope["session"]
+                    await sync_to_async(session.save)()
+
+                    if result:
+                        return await self.send(json.dumps({
+                            "command": "win"
+                            "winner": GameProcessor.get_current_player()   # TODO: need to implement get_current_player() in GameProcessor
+                            "winningCards": suspect, weapon, room  # TODO: need to implement toString for Hand
+                        }))
+
+
+                case "makeSuggestion":
+                    suspect = command[1]
+                    weapon = command[2]
+                    room = command[3]
+                    (disprover, disproveCards) = GameProcessor.handle_suggestion(GameProcessor.get_current_player(), suspect, weapon, room)
+                    
+                    session = self.scope["session"]
+                    await sync_to_async(session.save)()
+
+                    return await self.send(json.dumps({
+                        "command": "disprove-select"
+                        "disprover": disprover.toString()   # TODO: need to implement toString for Player
+                        "disproveCards": disproveCards.toString()  # TODO: need to implement toString for Hand
+                    }))
+
+                case "disproveReceived":
+                    disprover = command[1]
+                    disproveCard = command[2]
+                    # TODO: end current user's turn and update to next player turn
+                    GameProcessor.handle_disprove(disprover, disproveCard)  # TODO: need to implement this method
+                    GameProcessor.end_turn()
+
 
              
                 # unknown case

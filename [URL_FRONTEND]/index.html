@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clue-Less</title>
-	<base href="http://test.hyrule.kingdom/" />
     <link rel="stylesheet" href="map.css">
 	<script src="scripts/jquery.js"></script>
 </head>
@@ -19,6 +18,8 @@
 				<h1>Accusation</h3>
 				<hr />
 				<p>So, detective, you're ready to make arrests??</p>
+
+
 				<table>
 					<tr>
 						<td>
@@ -50,6 +51,7 @@
 						</td>
 					<tr>
 				</table>
+				</form>
 				<input type="submit" id="make_accusation" class="popup-submit" name="make_accusation" value="Make Accusation">
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
@@ -120,12 +122,31 @@
 				<table>
 					<tr>
 						<td>
-							<input type="radio" id="evidence" name="evidence" value="billiards"><label for="evidence">Billard's Room</label><br />
-							<input type="radio" id="evidence" name="evidence" value="mustard"><label for="evidence">Col. Mustard</label><br />
-							<input type="radio" id="evidence" name="evidence" value="kitchen"><label for="evidence">Kitchen</label><br />
-							<input type="radio" id="evidence" name="evidence" value="knife"><label for="evidence">Knife</label><br />
-							<input type="radio" id="evidence" name="evidence" value="plum"><label for="evidence">Prof. Plum</label><br />
-							<input type="radio" id="evidence" name="evidence" value="study"><label for="evidence">Study</label><br />
+							<span class="disprove_mustard hide"><input type="radio" id="disprove_who" name="disprove_who" value="mustard"><label for="disprove_who">Col. Mustard</label></span><br />
+							<span class="disprove_green hide"><input type="radio" id="disprove_who" name="disprove_who" value="green"><label for="disprove_who">Mr. Green</label></span><br />
+							<span class="disprove_peacock hide"><input type="radio" id="disprove_who" name="disprove_who" value="peacock"><label for="disprove_who">Mrs. Peacock</label></span><br />
+							<span class="disprove_scarlet hide"><input type="radio" id="disprove_who" name="disprove_who" value="scarlet"><label for="disprove_who">Mrs. Scarlet</label></span><br />
+							<span class="disprove_white hide"><input type="radio" id="disprove_who" name="disprove_who" value="white"><label for="disprove_who">Mrs. White</label></span><br />
+							<span class="disprove_plum hide"><input type="radio" id="disprove_who" name="disprove_who" value="plum"><label for="disprove_who">Prof. Plum</label></span><br />
+						</td>
+						<td>
+							<span class="disprove_candlestick hide"><input type="radio" id="evidence" name="evidence" value="candlestick"><label for="evidence">Candlestick</label></span><br />
+							<span class="disprove_knife hide"><input type="radio" id="evidence" name="evidence" value="knife"><label for="evidence">Knife</label></span><br />
+							<span class="disprove_pipe hide"><input type="radio" id="evidence" name="evidence" value="pipe"><label for="evidence">Lead Pipe</label></span><br />
+							<span class="disprove_revolver hide"><input type="radio" id="evidence" name="evidence" value="revolver"><label for="evidence">Revolver</label></span><br />
+							<span class="disprove_rope hide"><input type="radio" id="evidence" name="evidence" value="rope"><label for="evidence">Rope</label></span><br />
+							<span class="disprove_wrench hide"><input type="radio" id="evidence" name="evidence" value="wrench"><label for="evidence">Wrench</label></span><br />
+						</td>
+						<td>
+							<span class="disprove_ballroom hide"><input type="radio" id="disprove_where" name="disprove_where" value="ballroom"><label for="disprove_where">Ballroom</label></span><br />
+							<span class="disprove_billiards hide"><input type="radio" id="disprove_where" name="disprove_where" value="billiards"><label for="disprove_where">Billiard's Room</label></span><br />
+							<span class="disprove_conservatory hide"><input type="radio" id="disprove_where" name="disprove_where" value="Conservatory"><label for="disprove_where">Conservatory</label></span><br />							
+							<span class="disprove_dining hide"><input type="radio" id="disprove_where" name="disprove_where" value="dining"><label for="disprove_where">Dining Room</label></span><br />
+							<span class="disprove_hall hide"><input type="radio" id="disprove_where" name="disprove_where" value="hall"><label for="disprove_where">Hall</label></span><br />
+							<span class="disprove_kitchen hide"><input type="radio" id="disprove_where" name="disprove_where" value="kitchen"><label for="disprove_where">Kitchen</label></span><br />
+							<span class="disprove_library hide"><input type="radio" id="disprove_where" name="disprove_where" value="library"><label for="disprove_where">Library</label></span><br />
+							<span class="disprove_lounge hide"><input type="radio" id="disprove_where" name="disprove_where" value="lounge"><label for="disprove_where">Lounge</label></span><br />
+							<span class="disprove_study hide"><input type="radio" id="disprove_where" name="disprove_where" value="study"><label for="disprove_where">Study</label></span><br />
 						</td>
 					<tr>
 				</table>
@@ -403,6 +424,51 @@
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
 
+		<!-- SHOW VALID ACTIONS POPUP -->
+		<div id="cl-actions-wrapper" class="cl-actions-wrapper popup-wrapper hide">
+			<div class="cl-actions-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-actions-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Pick an action</h3>
+				<hr />
+				<p>So what's the plan, detective?</p>
+				<table>
+					<tr>
+						<td width="20%"></td>
+						<td>
+							<span class="selected_move hide"><input type="radio" id="selected_action" name="suggestion_who" value="move"><label for="suggestion_who">Move</label></span><br />
+							<span class="selected_suggestion hide"><input type="radio" id="selected_action" name="suggestion_who" value="suggestion"><label for="suggestion_who">Make a suggestion</label></span><br />
+							<span class="selected_accusation hide"><input type="radio" id="selected_action" name="suggestion_who" value="accusation"><label for="suggestion_who">Make an accusation</label></span><br />
+						</td>
+					<tr>
+				</table>
+				<p>in ##ROOM##.</p>
+				<input type="submit" id="chosen_action" class="popup-submit" name="chosen_action" value="Chosen Action">
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+
+		<!-- ACTION INVALID POPUP -->
+		<div id="cl-action-invalid-wrapper" class="cl-action-invalid-wrapper popup-wrapper hide">
+			<div class="cl-actions-invalid-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-action-invalid-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Invalid Action Selected</h3>
+				<hr />
+				<p>What's that detective? You know better than that. You can't perform that action right now.</p>
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+
+		<!-- CANNOT DISPROVE POPUP -->
+		<div id="cl-cannot-disprove-wrapper" class="cl-cannot-disprove-wrapper popup-wrapper hide">
+			<div class="cl-cannot-disprove-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-cannot-disprove-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Cannot Disprove</h3>
+				<hr />
+				<p>Looks like we're still missing needed evidence, detective. We can't disprove the suggestion.</p>
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+
 		<canvas id="glCanvas" class="cl-canvas" width="600" height="600"></canvas>
 		<script>
 			// DECLARE GAME VARS
@@ -412,6 +478,7 @@
 			var current_characters_turn;
 			var enforce_valid_character_move = false;
 			var unavailable_characters = [];
+			var selected_character;
 		</script>
 		<script src="map.js"></script>
 	</div>
@@ -440,6 +507,8 @@
 			<button id="no-enforce-valid-character-move" class="hide" onclick="$('#enforce-valid-character-move').removeClass('hide'); $('#no-enforce-valid-character-move').addClass('hide'); enforce_valid_character_move = false;">Do Not Enforce Valid Character Move</button><br />
 			<button id="open-loading-window" onclick="$('#loading').removeClass('hide');">Open Loading Popup</button><br />
 			<button id="close-loading-window" onclick="$('#loading').addClass('hide');">Close Loading Popup</button><br />
+			<button onclick="$('#cl-actions-wrapper').removeClass('hide');">Show Available Actions</button><br />
+			<button onclick="$('#cl-action-invalid-wrapper').removeClass('hide');">Action Invalid</button><br />
 		</div>
 	</div>
 </body>
