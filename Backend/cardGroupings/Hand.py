@@ -1,5 +1,6 @@
-from Card import Card, CardType
+from __future__ import annotations
 from random import shuffle
+from Backend.cardGroupings.Card import Card, CardType
 
 class Hand():
     """

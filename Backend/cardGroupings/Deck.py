@@ -1,4 +1,5 @@
-from Card import Card, CardType
+from __future__ import annotations
+from Backend.cardGroupings.Card import Card, CardType
 from random import shuffle
 
 class Deck():

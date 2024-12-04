@@ -1,8 +1,8 @@
 from __future__ import annotations
 from enum import Enum, auto
 from typing import List
-from GameManagement.player import Player
-from cardGroupings.Card import CardType, Card
+from Backend.GameManagement.playerGroupings.player import Player
+from Backend.cardGroupings.Card import CardType, Card
 
 SPACE_NAME = ""
 CREATE_BIDIRECTIONAL_CONN = True
@@ -29,7 +29,7 @@ class Space:
     def __init__(self, name: str = SPACE_NAME):
         self._name: str = name
         self._space_type: SpaceType = None
-        self._players: List[Player] = []
+        self._players: List['Player'] = []
         self._adjacent_spaces: List[Space] = []
         # represents all spaces adjacent to the space
         self._player_count: int = 0
@@ -68,7 +68,7 @@ class Space:
         return self._space_type
 
     def add_adjacent_space(self, space: Space, create_bidirectional: bool = CREATE_BIDIRECTIONAL_CONN) -> None:
-        """Adds a space to adjacent spaces list and creates reciprocal connection by default""" 
+        """Adds a space to adjacent spaces list and creates reciprocal connection by default"""
         if space is not self:
             if create_bidirectional:
                 space._adjacent_spaces.append(self)
@@ -76,7 +76,7 @@ class Space:
             self._adjacent_spaces.append(space)
         else:
             raise ValueError(f"{space._name} cannot be adjacent to itself")
-        
+
     def add_player(self, player: Player) -> bool:
         """Adds a player to the space"""
         is_success = False
@@ -85,7 +85,7 @@ class Space:
             self._player_count += 1
             is_success = True
         return is_success
-    
+
     def is_player_in_room(self, player_id: int) -> bool:
         """Returns True if the player's associated ID is found in the players
            list, otherwise the function Returns False."""
@@ -105,7 +105,7 @@ class Space:
             player = self._players.pop(player_index)
             self._player_count -= 1
         return player
-    
+
     def get_player_index(self, player_id: int) -> int:
         """Gets a player index based on the playerID"""
         current_index = 0
@@ -123,7 +123,7 @@ class Space:
         """Clears players list in the space and sets player count to 0"""
         self._players.clear()
         self._player_count = 0
-    
+
     def get_player_by_id(self, player_id: int) -> Player | None:
         """Gets the player associated with a player id"""
         found_player = None
@@ -132,7 +132,7 @@ class Space:
                 found_player = player
                 break
         return found_player
-    
+
     def get_player_by_character(self, character_name: str) -> Player | None:
         """Gets the player associated with a specific character name"""
         found_player = None
@@ -150,12 +150,12 @@ class Room(Space):
         self._space_type: SpaceType = SpaceType.ROOM
         self._weapons: List[Card] = []
         self._weapon_count: int = 0
-    
+
     def get_weapons(self) -> List[Card] | None:
         """Returns a list of weapons in the room or None, if no
            weapon is found in the room"""
         return self._weapons
-    
+
     def add_weapon(self, weapon: Card):
         """Adds a weapon to the room"""
         if weapon.get_card_type() == CardType.WEAPON:
@@ -170,7 +170,7 @@ class Room(Space):
         if weapon_index != -1:
             weapon = self._weapons.pop(weapon_index)
         return weapon
-    
+
     def get_weapon_index(self, weapon_name: str) -> int:
         """Gets a player index based on the playerID"""
         current_index = 0
@@ -194,7 +194,7 @@ class CornerRoom(Room):
     def get_secret_passages(self) -> List[Space]:
         """Returns a list of secret passages"""
         return self._secret_passages
-        
+
     def add_secret_passage(self, secret_passage: Space, create_bidirectional: CREATE_BIDIRECTION_SECRET):
         """Adds a secrete passage to the room"""
         if create_bidirectional:
@@ -202,7 +202,7 @@ class CornerRoom(Room):
                 secret_passage._secret_passages.append(self)
 
         self._secret_passages.append(secret_passage)
-    
+
     def has_secret_passage(self):
         """Returns True if the Room has a secret passage"""
         return bool(self._secret_passage)
@@ -213,11 +213,11 @@ class Hallway(Space):
     def __init__(self, name: str = SPACE_NAME):
         super().__init__(SPACE_NAME)  # Hallways don't need names
         self.space_type = SpaceType.HALLWAY
-    
+
     def is_empty(self) -> bool:
         """Returns True if no players are in the hallway"""
         return self._player_count == 0
-    
+
     def add_player(self, player: Player) -> bool:
         """Overrides the base class function to add a player. Only adds
            a player if the hallway is empty."""

@@ -1,8 +1,8 @@
 
+from __future__ import annotations
 from Backend.GameManagement.playerGroupings.Actions import Actions, Suggestion, Accusation, Move
 from Backend.GameManagement.playerGroupings.player import Player
-from Backend.GameManagement.gameboardGrouping import game_board, game_processor, space
-from Backend.cardGroupings import Card, Deck, Hand
+from Backend.cardGroupings import Hand
 
 class Player_Turn():
     p: Player
@@ -21,6 +21,7 @@ class Player_Turn():
         self.hasMoved = False
         self.caseFile = aCaseFile
 
+
     # isActive becomes True only when get_valid_actions() is called
     def get_valid_actions(self):
         return_list = []
@@ -35,6 +36,7 @@ class Player_Turn():
 
     def take_action(self, action: Actions):
         action.perform_action()
+        # TODO: Dont end turn right away. If they move into a room, they can make a suggestion/accusation
         end_turn()
 
     def end_turn(self):

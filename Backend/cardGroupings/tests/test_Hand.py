@@ -1,6 +1,6 @@
 import pytest
-from Card import Card, CardType
-from Hand import Hand
+from Backend.cardGroupings.Card import Card, CardType
+from Backend.cardGroupings.Hand import Hand
 
 @pytest.fixture
 def card_suspect():

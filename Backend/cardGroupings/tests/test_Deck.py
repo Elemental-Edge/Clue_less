@@ -1,6 +1,6 @@
 import pytest
-from Card import Card, CardType
-from Deck import Deck
+from Backend.cardGroupings.Card import Card, CardType
+from Backend.cardGroupings.Deck import Deck
 
 @pytest.fixture
 def card_suspect():
