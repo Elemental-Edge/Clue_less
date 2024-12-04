@@ -134,7 +134,7 @@ class GameProcessor:
         if player != self.current_turn.p:
             raise ValueError("Not this player's turn")
 
-        suggestion = Suggestion(aTurnOrder= self.turnOrder)
+        suggestion = Suggestion(player, aTurnOrder= self.turnOrder)
         disprovePlayer, disproveHand = suggestion.makeSuggestion(aSuspect,aWeapon,aRoom)
 
         # Request that the disprove player select a card from the disprove hand
@@ -164,7 +164,7 @@ class GameProcessor:
         if not self.current_turn or not self.current_turn.isActive:
             raise ValueError("Not currently this player's turn")
 
-        accusation = Accusation(self.case_file)
+        accusation = Accusation(player, self.case_file)
 
         # Check if Accusation was correct
         if accusation.makeAccusation(suspect, weapon, room):

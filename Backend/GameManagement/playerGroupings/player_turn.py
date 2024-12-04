@@ -27,11 +27,12 @@ class Player_Turn():
         return_list = []
         self.isActive = True
         if self.hasEnteredRoom and not self.hasMadeSuggestion:
-            return_list.append(Suggestion(self.p, self))
+            #Todo: Update to turn order
+            return_list.append(Suggestion(self.p, self.turnOrder ))
         if not self.hasMadeAccusation:
-            return_list.append(Accusation(self.caseFile))
+            return_list.append(Accusation(self.p, self.caseFile))
         if not self.hasMoved:
-            return_list.append(Move(self.p, self))
+            return_list.append(Move(self.p))
         return return_list
 
     def take_action(self, action: Actions):

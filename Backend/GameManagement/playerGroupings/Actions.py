@@ -18,7 +18,8 @@ class Actions():
 
 class Accusation(Actions) :
 
-    def __init__(self, aCaseFile: 'Hand'):
+    def __init__(self, player: Player, playerTurn: 'Player_Turn', aCaseFile: 'Hand'):
+        super().__init__(player, playerTurn)
         self.case_file = aCaseFile
 
     def makeAccusation(self, aSuspect: str, aWeapon: str, aRoom: str) -> bool:
@@ -59,7 +60,7 @@ class Suggestion(Actions):
         suggestedCards.add_card(Card(aWeapon, card_type=CardType.WEAPON))
         suggestedCards.add_card(Card(aRoom, card_type=CardType.ROOM))
 
-        #TODO: Verify that turnOrder is a list
+        #TODO: Update turnOrder to Circular List
         turnList_iter = iter(self.turnOrder)
         nextPlayer: Optional['Player'] = None
         if (None != self.p):
@@ -84,12 +85,15 @@ class Suggestion(Actions):
 
 class Move(Actions):
 
+    def __init__(self, player: Player, playerTurn: 'Player_Turn'):
+        super().__init__(player, playerTurn)
+
     def makeMove(self, aDest: 'Space') -> bool:
 
         if None == aDest:
             return False
-        if (SpaceType.HALLWAY == aDest.get_space_type()):
-            return False
+        # if (SpaceType.HALLWAY == aDest.get_space_type()):
+        #     return False
 
         # Check if Destination is in Adjacent Spaces
         if not aDest in self.p.currLocation.get_adjacent_spaces():
@@ -109,9 +113,3 @@ class Move(Actions):
 
         # TODO: broadcast move
         return True
-
-
-
-
-
-

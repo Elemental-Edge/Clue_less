@@ -66,7 +66,7 @@ class JoinGameView(View):
         # TODO: THIS IS A STUB
 
         return JsonResponse({'message': 'This feature has not been implemented yet.'}, status=200)
-    
+
 class LeaveGameView(View):
     """
     View for handling player leaving a game.
@@ -93,7 +93,7 @@ class LeaveGameView(View):
         # TODO: THIS IS A STUB
 
         return JsonResponse({'message': 'This feature has not been implemented yet.'}, status=200)
-    
+
 class StartGameView(View):
     """
     View for handling player starting a game.
@@ -120,7 +120,7 @@ class StartGameView(View):
         # TODO: THIS IS A STUB
 
         return JsonResponse({'message': 'This feature has not been implemented yet.'}, status=200)
-    
+
 class ChooseCharacterView(View):
     """
     View for choosing a character.
@@ -147,7 +147,7 @@ class ChooseCharacterView(View):
         # TODO: THIS IS A STUB
 
         return JsonResponse({'message': 'This feature has not been implemented yet.'}, status=200)
-    
+
 class PlayerMoveView(View):
 
     def post(self, request) -> JsonResponse:
@@ -157,17 +157,29 @@ class PlayerMoveView(View):
         # TODO: THIS IS A STUB
 
         return JsonResponse({'message': 'This feature has not been implemented yet.'}, status=200)
-    
+
 class MakeSuggestionView(View):
 
     def post(self, request) -> JsonResponse:
+        from django.apps import apps
+
+        # myapp/consumers.py
+        for i in apps.get_app_configs():
+            print(i)
+
+        my_app_config = apps.get_app_config('GameManagement')
+        singleton_instance = my_app_config.get_singleton()
+
+        # Now you can use the singleton_instance in your consumer
+        singleton_instance.initialize()
+        singleton_instance.some_method()
 
         # TODO: THIS IS A STUB
         # TODO: THIS IS A STUB
         # TODO: THIS IS A STUB
         # Notify all clients of the new login
         channel_layer = get_channel_layer()
-        username = request.user.username 
+        username = request.user.username
         async_to_sync(channel_layer.group_send)(
             "notifications",
             {
@@ -177,7 +189,7 @@ class MakeSuggestionView(View):
         )
 
         return JsonResponse({'message': 'This feature has not been implemented yet.'}, status=200)
- 
+
 class MakeAccusationView(View):
 
     def post(self, request) -> JsonResponse:
@@ -187,7 +199,7 @@ class MakeAccusationView(View):
         # TODO: THIS IS A STUB
 
         return JsonResponse({'message': 'This feature has not been implemented yet.'}, status=200)
-    
+
 class EndTurnView(View):
 
     def post(self, request) -> JsonResponse:
@@ -197,7 +209,7 @@ class EndTurnView(View):
         # TODO: THIS IS A STUB
 
         return JsonResponse({'message': 'This feature has not been implemented yet.'}, status=200)
-    
+
 class EndGameEarlyRequestView(View):
 
     def post(self, request) -> JsonResponse:
@@ -207,7 +219,7 @@ class EndGameEarlyRequestView(View):
         # TODO: THIS IS A STUB
 
         return JsonResponse({'message': 'This feature has not been implemented yet.'}, status=200)
-    
+
 class EndGameEarlyVoteView(View):
 
     def post(self, request) -> JsonResponse:
