@@ -6,16 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4744f2d5-bea9-4fd7-bc99-e2584abb5988" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/Actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/Actions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/cardGroupings/Hand.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/cardGroupings/Hand.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/game_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/game_processor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/space.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/space.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/turn_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/turn_order.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +113,7 @@
       <workItem from="1733363869510" duration="10000" />
       <workItem from="1733363894601" duration="3047000" />
       <workItem from="1733379203579" duration="613000" />
-      <workItem from="1733425819137" duration="9856000" />
+      <workItem from="1733425819137" duration="10042000" />
     </task>
     <servers />
   </component>
