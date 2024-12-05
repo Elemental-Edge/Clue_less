@@ -43,7 +43,6 @@ class TurnOrder:
         Traverses the list to find the player and removes their node.
         If the player is the only one, clears the list.
         """
-        removed_player = None
         if self.head:
             prev = self.tail
             current = self.head

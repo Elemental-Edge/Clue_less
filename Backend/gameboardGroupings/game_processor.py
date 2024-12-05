@@ -44,7 +44,7 @@ class GameProcessor:
         self.state: GameState = GameState.WAITING_FOR_PLAYERS
         self.winner: Optional[Player] = None
 
-        TODO: Where are we going to populate the turn oder? JKL
+        # TODO: Where are we going to populate the turn oder? JKL
         self.turnOrder: Optional[TurnOrder] = None
         self._initialize_deck()
 
