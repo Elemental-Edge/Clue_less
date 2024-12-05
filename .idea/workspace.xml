@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4744f2d5-bea9-4fd7-bc99-e2584abb5988" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/backup-2024-11-11-9h13/map.html" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/backup-2024-11-11-9h13/map.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/map.css" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/map.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" afterDir="false" />
-    </list>
+    <list default="true" id="4744f2d5-bea9-4fd7-bc99-e2584abb5988" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -96,6 +90,7 @@
       <workItem from="1733339741512" duration="1380000" />
       <workItem from="1733341134489" duration="2393000" />
       <workItem from="1733346116161" duration="59000" />
+      <workItem from="1733346181319" duration="111000" />
     </task>
     <servers />
   </component>

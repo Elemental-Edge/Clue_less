@@ -300,7 +300,18 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             }))
 
                     return;
+                
+                # show/update dealt cards
+                case "showDealtCards":
+                    session = self.scope["session"]
+                    await sync_to_async(session.save)()
 
+                    return await self.send(json.dumps({
+                        "command": "show-dealt-cards"
+                        "cards": GameProcessor.get_current_player.get_hand().toString()  # TODO: need to implement toString for Hand and get_hand() method in player
+                    }))
+
+                # get valid actions list for current player
                 case "getValidActions":
                     actions_list = GameProcessor.get_valid_actions()
 
@@ -327,7 +338,12 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             "winner": GameProcessor.get_current_player()   # TODO: need to implement get_current_player() in GameProcessor
                             "winningCards": suspect, weapon, room  # TODO: need to implement toString for Hand
                         }))
-
+                    else:
+                        # send eliminated player information
+                        return await self.send(json.dumps({
+                            "command": "eliminate"
+                            "eliminated": GameProcessor.get_current_player()   # TODO: need to implement get_current_player() in GameProcessor
+                        }))
 
                 case "makeSuggestion":
                     suspect = command[1]
@@ -337,6 +353,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     
                     session = self.scope["session"]
                     await sync_to_async(session.save)()
+
+                    # TODO: cannot-disprove popup, unhide for other players
 
                     return await self.send(json.dumps({
                         "command": "disprove-select"
@@ -350,8 +368,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     # TODO: end current user's turn and update to next player turn
                     GameProcessor.handle_disprove(disprover, disproveCard)  # TODO: need to implement this method
                     GameProcessor.end_turn()
-
-
              
                 # unknown case
                 case _:

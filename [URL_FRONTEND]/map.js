@@ -413,10 +413,6 @@ const initializeDjangoChannels = (ws_url) => {
 				$("#select-game-welcome-message").html(`Congratulations, detective ${your_username}!<br />Which case would you like to start with?`);
 				$("#select-game-wrapper").removeClass("hide");
 				return;
-
-			case "enter-disprove-action":
-				$('#cl-disprove-wrapper').removeClass('hide');
-				return;
 			
 			case "show-valid-actions":
 				// need to check which valid actions and adjust/hide appropriately
@@ -436,27 +432,43 @@ const initializeDjangoChannels = (ws_url) => {
 			
 			case "disprove-select":
 				// unhide possible disprove cards
+				if(current_user == disprover)	// TODO: make sure current_user is a String of current user character formatted
 				for (card in data.disproveCards) {
 					$('#disprove_' + card).removeClass('hide');
 				}
 				$("#cl-disprove-wrapper").removeClass('hide');
+				return;
+
+			case "cannot-disprove":
+				$("#cl-cannot-disprove-wrapper").removeClass('hide');
+				return;
 				
 			case "makeAccusation":
 				// unhide accusation popup
 				$("#cl-accusation-wrapper").removeClass('hide');
+				return;
 				
 			case "makeSuggestion":
 				// unhide suggestion popup
 				$("#cl-suggestion-wrapper").removeClass('hide');
+				// const tokenToMove = $('input[name="token_to_move"]:checked').val(); // jQuery selector for checked radio button
+				// const locationToMove = $('input[name="move_to_where"]:checked').val(); // jQuery selector for checked radio button
+				// moveCircleToRoom(getCircleByKey(tokenToMove), getRoomByKey(locationToMove));
+				// $(".cl-move-token-to-room-wrapper").addClass("hide");
+				return;
 
 			case "win":
 				// unhide win popup
 				$("#cl-suggestion-wrapper").removeClass('hide');
+				return;
 
 			case "selected-action-invalid":
 				$('#cl-win-wrapper').removeClass('hide');
 				return;
 
+			case "eliminate":
+				$('#cl-bad-accusation-wrapper').removeClass('hide');
+				return;
 			
 			default:
 				console.error(`Unknown command from server: ${data.command}.`);

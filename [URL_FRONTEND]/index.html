@@ -77,7 +77,7 @@
 				<hr />
 				<p>Here is the evidence you've collected, Detective.  You know these people, items, and places were not involved in the murder.</p>
 				<ul>
-					<li>Billard's Room</li>
+					<li>Billiards Room</li>
 					<li>Col. Mustard</li>
 					<li>Kitchen</li>
 					<li>Knife</li>
@@ -139,7 +139,7 @@
 						</td>
 						<td>
 							<span class="disprove_ballroom hide"><input type="radio" id="disprove_where" name="disprove_where" value="ballroom"><label for="disprove_where">Ballroom</label></span><br />
-							<span class="disprove_billiards hide"><input type="radio" id="disprove_where" name="disprove_where" value="billiards"><label for="disprove_where">Billiard's Room</label></span><br />
+							<span class="disprove_billiards hide"><input type="radio" id="disprove_where" name="disprove_where" value="billiards"><label for="disprove_where">Billiards Room</label></span><br />
 							<span class="disprove_conservatory hide"><input type="radio" id="disprove_where" name="disprove_where" value="Conservatory"><label for="disprove_where">Conservatory</label></span><br />							
 							<span class="disprove_dining hide"><input type="radio" id="disprove_where" name="disprove_where" value="dining"><label for="disprove_where">Dining Room</label></span><br />
 							<span class="disprove_hall hide"><input type="radio" id="disprove_where" name="disprove_where" value="hall"><label for="disprove_where">Hall</label></span><br />
@@ -500,6 +500,9 @@
 			<button onclick="$('#cl-suggestion-wrapper').removeClass('hide');">Suggestion Popup</button><br />
 			<button onclick="$('#cl-test-command-wrapper').removeClass('hide');">Test Command Popup</button><br />
 			<button onclick="$('#cl-win-wrapper').removeClass('hide');">Win Popup</button><br />
+			<button onclick="$('#cl-actions-wrapper').removeClass('hide');">Available Actions</button><br />
+			<button onclick="$('#cl-action-invalid-wrapper').removeClass('hide');">Action Invalid</button><br />
+			<button onclick="$('#cl-cannot-disprove-wrapper').removeClass('hide');">Cannot Disprove</button><br />
 			<div>---</div>
 			<button id="allow-map-interact" onclick="$('#disallow-map-interact').removeClass('hide'); $('#allow-map-interact').addClass('hide'); your_turn = true;">Set "Your Turn"</button>
 			<button id="disallow-map-interact" class="hide" onclick="$('#allow-map-interact').removeClass('hide'); $('#disallow-map-interact').addClass('hide'); your_turn = false;">Set "Not Your Turn"</button><br />
@@ -507,8 +510,6 @@
 			<button id="no-enforce-valid-character-move" class="hide" onclick="$('#enforce-valid-character-move').removeClass('hide'); $('#no-enforce-valid-character-move').addClass('hide'); enforce_valid_character_move = false;">Do Not Enforce Valid Character Move</button><br />
 			<button id="open-loading-window" onclick="$('#loading').removeClass('hide');">Open Loading Popup</button><br />
 			<button id="close-loading-window" onclick="$('#loading').addClass('hide');">Close Loading Popup</button><br />
-			<button onclick="$('#cl-actions-wrapper').removeClass('hide');">Show Available Actions</button><br />
-			<button onclick="$('#cl-action-invalid-wrapper').removeClass('hide');">Action Invalid</button><br />
 		</div>
 	</div>
 </body>
