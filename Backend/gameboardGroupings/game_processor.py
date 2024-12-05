@@ -6,8 +6,12 @@ from cardGroupings.Card import Card, CardType
 from Backend.GameManagement.playerGroupings.player import Player
 from Backend.GameManagement.playerGroupings.Actions import Accusation, Suggestion
 from turn_order import TurnOrder
+from GameManagement.player import Player
+from gameboardGroupings.turn_order import PlayerTurn
 from space import Room, Hallway, Space
+from gameboard import GameBoard
 import random
+
 
 class GameState(Enum):
     WAITING_FOR_PLAYERS = auto()
@@ -15,16 +19,17 @@ class GameState(Enum):
     IN_PROGRESS = auto()
     GAME_OVER = auto()
 
+
 class GameProcessor:
     """Controls the game flow and manages game state."""
 
     MIN_PLAYERS = 3
     MAX_PLAYERS = 6
-
-    def __init__(self):
+    
+    def __init__(self, game_id: str):
         # Game identification
-        self.game_id: str = str(uuid.uuid4())
-
+        self.game_id: str = game_id
+        
         # Game components
         self.game_board: GameBoard = GameBoard()
         self.main_deck: Deck = Deck()

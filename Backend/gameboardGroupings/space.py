@@ -34,19 +34,7 @@ class Space:
         # _players list length
 
     def __eq__(self, other: object) -> bool:
-        """Overloads the equal operator and establishes that two spaces are
-        equal if both spaces have the same space type, name (rooms), or
-        same adjacent spaces(hallways)."""
-        if not isinstance(other, Space):
-            # Returns False, if compared object is not of type Space
-            return False
-        if self._space_type != other._space_type:
-            # Returns False, if both Space types are not the same
-            return False
-        if self._space_type == SpaceType.HALLWAY:
-            # Returns True, if _adjacent_space are exactly the same.
-            return self._adjacent_spaces == other._adjacent_spaces
-        return self._name == other._name
+        return self is other
 
     def get_player_count(self) -> int:
         """Returns the number of players in the space."""
@@ -131,6 +119,7 @@ class Space:
     def remove_player(self, player_id: int) -> Player | None:
         """Removes a player from the space, based on the player's associated ID
         number."""
+        # change function to take a player object
         player_index = self.get_player_index(player_id)
         player = None
         if player_index != -1:
@@ -224,7 +213,7 @@ class CornerRoom(Room):
         self._secret_passage: CornerRoom = None
         self._space_type = SpaceType.CornerRoom
 
-    def get_secret_passages(self) -> CornerRoom | None:
+    def get_secret_passage(self) -> CornerRoom | None:
         """Returns a list of secret passages"""
         return self._secret_passage
 
@@ -244,7 +233,7 @@ class CornerRoom(Room):
             self._secret_passage = None
         return removed_room
 
-    def has_secret_passage(self):
+    def has_secret_passage(self) -> bool:
         """Returns True if the Room has a secret passage"""
         return self._secret_passage is not None
 
@@ -255,15 +244,17 @@ class Hallway(Space):
     def __init__(self, name: str = SPACE_NAME):
         super().__init__(name)  # Hallways don't need names
         self._space_type = SpaceType.HALLWAY
+        self._current_player = None
 
     def is_empty(self) -> bool:
         """Returns True if no players are in the hallway"""
-        return self._player_count == 0
+        return self._current_player is None
 
     def add_player(self, player: Player) -> bool:
         """Overrides the base class function to add a player. Only adds
         a player if the hallway is empty."""
         is_success = False
         if self.is_empty():
-            is_success = super().add_player(player)
+            self._current_player = player
+            is_success = True
         return is_success
