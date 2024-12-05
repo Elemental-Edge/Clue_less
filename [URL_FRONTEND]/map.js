@@ -432,7 +432,7 @@ const initializeDjangoChannels = (ws_url) => {
 			
 			case "disprove-select":
 				// unhide possible disprove cards
-				if(current_user == disprover)	// TODO: make sure current_user is a String of current user character formatted
+				if(current_user == data.disprover)	// TODO: make sure current_user is a String of current user character formatted
 				for (card in data.disproveCards) {
 					$('#disprove_' + card).removeClass('hide');
 				}
@@ -459,11 +459,11 @@ const initializeDjangoChannels = (ws_url) => {
 
 			case "win":
 				// unhide win popup
-				$("#cl-suggestion-wrapper").removeClass('hide');
+				$("#cl-win-wrapper").removeClass('hide');
 				return;
 
 			case "selected-action-invalid":
-				$('#cl-win-wrapper').removeClass('hide');
+				$('#cl-action-invalid-wrapper').removeClass('hide');
 				return;
 
 			case "eliminate":
