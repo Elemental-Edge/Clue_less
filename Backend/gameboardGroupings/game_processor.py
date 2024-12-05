@@ -4,12 +4,13 @@ from Backend.cardGroupings.Deck import Deck
 from Backend.cardGroupings.Hand import Hand
 from Backend.cardGroupings.Card import Card, CardType
 from Backend.GameManagement.playerGroupings.player import Player
-from Backend.GameManagement.playerGroupings.Actions import Accusation, Suggestion
+from Backend.GameManagement.playerGroupings.Actions import Accusation, Suggestion, Actions
 from Backend.gameboardGroupings.turn_order import TurnOrder
 from Backend.GameManagement.playerGroupings.player import Player
 from Backend.gameboardGroupings.space import Room, Hallway, Space
 from Backend.gameboardGroupings.gameboard import GameBoard
 import random
+
 # TODO: Must have odd players to join the game
 
 class GameState(Enum):
@@ -130,7 +131,7 @@ class GameProcessor:
             if current_turn:
                 current_turn.receive_card_dealt(card)
 
-    def handle_suggestion(self, player: Player, aSuspect: str, aWeapon: str, aRoom: str) -> Optional[Card]:
+    def handle_suggestion(self, player: Player, aSuspect: str, aWeapon: str, aRoom: str) -> Optional[tuple[Player, Hand]]:
         """Handle a suggestion from a player."""
         if not self.current_turn or not self.current_turn.isActive:
             raise ValueError("Not currently this player's turn")
@@ -140,7 +141,8 @@ class GameProcessor:
 
         suggestion = Suggestion(aTurnOrder= self.turnOrder)
         disprovePlayer, disproveHand = suggestion.makeSuggestion(aSuspect,aWeapon,aRoom)
-        return None
+
+        return disprovePlayer, disproveHand
 
     def handle_accusation(self, suspect: str, weapon: str, room: str) -> bool:
         """Handle an accusation from a player."""
@@ -185,9 +187,22 @@ class GameProcessor:
         if target_space not in self.get_valid_moves(player):
             return False
 
-        player.prevLocation = player.currLocation
-        player.currLocation = target_space
+        player.prevLocation = player.get_current_location()
+        player.set_current_location(target_space)
         return True
     
     def get_game_winner(self) -> Player:
         return self.winner
+    
+    def get_current_player(self) -> Player:
+        return self.turnOrder.get_current_turn()
+ 
+    def handle_disprove(self, aDisprover: Player, aDisproveCard: Card):
+        # TODO: let the current_player see the disprove card
+        # TODO: broadcast the event (not the card) to all players
+        pass
+    def get_case_file(self) -> Hand:
+        return self.case_file
+ 
+    def get_valid_actions(self) -> List[Actions]:
+        return self.current_turn.get_valid_actions()

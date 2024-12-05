@@ -14,7 +14,10 @@ class Actions():
         from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
         p : 'Player' = player
         pt : 'Player_Turn' = playerTurn
-
+    
+    @abstractmethod
+    def __str__(self):
+        pass
 
 class Accusation(Actions) :
 
@@ -39,6 +42,9 @@ class Accusation(Actions) :
         return ( self.case_file.has_card(suspect)
             and self.case_file.has_card(weapon)
             and self.case_file.has_card(room))
+    
+    def __str__(self):
+        return "accusation"
 
 class Suggestion(Actions):
     def __init__(self, aPlayer: 'Player', aTurnOrder: 'TurnOrder'):
@@ -81,6 +87,9 @@ class Suggestion(Actions):
                 break
             nextPlayer = next(turnList_iter)
         return (nextPlayer, disproveCards)
+    
+    def __str__(self):
+        return "suggestion"
 
 class Move(Actions):
 
@@ -109,6 +118,9 @@ class Move(Actions):
 
         # TODO: broadcast move
         return True
+    
+    def __str__(self):
+        return "move"
 
 
 

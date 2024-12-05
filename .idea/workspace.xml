@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4744f2d5-bea9-4fd7-bc99-e2584abb5988" name="Changes" comment="" />
+    <list default="true" id="4744f2d5-bea9-4fd7-bc99-e2584abb5988" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/GameManagement/player.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/Actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/Actions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/cardGroupings/Card.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/cardGroupings/Card.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/cardGroupings/Hand.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/cardGroupings/Hand.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/game_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/game_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,6 +101,10 @@
       <workItem from="1733341134489" duration="2393000" />
       <workItem from="1733346116161" duration="59000" />
       <workItem from="1733346181319" duration="111000" />
+      <workItem from="1733361168944" duration="241000" />
+      <workItem from="1733363840231" duration="22000" />
+      <workItem from="1733363869510" duration="10000" />
+      <workItem from="1733363894601" duration="2460000" />
     </task>
     <servers />
   </component>
@@ -124,13 +138,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Backend/GameManagement/player.py</url>
-          <line>1</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Backend/GameManagement/Actions.py</url>
-          <line>1</line>
+          <url>file://$PROJECT_DIR$/Backend/gameboardGroupings/game_processor.py</url>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

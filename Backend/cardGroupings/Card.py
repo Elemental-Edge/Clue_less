@@ -27,33 +27,33 @@ class Card:
         VALID_ROOMS: List of valid rooms
     """
     VALID_SUSPECTS = [
-        "Miss Scarlet",
-        "Professor Plum",
-        "Mrs. Peacock",
-        "Mr. Green",
-        "Colonel Mustard",
-        "Mrs. White"
+        "scarlet",
+        "plum",
+        "peacock",
+        "green",
+        "mustard",
+        "white"
         ]
 
     VALID_WEAPONS = [
-        "Candlestick",
-        "Dagger",
-        "Lead Pipe",
-        "Revolver",
-        "Rope",
-        "Wrench"
+        "candlestick",
+        "dagger",
+        "pipe",
+        "revolver",
+        "rope",
+        "wrench"
         ]
 
     VALID_ROOMS = [
-        "Ballroom",
-        "Kitchen",
-        "Library",
-        "Study",
-        "Hall",
-        "Lounge",
-        "Dining Room",
-        "Conservatory",
-        "Billiard Room"
+        "ballroom",
+        "kitchen",
+        "library",
+        "study",
+        "hall",
+        "lounge",
+        "dining",
+        "conservatory",
+        "billiards"
         ]
 
     def __init__(self, name: str, card_type: CardType):
@@ -93,7 +93,7 @@ class Card:
         return f"Card(name='{self._name}', card_type={self._card_type})"
 
     def __str__(self) -> str:
-        return f"name='{self._name}', card_type={self._card_type}"
+        return f"name='{self._name}'"
 
 if __name__ == "__main__":
     card1 = Card(Card.VALID_SUSPECTS[2], CardType.SUSPECT)

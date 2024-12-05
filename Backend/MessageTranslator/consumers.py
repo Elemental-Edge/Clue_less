@@ -326,20 +326,21 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     await sync_to_async(session.save)()
 
                     return await self.send(json.dumps({
-                        "command": "show-dealt-cards"
-                        #"cards": GameProcessor.get_current_player.get_hand().toString()  # TODO: need to implement toString for Hand and get_hand() method in player
+                        "command": "show-dealt-cards",
+                        "cards": GameProcessor.get_current_player().get_hand().__str__()
+                    # TODO: need to implement toString for Hand and get_hand() method in player
                     }))
 
                 # get valid actions list for current player
                 case "getValidActions":
-                    #actions_list = GameProcessor.get_valid_actions()
+                    actions_list = GameProcessor.get_valid_actions()    # TODO: get_valid_actions() for GameProcessor
 
                     session = self.scope["session"]
                     await sync_to_async(session.save)()
 
                     return await self.send(json.dumps({
-                        "command": "show-valid-actions"
-                        #"actions": actions_list.toString()  # TODO: need to implement toString for Actions
+                        "command": "show-valid-actions",
+                        "actions": actions_list.__str__()  # TODO: need to implement toString for Actions
                     }))
 
                 case "makeAccusation":
@@ -354,16 +355,18 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     # TODO: Anytime the gamestate changes need to broadcast message to clients
                     if result:
                         return await self.send(json.dumps({
-                            "command": "win"
-                            #"winner": GameProcessor.get_winner()   # TODO: need to implement get_current_player() in GameProcessor
-                           # "winningCards": suspect, weapon, room  # TODO: need to implement toString for Hand
+                            "command": "win",
+                            "winner": GameProcessor.get_current_player().__str__(),   # TODO: need to implement get_current_player() in GameProcessor
+                            "winningCards": suspect + " " + weapon + " " + room  # TODO: need to implement toString for Hand
                         }))
                     else:
                         # send eliminated player information
                         return await self.send(json.dumps({
-                            "command": "eliminate"
-                            #"eliminated": GameProcessor.get_current_player()   # TODO: need to implement get_current_player() in GameProcessor
+                            "command": "eliminate",
+                            "eliminated": GameProcessor.get_current_player().__str__()   # TODO: need to implement get_current_player() in GameProcessor
                         }))
+
+                    return;
 
                 case "makeSuggestion":
                     suspect = command[1]
@@ -378,16 +381,18 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                     return await self.send(json.dumps({
                         "command": "disprove-select",
-                        #"disprover": disprover.toString(),   # TODO: need to implement toString for Player
-                        #"disproveCards": disproveCards.toString()  # TODO: need to implement toString for Hand
+                        "disprover": disprover.__str__(),   # TODO: need to implement toString for Player
+                        "disproveCards": disproveCards.__str__()  # TODO: need to implement toString for Hand
                     }))
 
                 case "disproveReceived":
-                    #disprover = command[1]
-                    #disproveCard = command[2]
-                    # TODO: end current user's turn and update to next player turn
-                    #GameProcessor.handle_disprove(disprover, disproveCard)  # TODO: need to implement this method
-                    #GameProcessor.end_turn()
+                    disprover = command[1]
+                    disproveCard = command[2]
+                    # TODO: handle disprove simultaneously showing cannot-disprove to relevant users and disprove-select
+                    GameProcessor.handle_disprove(disprover, disproveCard)  # TODO: need to implement this method
+                    GameProcessor.end_turn()
+
+                    return;
              
                 # unknown case
                 case _:

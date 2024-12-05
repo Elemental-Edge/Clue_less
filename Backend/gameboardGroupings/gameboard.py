@@ -93,3 +93,7 @@ class GameBoard:
     def get_all_spaces(self) -> List[Space]:
         """Returns all sapces on the board"""
         return self.spaces
+
+    # def get_starting_positions(self):
+
+
