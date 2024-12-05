@@ -1,6 +1,6 @@
 from typing import List
 from random import shuffle
-from GameManagement.player import Player
+from Backend.GameManagement.playerGroupings.player import Player
 
 
 class Node:
@@ -68,7 +68,7 @@ class TurnOrder:
             current = current.next
         return None  # Player not found
 
-    def get_current_turn(self):
+    def get_current_turn(self) -> Player | None:
         """
         Get the player whose turn it is.
         Returns the player at the `current` node.
@@ -145,3 +145,10 @@ class TurnOrder:
         players.append(self.tail.player)  # Add the tail player to the list
 
         return players
+    
+    def get_active_players(self) -> List[Player]:
+        activate_players = []
+        for player in self.get_turn_order():
+            if not player.is_eliminated():
+                activate_players.append(player)
+        return activate_players

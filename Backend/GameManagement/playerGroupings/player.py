@@ -18,6 +18,18 @@ class Player():
         self.playerName = name
         self.isEliminated = False
 
+    def get_player_ID(self):
+        return self.playerID
+    
+    def is_eliminated(self):
+        return self.isEliminated
+
+    def get_character_name(self):
+        return self.character
+    
+    def set_player_eliminated(self, isEliminated: bool):
+        self.isEliminated = isEliminated
+
     def receive_card_dealt(self, card: Card):
         self.playerHand.add_card(card)
 
@@ -34,5 +46,6 @@ class Player():
             else:
                 possible_dest.append(sp)
         return possible_dest
+    
 
 

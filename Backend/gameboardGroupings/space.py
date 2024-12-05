@@ -211,7 +211,7 @@ class CornerRoom(Room):
     def __init__(self, name: str):
         super().__init__(name)
         self._secret_passage: CornerRoom = None
-        self._space_type = SpaceType.CornerRoom
+        self._space_type = SpaceType.CORNER_ROOM
 
     def get_secret_passage(self) -> CornerRoom | None:
         """Returns a list of secret passages"""

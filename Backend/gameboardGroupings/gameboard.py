@@ -1,4 +1,4 @@
-from space import Room, Hallway, Space
+from Backend.gameboardGroupings.space import Room, CornerRoom, Hallway, Space
 from typing import List
 
 class GameBoard:
@@ -10,15 +10,15 @@ class GameBoard:
     def setup_gameboard(self):
         """Creates the default Clue board layout with all rooms and connections"""
         # Creates all room for the default Clue board layout
-        study_room = Room("Study")
+        study_room = CornerRoom("Study")
         hall_room = Room("Hall")
-        lounge_room = Room("Lounge")
+        lounge_room = CornerRoom("Lounge")
         library_room = Room("Library")
         billiard_room = Room("Billiard Room")
         dining_room = Room("Dining Room")
-        conservatory_room = Room("Conservatory")
+        conservatory_room = CornerRoom("Conservatory")
         ballroom_room = Room("Ballroom")
-        kitchen_room = Room("Kitchen")
+        kitchen_room = CornerRoom("Kitchen")
 
         # Creats hallways between rooms
         # Horizontal hallways first (left to right)
@@ -75,8 +75,8 @@ class GameBoard:
         dining_kitchen.add_adjacent_space(kitchen_room)
 
         # Add secret passages between corner rooms
-        study_room.add_secret_passage(kitchen_room, create_bidirectional=True)  # Study <-> Kitchen
-        lounge_room.add_secret_passage(conservatory_room, create_bidirectional=True)  # Lounge <-> Conservatory
+        study_room.add_secret_passage(kitchen_room)  # Study <-> Kitchen
+        lounge_room.add_secret_passage(conservatory_room)  # Lounge <-> Conservatory
 
         # store all spaces
         self.spaces.extend([

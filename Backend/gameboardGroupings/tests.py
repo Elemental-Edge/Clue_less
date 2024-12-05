@@ -1,7 +1,7 @@
 import unittest
-from Backend.GameManagement.player import Player
-from space import Space, Room, CornerRoom, Hallway, SpaceType
-from cardGroupings.Card import Card, CardType
+from Backend.GameManagement.playerGroupings.player import Player
+from Backend.gameboardGroupings.space import Space, Room, CornerRoom, Hallway, SpaceType
+from Backend.cardGroupings.Card import Card, CardType
 
 
 class SpaceTypeTest(unittest.TestCase):

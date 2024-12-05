@@ -10,10 +10,18 @@ from Backend.gameboardGroupings.game_processor import GameProcessor
 import re
 import string
 import uuid
+from django.apps import apps
+ 
+my_app_config = apps.get_app_config('GameManagement')
+game_processor_instance = my_app_config.get_game_processor()
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     gamerooms = []
+
+    def __init__(self):
+        self.game_processor_instance = my_app_config.get_game_processor()
+        super().__init__()
 
     """
     A WebSocket consumer for handling real-time notifications.
@@ -57,8 +65,18 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             # Log the error or handle it appropriately
             print(f"Error while disconnecting from notifications group: {e}")
 
-
     async def receive(self, text_data):
+        try:
+            command = text_data.split()
+            c = command[0]
+            match c:
+                case "login":
+                    data = game_processor_instance.__str__()
+                    print("The game_processor:", data)
+        except Exception as e:
+            print(f"{e}")
+        return 0
+        """
         try:
             # Parse the incoming WebSocket message
             command = text_data.split()
@@ -178,6 +196,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                 "command": "successful-login",
                                 "username": session["_auth_username"]
                             }))
+                            # TODO: Pass Player name and ID to GameProcessor.add_player() function
 
                         else:
                             # bad username/password combo
@@ -308,48 +327,49 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                     return await self.send(json.dumps({
                         "command": "show-dealt-cards"
-                        "cards": GameProcessor.get_current_player.get_hand().toString()  # TODO: need to implement toString for Hand and get_hand() method in player
+                        #"cards": GameProcessor.get_current_player.get_hand().toString()  # TODO: need to implement toString for Hand and get_hand() method in player
                     }))
 
                 # get valid actions list for current player
                 case "getValidActions":
-                    actions_list = GameProcessor.get_valid_actions()
+                    #actions_list = GameProcessor.get_valid_actions()
 
                     session = self.scope["session"]
                     await sync_to_async(session.save)()
 
                     return await self.send(json.dumps({
                         "command": "show-valid-actions"
-                        "actions": actions_list.toString()  # TODO: need to implement toString for Actions
+                        #"actions": actions_list.toString()  # TODO: need to implement toString for Actions
                     }))
 
                 case "makeAccusation":
                     suspect = command[1]
                     weapon = command[2]
                     room = command[3]
-                    result = GameProcessor.handle_accusation(GameProcessor.get_current_player(), suspect, weapon, room)
-
+                    # TODO: Add a check to ensure that requesting user is the current player
+                    #result = GameProcessor.handle_accusation(suspect, weapon, room)
+        
                     session = self.scope["session"]
                     await sync_to_async(session.save)()
-
+                    # TODO: Anytime the gamestate changes need to broadcast message to clients
                     if result:
                         return await self.send(json.dumps({
                             "command": "win"
-                            "winner": GameProcessor.get_current_player()   # TODO: need to implement get_current_player() in GameProcessor
-                            "winningCards": suspect, weapon, room  # TODO: need to implement toString for Hand
+                            #"winner": GameProcessor.get_winner()   # TODO: need to implement get_current_player() in GameProcessor
+                           # "winningCards": suspect, weapon, room  # TODO: need to implement toString for Hand
                         }))
                     else:
                         # send eliminated player information
                         return await self.send(json.dumps({
                             "command": "eliminate"
-                            "eliminated": GameProcessor.get_current_player()   # TODO: need to implement get_current_player() in GameProcessor
+                            #"eliminated": GameProcessor.get_current_player()   # TODO: need to implement get_current_player() in GameProcessor
                         }))
 
                 case "makeSuggestion":
                     suspect = command[1]
                     weapon = command[2]
                     room = command[3]
-                    (disprover, disproveCards) = GameProcessor.handle_suggestion(GameProcessor.get_current_player(), suspect, weapon, room)
+                    #(disprover, disproveCards) = GameProcessor.handle_suggestion(GameProcessor.get_current_player(), suspect, weapon, room)
                     
                     session = self.scope["session"]
                     await sync_to_async(session.save)()
@@ -357,17 +377,17 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     # TODO: cannot-disprove popup, unhide for other players
 
                     return await self.send(json.dumps({
-                        "command": "disprove-select"
-                        "disprover": disprover.toString()   # TODO: need to implement toString for Player
-                        "disproveCards": disproveCards.toString()  # TODO: need to implement toString for Hand
+                        "command": "disprove-select",
+                        #"disprover": disprover.toString(),   # TODO: need to implement toString for Player
+                        #"disproveCards": disproveCards.toString()  # TODO: need to implement toString for Hand
                     }))
 
                 case "disproveReceived":
-                    disprover = command[1]
-                    disproveCard = command[2]
+                    #disprover = command[1]
+                    #disproveCard = command[2]
                     # TODO: end current user's turn and update to next player turn
-                    GameProcessor.handle_disprove(disprover, disproveCard)  # TODO: need to implement this method
-                    GameProcessor.end_turn()
+                    #GameProcessor.handle_disprove(disprover, disproveCard)  # TODO: need to implement this method
+                    #GameProcessor.end_turn()
              
                 # unknown case
                 case _:
@@ -382,6 +402,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 "status": "error",
                 "message": "Invalid request format."
             }))
+            """
 
     async def notify(self, event: dict) -> None:
         """
