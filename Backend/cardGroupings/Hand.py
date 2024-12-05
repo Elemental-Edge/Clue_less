@@ -54,12 +54,12 @@ class Hand():
 
     def isEmpty(self):
         "Returns true if the list is empty"
-        return(0 == len(self._cards))
+        return 0 == len(self._cards)
 
     def __str__(self):
         toReturn = []
         for card in self._cards:
-            toReturn.append(str(card))
+            toReturn.append(str(card) + " ")
         return toReturn
 
 # Sample

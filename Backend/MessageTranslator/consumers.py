@@ -75,8 +75,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     print("The game_processor:", data)
         except Exception as e:
             print(f"{e}")
-        return 0
-        """
+        # return 0
+
         try:
             # Parse the incoming WebSocket message
             command = text_data.split()
@@ -325,15 +325,18 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     session = self.scope["session"]
                     await sync_to_async(session.save)()
 
+                    cardsStr = []
+                    for card in self.game_processor_instance.get_current_player().get_hand():
+                        cardsStr.append(card.__str__())
+
                     return await self.send(json.dumps({
                         "command": "show-dealt-cards",
-                        "cards": GameProcessor.get_current_player().get_hand().__str__()
-                    # TODO: need to implement toString for Hand and get_hand() method in player
+                        "cards": cardsStr
                     }))
 
                 # get valid actions list for current player
                 case "getValidActions":
-                    actions_list = GameProcessor.get_valid_actions()    # TODO: get_valid_actions() for GameProcessor
+                    actions_list = self.game_processor_instance.get_valid_actions()
 
                     session = self.scope["session"]
                     await sync_to_async(session.save)()
@@ -343,56 +346,77 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         "actions": actions_list.__str__()  # TODO: need to implement toString for Actions
                     }))
 
-                case "makeAccusation":
+
+                case "accusation":
                     suspect = command[1]
                     weapon = command[2]
                     room = command[3]
                     # TODO: Add a check to ensure that requesting user is the current player
-                    #result = GameProcessor.handle_accusation(suspect, weapon, room)
+                    # i.e. selected_character == self.game_processor_instance.get_current_player()
+                    result = self.game_processor_instance.handle_accusation(suspect, weapon, room)
         
                     session = self.scope["session"]
                     await sync_to_async(session.save)()
                     # TODO: Anytime the gamestate changes need to broadcast message to clients
                     if result:
+                        # also need to enter win game state on back-end in addition to win popup
+                        winCards = [suspect, weapon, room]
                         return await self.send(json.dumps({
                             "command": "win",
-                            "winner": GameProcessor.get_current_player().__str__(),   # TODO: need to implement get_current_player() in GameProcessor
-                            "winningCards": suspect + " " + weapon + " " + room  # TODO: need to implement toString for Hand
+                            "winner": self.game_processor_instance.get_current_player().__str__(),
+                            "winningCards": winCards
                         }))
                     else:
+                        # also need to eliminate player on backend in addition to lose popup
                         # send eliminated player information
                         return await self.send(json.dumps({
                             "command": "eliminate",
-                            "eliminated": GameProcessor.get_current_player().__str__()   # TODO: need to implement get_current_player() in GameProcessor
+                            "eliminated": self.game_processor_instance.get_current_player().__str__()
                         }))
 
                     return;
 
-                case "makeSuggestion":
+                case "suggestion":
                     suspect = command[1]
                     weapon = command[2]
                     room = command[3]
-                    #(disprover, disproveCards) = GameProcessor.handle_suggestion(GameProcessor.get_current_player(), suspect, weapon, room)
+                    disprover, disproveCards = self.game_processor_instance.handle_suggestion(self.game_processor_instance.get_current_player(), suspect, weapon, room)
                     
                     session = self.scope["session"]
                     await sync_to_async(session.save)()
 
                     # TODO: cannot-disprove popup, unhide for other players
-
+                    # this is incorrect: need to send this json data to the disprove player, not current player
+                    # but also the cannot-disprove info to other players
                     return await self.send(json.dumps({
                         "command": "disprove-select",
-                        "disprover": disprover.__str__(),   # TODO: need to implement toString for Player
-                        "disproveCards": disproveCards.__str__()  # TODO: need to implement toString for Hand
+                        "disprover": disprover.__str__(),
+                        "disproveCards": disproveCards
                     }))
 
                 case "disproveReceived":
                     disprover = command[1]
                     disproveCard = command[2]
                     # TODO: handle disprove simultaneously showing cannot-disprove to relevant users and disprove-select
-                    GameProcessor.handle_disprove(disprover, disproveCard)  # TODO: need to implement this method
-                    GameProcessor.end_turn()
+                    self.game_processor_instance.handle_disprove(disprover, disproveCard)  # TODO: need to implement this method
+                    self.game_processor_instance.end_turn()
 
                     return;
+
+                case "validMoves":    # show valid moves
+                    possibleSpaces = self.game_processor_instance.get_current_player().get_valid_moves()
+                    stringPossibleSpaces = []
+                    for sp in possibleSpaces:
+                        stringPossibleSpaces.append(sp.__str__())
+
+                    return await self.send(json.dumps({
+                        "command": "show-valid-moves",
+                        "possibleDestinations": stringPossibleSpaces
+                    }))
+
+                case "actualMove":  # actual movement
+                    dest = command[1]
+                    self.game_processor_instance.move_player(self.game_processor_instance.get_current_player(), self.game_processor_instance.get_space_by_name(dest))
              
                 # unknown case
                 case _:
@@ -407,7 +431,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 "status": "error",
                 "message": "Invalid request format."
             }))
-            """
+
 
     async def notify(self, event: dict) -> None:
         """

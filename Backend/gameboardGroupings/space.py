@@ -21,7 +21,6 @@ class SpaceType(Enum):
         # Returns the SpaceType Name
         return self.name.replace("_", " ").tite()
 
-
 class Space:
     def __init__(self, name: str = SPACE_NAME):
         self._name: str = name

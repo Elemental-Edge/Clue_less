@@ -378,7 +378,7 @@ const initializeDjangoChannels = (ws_url) => {
 				$("#join-game-no-games").addClass("hide");
 				let c = $("#join-game-template").clone();
 				c.children(".join-game-button").val(data.name);
-				c.attr("game-id", data.game-id);
+				c.attr("game-id", data.game - id);
 				c.removeClass("hide");
 				$("#game-list-table").append(c);
 				return;
@@ -392,11 +392,11 @@ const initializeDjangoChannels = (ws_url) => {
 				$(data.selector).text(data.text);
 				$(data.selector).removeClass("hide");
 				return;
-				
+
 			case "successful-create-game":
 				alert("TODO: Game created on backend.  Finish logic on front end.");
 				return;
-				
+
 			case "successful-login":
 				$("#register-popup-error").addClass("hide");
 				$("#login-form-wrapper").addClass("hide");
@@ -404,7 +404,7 @@ const initializeDjangoChannels = (ws_url) => {
 				$("#select-game-welcome-message").html(`Ahh, well met detective ${your_username}!<br />Which case would you like to work on?`);
 				$("#select-game-wrapper").removeClass("hide");
 				return;
-				
+
 			case "successful-register":
 				$("#login-popup-error").addClass("hide");
 				$("#register-popup-error").addClass("hide");
@@ -413,7 +413,7 @@ const initializeDjangoChannels = (ws_url) => {
 				$("#select-game-welcome-message").html(`Congratulations, detective ${your_username}!<br />Which case would you like to start with?`);
 				$("#select-game-wrapper").removeClass("hide");
 				return;
-			
+
 			case "show-valid-actions":
 				// need to check which valid actions and adjust/hide appropriately
 				for (element in data.actions) {
@@ -429,14 +429,16 @@ const initializeDjangoChannels = (ws_url) => {
 				}
 				$('#cl-actions-wrapper').removeClass('hide');
 				return;
-			
+
 			case "disprove-select":
+				$("#cl-suggestion-wrapper").addClass('hide');
 				// unhide possible disprove cards
-				if(current_user == data.disprover)	// TODO: make sure current_user is a String of current user character formatted
-				for (card in data.disproveCards) {
-					$('#disprove_' + card).removeClass('hide');
+				if (${selected_character} == data.disprover) { // TODO: make sure selected_character is a String of current character formatted
+					for (card in data.disproveCards) {
+						$('#disprove_' + card).removeClass('hide');
+					}
+					$("#cl-disprove-wrapper").removeClass('hide');
 				}
-				$("#cl-disprove-wrapper").removeClass('hide');
 				return;
 
 			case "cannot-disprove":
@@ -444,11 +446,13 @@ const initializeDjangoChannels = (ws_url) => {
 				return;
 				
 			case "makeAccusation":
+				$('#cl-actions-wrapper').addClass('hide');
 				// unhide accusation popup
 				$("#cl-accusation-wrapper").removeClass('hide');
 				return;
 				
 			case "makeSuggestion":
+				$('#cl-actions-wrapper').addClass('hide');
 				// unhide suggestion popup
 				$("#cl-suggestion-wrapper").removeClass('hide');
 				// const tokenToMove = $('input[name="token_to_move"]:checked').val(); // jQuery selector for checked radio button
@@ -457,18 +461,32 @@ const initializeDjangoChannels = (ws_url) => {
 				// $(".cl-move-token-to-room-wrapper").addClass("hide");
 				return;
 
+			case "move":
+				$('#cl-actions-wrapper').addClass('hide');
+				for (elem in data.possibleDestinations) {
+					$('#move_' + elem).removeClass('hide');
+				}
+				$("#cl-move-token-wrapper").removeClass('hide');
+
 			case "win":
 				// unhide win popup
 				$("#cl-win-wrapper").removeClass('hide');
 				return;
 
 			case "selected-action-invalid":
+				$('#cl-actions-wrapper').addClass('hide');
 				$('#cl-action-invalid-wrapper').removeClass('hide');
 				return;
 
 			case "eliminate":
 				$('#cl-bad-accusation-wrapper').removeClass('hide');
 				return;
+
+			case "show-dealt-cards":
+				for (c in cards) {
+					$('#dealt_' + c).removeClass('hide');
+				}
+				$('#cl-cards-wrapper').removeClass('hide');
 			
 			default:
 				console.error(`Unknown command from server: ${data.command}.`);
@@ -543,21 +561,43 @@ $("form").on("submit", function(e) {
 
 	// make accusation
 	if ($(this).attr("id") == "make_accusation") {
-		sendMessageToBackend(socket, `makeAccusation ${$("#accusation-who").val()} ${$("#accusation_with").val()} ${$("#accusation-where").val()}`);
+		sendMessageToBackend(socket, `accusation ${$("#accusation-who").val()} ${$("#accusation_with").val()} ${$("#accusation-where").val()}`);
 		return;
 	}
 
 	// make suggestion
 	if ($(this).attr("id") == "make_suggestion") {
-		sendMessageToBackend(socket, `getPlayerLocation` selected_character.currLocation);
-		sendMessageToBackend(socket, `makeSuggestion ${$("#suggestion-who").val()} ${$("#suggestion_with").val()} ${getCurrentRoom()}`);
+		sendMessageToBackend(socket, `suggestion ${$("#suggestion-who").val()} ${$("#suggestion_with").val()} ${current_location}`);
+		return;
+	}
+
+	// make actual move
+	if ($(this).attr("id") == "move_to_space") {
+		sendMessageToBackend(socket, `actualMove ${$("#move_to_where").val()}`);
 		return;
 	}
 
 	// action chosen
 	if ($(this).attr("id") == "chosen_action") {
 		// make a check to see if suggestion is valid
-		sendMessageToBackend(socket, `checkValidAction ${$("#selected_action"}).val()}`);
+		if ($("#selected_action").equals("move")) {
+			$('#cl-actions-wrapper').addClass('hide');
+			sendMessageToBackend(socket, `validMoves`);
+		}
+		elif ($("#selected_action").equals("suggestion"))
+		{
+			$('#cl-actions-wrapper').addClass('hide');
+			sendMessageToBackend(socket, `suggestion`);	}
+		elif ($("#selected_action").equals("accusation"))
+		{
+			$('#cl-actions-wrapper').addClass('hide');
+			sendMessageToBackend(socket, `accusation`);	}
+		}
+		return;
+	}
+
+	if ($(this).attr("id") == "disprove") {
+		sendMessageToBackend(socket, `disproveReceived ${selected_character} ${$("#disprove_card").val()}`}
 		return;
 	}
 
@@ -578,6 +618,21 @@ $("#move_to_room").on("click", function() {
 	moveCircleToRoom(getCircleByKey(tokenToMove), getRoomByKey(locationToMove));
 	$(".cl-move-token-to-room-wrapper").addClass("hide");
 });
+
+$("#move_to_space").on("click", function() {
+	const tokenToMove = $('input[name="token_to_move"]:checked').val(); // jQuery selector for checked radio button
+	const locationToMove = $('input[name="move_to_where"]:checked').val(); // jQuery selector for checked radio button
+	dest = getHallwayByKey(locationToMove)
+	if (dest == null) {
+		dest = getRoomByKey(locationToMove)
+		moveCircleToRoom(getCircleByKey(tokenToMove), dest);
+	}
+	else {
+		moveCircleToHallway(getCircleByKey(tokenToMove), dest);
+	}
+	$(".cl-move-token-to-space-wrapper").addClass("hide");
+}
+
 
 $(".popup-close").on("click", function() { $($(this).attr("closes")).addClass("hide"); });
 

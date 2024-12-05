@@ -1,7 +1,7 @@
 
 from __future__ import annotations
 from Backend.cardGroupings.Card import Card
-#from Backend.gameboardGroupings.space import Space, SpaceType
+from Backend.gameboardGroupings.space import Space, SpaceType, Hallway
 from Backend.cardGroupings.Hand import Hand
 from Backend.cardGroupings.Card import Card
 

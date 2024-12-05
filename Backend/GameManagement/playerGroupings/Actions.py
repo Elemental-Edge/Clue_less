@@ -4,16 +4,17 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 from Backend.GameManagement.playerGroupings.player import Player
+from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
 from Backend.gameboardGroupings.turn_order import TurnOrder
 from Backend.cardGroupings.Card import Card, CardType
 from Backend.cardGroupings.Hand import Hand
 from Backend.gameboardGroupings.space import SpaceType,Space
 
 class Actions():
-    def __init__(self, player: 'Player', playerTurn: 'Player_Turn'):
+    def __init__(self, player: Player, playerTurn: Player_Turn):
         from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
-        p : 'Player' = player
-        pt : 'Player_Turn' = playerTurn
+        self.p : 'Player' = player
+        self.pt : 'Player_Turn' = playerTurn
     
     @abstractmethod
     def __str__(self):
@@ -21,7 +22,7 @@ class Actions():
 
 class Accusation(Actions) :
 
-    def __init__(self, aCaseFile: 'Hand'):
+    def __init__(self, aCaseFile: Hand):
         self.case_file = aCaseFile
 
     def makeAccusation(self, aSuspect: str, aWeapon: str, aRoom: str) -> bool:
@@ -47,11 +48,11 @@ class Accusation(Actions) :
         return "accusation"
 
 class Suggestion(Actions):
-    def __init__(self, aPlayer: 'Player', aTurnOrder: 'TurnOrder'):
+    def __init__(self, aPlayer: Player, aTurnOrder: TurnOrder):
         super().__init__(aPlayer)
         self.turnOrder = aTurnOrder
 
-    def makeSuggestion(self, aSuspect: str, aWeapon: str, aRoom: str) -> tuple['Player', 'Hand']:
+    def makeSuggestion(self, aSuspect: str, aWeapon: str, aRoom: str) -> tuple[Player, list[str]]:
         """
         Checks if the accusation made by the user was correct.
 
@@ -68,25 +69,29 @@ class Suggestion(Actions):
         #TODO: Verify that turnOrder is a list
         turnList_iter = iter(self.turnOrder)
         nextPlayer: Optional['Player'] = None
-        if (None != self.p):
+        if None != self.p:
             raise ValueError("Current Player not defined! :-(")
         # output list of player's cards that match suggestion
         disproveCards = Hand()
         nextPlayer = next(turnList_iter)
-        while (nextPlayer != self.p):
-            if (None == nextPlayer):
+        while nextPlayer != self.p:
+            if None == nextPlayer:
                 break
-            if (nextPlayer.isEliminated):
+            if nextPlayer.isEliminated:
                 continue
             # Check player's hand for matching cards
             for card in suggestedCards.get_hand():
-                if (nextPlayer.playerHand.hand.has_card(card)):
+                if nextPlayer.get_hand().has_card(card):
                     disproveCards.add_card(card)
 
-            if (not disproveCards.isEmpty()):
+            if not disproveCards.isEmpty():
                 break
             nextPlayer = next(turnList_iter)
-        return (nextPlayer, disproveCards)
+
+        toReturnDisproveCardsList = []
+        for el in disproveCards.get_hand():
+            toReturnDisproveCardsList.append(el.__str__())
+        return nextPlayer, toReturnDisproveCardsList
     
     def __str__(self):
         return "suggestion"
@@ -97,7 +102,7 @@ class Move(Actions):
 
         if None == aDest:
             return False
-        if (SpaceType.HALLWAY == aDest.get_space_type()):
+        if SpaceType.HALLWAY == aDest.get_space_type():
             return False
 
         # Check if Destination is in Adjacent Spaces
@@ -106,7 +111,7 @@ class Move(Actions):
         # have player select a move
         selected_destination = aDest
 
-        if(selected_destination.get_space_type() == SpaceType.ROOM):
+        if selected_destination.get_space_type() == SpaceType.ROOM:
             self.pt.hasEnteredRoom = True
 
         selected_destination.add_player(self.p)

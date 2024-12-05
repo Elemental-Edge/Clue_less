@@ -46,6 +46,8 @@ class TurnOrder:
         if self.head:
             prev = self.tail
             current = self.head
+        else:   # no active players
+            return None
 
         while current != self.tail or prev == self.tail:  # Traverse until full cycle
             if current.player == player:

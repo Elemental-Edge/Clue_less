@@ -3,7 +3,6 @@ from typing import List, Optional, Dict, Set
 from Backend.cardGroupings.Deck import Deck
 from Backend.cardGroupings.Hand import Hand
 from Backend.cardGroupings.Card import Card, CardType
-from Backend.GameManagement.playerGroupings.player import Player
 from Backend.GameManagement.playerGroupings.Actions import Accusation, Suggestion, Actions
 from Backend.gameboardGroupings.turn_order import TurnOrder
 from Backend.GameManagement.playerGroupings.player import Player
@@ -206,3 +205,13 @@ class GameProcessor:
  
     def get_valid_actions(self) -> List[Actions]:
         return self.current_turn.get_valid_actions()
+
+    def get_turn_order(self) -> list[str]:
+        active_players = self.turnOrder.get_turn_order()
+        toReturn = []
+        for player in active_players:
+            toReturn.append(player.__str__())
+        return toReturn
+
+    def get_space_by_name(self, dest: str):
+        return self.game_board.get_space_by_name(dest)

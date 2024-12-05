@@ -6,12 +6,35 @@
   <component name="ChangeListManager">
     <list default="true" id="4744f2d5-bea9-4fd7-bc99-e2584abb5988" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/Actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/Actions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/GameManagement/playerGroupings/player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/cardGroupings/Hand.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/cardGroupings/Hand.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/game_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/game_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/space.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/space.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/turn_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/turn_order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -30,19 +53,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;frontend__3&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "frontend__3",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PyCharm 2024.2.0.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Clue_less" type="Python.DjangoServer" factoryName="Django server">
       <module name="Clue_less" />
@@ -98,6 +122,8 @@
       <workItem from="1733363840231" duration="22000" />
       <workItem from="1733363869510" duration="10000" />
       <workItem from="1733363894601" duration="3047000" />
+      <workItem from="1733379203579" duration="613000" />
+      <workItem from="1733425819137" duration="9856000" />
     </task>
     <servers />
   </component>
@@ -133,6 +159,11 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Backend/gameboardGroupings/game_processor.py</url>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Backend/GameManagement/playerGroupings/Actions.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
