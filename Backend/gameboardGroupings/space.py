@@ -19,7 +19,7 @@ class SpaceType(Enum):
         that represents the room type.
         """
         # Returns the SpaceType Name
-        return self.name.replace("_", " ").tite()
+        return self.name.replace("_", " ").titegit()
 
 class Space:
     def __init__(self, name: str = SPACE_NAME):

@@ -1,7 +1,6 @@
 
 from __future__ import annotations
 from Backend.cardGroupings.Card import Card
-from Backend.gameboardGroupings.space import Space, SpaceType, Hallway
 from Backend.cardGroupings.Hand import Hand
 from Backend.cardGroupings.Card import Card
 
@@ -28,7 +27,7 @@ class Player():
         possible_dest = []
         # check if adjacent spaces are empty
         for sp in adj:
-            if SpaceType.HALLWAY == sp.get_space_type():
+            if 'SpaceType'.HALLWAY == sp.get_space_type():
                 if sp.is_empty():
                     possible_dest.append(sp)
             else:
@@ -41,10 +40,10 @@ class Player():
     def get_character(self) -> str:
         return self.character
     
-    def get_current_location(self) -> Space:
+    def get_current_location(self) -> 'Space':
         return self.currLocation
 
-    def set_current_location(self, sp: Space):
+    def set_current_location(self, sp: 'Space'):
         self.currLocation = sp
     
     def is_eliminated(self) -> bool:

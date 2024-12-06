@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4744f2d5-bea9-4fd7-bc99-e2584abb5988" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/test.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/space.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/space.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -120,7 +119,7 @@
       <workItem from="1733425819137" duration="10390000" />
       <workItem from="1733438319186" duration="685000" />
       <workItem from="1733446189065" duration="3000" />
-      <workItem from="1733446196801" duration="66000" />
+      <workItem from="1733446196801" duration="1389000" />
     </task>
     <servers />
   </component>
