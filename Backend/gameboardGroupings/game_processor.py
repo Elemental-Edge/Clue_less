@@ -160,6 +160,7 @@ class GameProcessor:
                 current_turn.set_player_eliminated(True)
                 self.is_game_over()
                 return False
+        return False
     
     def is_game_over(self) -> bool:
         # Check if game is over

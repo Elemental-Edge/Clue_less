@@ -560,20 +560,20 @@ $("form").on("submit", function(e) {
     }
 
     // make accusation
-    if ($(this).attr("id") == "make_accusation") {
-        sendMessageToBackend(socket, `accusation ${$("#accusation-who").val()} ${$("#accusation_with").val()} ${$("#accusation-where").val()}`);
+    if ($(this).attr("id") == "accusation-form") {
+        sendMessageToBackend(socket, `accusation ${$("#accusation_who:checked").val()} ${$("#accusation_with:checked").val()} ${$("#accusation_where:checked").val()}`);
         return;
     }
 
     // make suggestion
     if ($(this).attr("id") == "make_suggestion") {
-        sendMessageToBackend(socket, `suggestion ${$("#suggestion-who").val()} ${$("#suggestion_with").val()} ${current_location}`);
+        sendMessageToBackend(socket, `suggestion ${$("#suggestion-who:checked").val()} ${$("#suggestion_with:checked").val()} ${current_location}`);
         return;
     }
 
     // make actual move
     if ($(this).attr("id") == "move_to_space") {
-        sendMessageToBackend(socket, `actualMove ${$("#move_to_where").val()}`);
+        sendMessageToBackend(socket, `actualMove ${$("#move_to_where:checked").val()}`);
         return;
     }
 
