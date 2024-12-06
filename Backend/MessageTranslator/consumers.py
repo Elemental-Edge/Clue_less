@@ -66,6 +66,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         try:
             # Parse the incoming WebSocket message
             command = text_data.split()
+            print(text_data) # TEST STATEMENT
             c = command[0]
             match c:
 
@@ -362,9 +363,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                 # show/update dealt cards
                 case "showDealtCards":
-                    session = self.scope["session"]
-                    await sync_to_async(session.save)()
-
                     cardsStr = []
                     for card in self.game_processor_instance.get_current_player().get_hand():
                         cardsStr.append(card.__str__())
@@ -378,9 +376,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 case "getValidActions":
                     actions_list = self.game_processor_instance.get_valid_actions()
 
-                    session = self.scope["session"]
-                    await sync_to_async(session.save)()
-
                     return await self.send(json.dumps({
                         "command": "show-valid-actions",
                         "actions": actions_list.__str__()  # TODO: need to implement toString for Actions
@@ -391,12 +386,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     suspect = command[1]
                     weapon = command[2]
                     room = command[3]
+
                     # TODO: Add a check to ensure that requesting user is the current player
                     # i.e. selected_character == self.game_processor_instance.get_current_player()
                     result = self.game_processor_instance.handle_accusation(suspect, weapon, room)
-        
-                    session = self.scope["session"]
-                    await sync_to_async(session.save)()
+
                     # TODO: Anytime the gamestate changes need to broadcast message to clients
                     if result:
                         # also need to enter win game state on back-end in addition to win popup
@@ -421,9 +415,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     weapon = command[2]
                     room = command[3]
                     disprover, disproveCards = self.game_processor_instance.handle_suggestion(self.game_processor_instance.get_current_player(), suspect, weapon, room)
-                    
-                    session = self.scope["session"]
-                    await sync_to_async(session.save)()
 
                     # TODO: cannot-disprove popup, unhide for other players
                     # this is incorrect: need to send this json data to the disprove player, not current player
