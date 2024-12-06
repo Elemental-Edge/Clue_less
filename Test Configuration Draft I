@@ -1,0 +1,51 @@
+# tests.py in the game app
+from django.test import TestCase
+from django.contrib.auth.models import User
+from django.urls import reverse
+from .models import GameCharacter, GamePlayer
+
+class LoginTestCase(TestCase):
+    def setUp(self):
+        # Create test users and characters
+        self.test_user = User.objects.create_user(
+            username='testplayer', 
+            password='testpassword123'
+        )
+        
+        # Create game characters
+        GameCharacter.objects.create(name='miss_scarlet')
+        GameCharacter.objects.create(name='colonel_mustard')
+
+    def test_user_registration(self):
+        # Test user registration process
+        response = self.client.post(reverse('register'), {
+            'username': 'newplayer',
+            'password1': 'strong_password123',
+            'password2': 'strong_password123'
+        })
+        self.assertEqual(response.status_code, 302)  # Redirect after successful registration
+        self.assertTrue(User.objects.filter(username='newplayer').exists())
+
+    def test_login_process(self):
+        # Test successful login
+        response = self.client.post(reverse('login'), {
+            'username': 'testplayer',
+            'password': 'testpassword123'
+        })
+        self.assertEqual(response.status_code, 302)  # Redirect after successful login
+
+    def test_character_selection(self):
+        # Login first
+        self.client.login(username='testplayer', password='testpassword123')
+        
+        # Get available characters
+        characters = GameCharacter.objects.all()
+        
+        # Select a character
+        response = self.client.post(reverse('select_character'), {
+            'character': characters.first().id
+        })
+        
+        # Check if character was assigned
+        game_player = GamePlayer.objects.get(user=self.test_user)
+        self.assertIsNotNone(game_player.character)
