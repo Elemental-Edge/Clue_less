@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clue-Less</title>
+	<base href="http://test.hyrule.kingdom/" />
     <link rel="stylesheet" href="map.css">
 	<script src="scripts/jquery.js"></script>
 </head>
 <body>
 
 	<div id="cl-board" class="cl-board">
-			
+
 		<!-- ACCUSATION POPUP -->
 		<div id="cl-accusation-wrapper" class="cl-accusation-wrapper popup-wrapper hide">
 			<div class="cl-accusation-inner popup-inner">
@@ -18,45 +19,42 @@
 				<h1>Accusation</h3>
 				<hr />
 				<p>So, detective, you're ready to make arrests??</p>
-
-				<form id="accusation-form">
-					<table>
-						<tr>
-							<td>
-								<input type="radio" id="accusation_who" name="accusation_who" value="mustard"><label for="accusation_who">Col. Mustard</label><br />
-								<input type="radio" id="accusation_who" name="accusation_who" value="green"><label for="accusation_who">Mr. Green</label><br />
-								<input type="radio" id="accusation_who" name="accusation_who" value="peacock"><label for="accusation_who">Mrs. Peacock</label><br />
-								<input type="radio" id="accusation_who" name="accusation_who" value="scarlet"><label for="accusation_who">Mrs. Scarlet</label><br />
-								<input type="radio" id="accusation_who" name="accusation_who" value="white"><label for="accusation_who">Mrs. White</label><br />
-								<input type="radio" id="accusation_who" name="accusation_who" value="plum"><label for="accusation_who">Prof. Plum</label><br />
-							</td>
-							<td>
-								<input type="radio" id="accusation_with" name="accusation_with" value="candlestick"><label for="accusation_with">Candlestick</label><br />
-								<input type="radio" id="accusation_with" name="accusation_with" value="knife"><label for="accusation_with">Knife</label><br />
-								<input type="radio" id="accusation_with" name="accusation_with" value="pipe"><label for="accusation_with">Lead Pipe</label><br />
-								<input type="radio" id="accusation_with" name="accusation_with" value="revolver"><label for="accusation_with">Revolver</label><br />
-								<input type="radio" id="accusation_with" name="accusation_with" value="rope"><label for="accusation_with">Rope</label><br />
-								<input type="radio" id="accusation_with" name="accusation_with" value="wrench"><label for="accusation_with">Wrench</label><br />
-							</td>
-							<td>
-								<input type="radio" id="accusation_where" name="accusation_where" value="ballroom"><label for="accusation_where">Ballroom</label><br />
-								<input type="radio" id="accusation_where" name="accusation_where" value="billiards"><label for="accusation_where">Billard's Room</label><br />
-								<input type="radio" id="accusation_where" name="accusation_where" value="Conservatory"><label for="accusation_where">Conservatory</label><br />
-								<input type="radio" id="accusation_where" name="accusation_where" value="dining"><label for="accusation_where">Dining Room</label><br />
-								<input type="radio" id="accusation_where" name="accusation_where" value="hall"><label for="accusation_where">Hall</label><br />
-								<input type="radio" id="accusation_where" name="accusation_where" value="kitchen"><label for="accusation_where">Kitchen</label><br />
-								<input type="radio" id="accusation_where" name="accusation_where" value="library"><label for="accusation_where">Library</label><br />
-								<input type="radio" id="accusation_where" name="accusation_where" value="lounge"><label for="accusation_where">Lounge</label><br />
-								<input type="radio" id="accusation_where" name="accusation_where" value="study"><label for="accusation_where">Study</label><br />
-							</td>
-						<tr>
-					</table>
-					<input type="submit" id="make_accusation" class="popup-submit" name="make_accusation" value="Make Accusation" />
-				</form>
+				<table>
+					<tr>
+						<td>
+							<input type="radio" id="accusation_who" name="accusation_who" value="mustard"><label for="accusation_who">Col. Mustard</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="green"><label for="accusation_who">Mr. Green</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="peacock"><label for="accusation_who">Mrs. Peacock</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="scarlet"><label for="accusation_who">Mrs. Scarlet</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="white"><label for="accusation_who">Mrs. White</label><br />
+							<input type="radio" id="accusation_who" name="accusation_who" value="plum"><label for="accusation_who">Prof. Plum</label><br />
+						</td>
+						<td>
+							<input type="radio" id="accusation_with" name="accusation_with" value="candlestick"><label for="accusation_with">Candlestick</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="knife"><label for="accusation_with">Knife</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="pipe"><label for="accusation_with">Lead Pipe</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="revolver"><label for="accusation_with">Revolver</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="rope"><label for="accusation_with">Rope</label><br />
+							<input type="radio" id="accusation_with" name="accusation_with" value="wrench"><label for="accusation_with">Wrench</label><br />
+						</td>
+						<td>
+							<input type="radio" id="accusation_where" name="accusation_where" value="ballroom"><label for="accusation_where">Ballroom</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="billiards"><label for="accusation_where">Billard's Room</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="Conservatory"><label for="accusation_where">Conservatory</label><br />							
+							<input type="radio" id="accusation_where" name="accusation_where" value="dining"><label for="accusation_where">Dining Room</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="hall"><label for="accusation_where">Hall</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="kitchen"><label for="accusation_where">Kitchen</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="library"><label for="accusation_where">Library</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="lounge"><label for="accusation_where">Lounge</label><br />
+							<input type="radio" id="accusation_where" name="accusation_where" value="study"><label for="accusation_where">Study</label><br />
+						</td>
+					<tr>
+				</table>
+				<input type="submit" id="make_accusation" class="popup-submit" name="make_accusation" value="Make Accusation">
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-
+		
 		<!-- BAD-ACCUSATION POPUP -->
 		<div id="cl-bad-accusation-wrapper" class="cl-bad-accusation-wrapper popup-wrapper hide">
 			<div class="cl-disprove-inner popup-inner">
@@ -68,7 +66,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-
+		
 		<!-- CARDS POPUP -->
 		<div id="cl-cards-wrapper" class="cl-cards-wrapper popup-wrapper hide">
 			<div class="cl-disprove-inner popup-inner">
@@ -76,37 +74,14 @@
 				<h1>Cards</h3>
 				<hr />
 				<p>Here is the evidence you've collected, Detective.  You know these people, items, and places were not involved in the murder.</p>
-				<table>
-					<tr>
-						<td>
-							<span class="dealt_mustard hide"><input type="radio" id="dealt_card" name="dealt_card" value="mustard"><label for="dealt_card">Col. Mustard</label></span><br />
-							<span class="dealt_green hide"><input type="radio" id="dealt_card" name="dealt_card" value="green"><label for="dealt_card">Mr. Green</label></span><br />
-							<span class="dealt_peacock hide"><input type="radio" id="dealt_card" name="dealt_card" value="peacock"><label for="dealt_card">Mrs. Peacock</label></span><br />
-							<span class="dealt_scarlet hide"><input type="radio" id="dealt_card" name="dealt_card" value="scarlet"><label for="dealt_card">Mrs. Scarlet</label></span><br />
-							<span class="dealt_white hide"><input type="radio" id="dealt_card" name="dealt_card" value="white"><label for="dealt_card">Mrs. White</label></span><br />
-							<span class="dealt_plum hide"><input type="radio" id="dealt_card" name="dealt_card" value="plum"><label for="dealt_card">Prof. Plum</label></span><br />
-						</td>
-						<td>
-							<span class="dealt_candlestick hide"><input type="radio" id="dealt_card" name="dealt_card" value="candlestick"><label for="dealt_card">Candlestick</label></span><br />
-							<span class="dealt_knife hide"><input type="radio" id="dealt_card" name="dealt_card" value="knife"><label for="dealt_card">Knife</label></span><br />
-							<span class="dealt_pipe hide"><input type="radio" id="dealt_card" name="dealt_card" value="pipe"><label for="dealt_card">Lead Pipe</label></span><br />
-							<span class="dealt_revolver hide"><input type="radio" id="dealt_card" name="dealt_card" value="revolver"><label for="dealt_card">Revolver</label></span><br />
-							<span class="dealt_rope hide"><input type="radio" id="dealt_card" name="dealt_card" value="rope"><label for="dealt_card">Rope</label></span><br />
-							<span class="dealt_wrench hide"><input type="radio" id="dealt_card" name="dealt_card" value="wrench"><label for="dealt_card">Wrench</label></span><br />
-						</td>
-						<td>
-							<span class="dealt_ballroom hide"><input type="radio" id="dealt_card" name="dealt_card" value="ballroom"><label for="dealt_card">Ballroom</label></span><br />
-							<span class="dealt_billiards hide"><input type="radio" id="dealt_card" name="dealt_card" value="billiards"><label for="dealt_card">Billiards Room</label></span><br />
-							<span class="dealt_conservatory hide"><input type="radio" id="dealt_card" name="dealt_card" value="Conservatory"><label for="dealt_card">Conservatory</label></span><br />
-							<span class="dealt_dining hide"><input type="radio" id="dealt_card" name="dealt_card" value="dining"><label for="dealt_card">Dining Room</label></span><br />
-							<span class="dealt_hall hide"><input type="radio" id="dealt_card" name="dealt_card" value="hall"><label for="dealt_card">Hall</label></span><br />
-							<span class="dealt_kitchen hide"><input type="radio" id="dealt_card" name="dealt_card" value="kitchen"><label for="dealt_card">Kitchen</label></span><br />
-							<span class="dealt_library hide"><input type="radio" id="dealt_card" name="dealt_card" value="library"><label for="dealt_card">Library</label></span><br />
-							<span class="dealt_lounge hide"><input type="radio" id="dealt_card" name="dealt_card" value="lounge"><label for="dealt_card">Lounge</label></span><br />
-							<span class="dealt_study hide"><input type="radio" id="dealt_card" name="dealt_card" value="study"><label for="dealt_card">Study</label></span><br />
-						</td>
-					<tr>
-				</table>
+				<ul>
+					<li>Billard's Room</li>
+					<li>Col. Mustard</li>
+					<li>Kitchen</li>
+					<li>Knife</li>
+					<li>Prof. Plum</li>
+					<li>Study</li>
+				</ul>
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
@@ -114,27 +89,95 @@
 		<!-- CHARACTER SELECTION POPUP -->
 		<div id="cl-character-selection-wrapper" class="cl-character-selection-wrapper popup-wrapper hide">
 			<div class="cl-character-selection-inner popup-inner">
-				<div class="popup-control popup-close" closes="#cl-character-selection-wrapper"><img src="assets/control/close.png"></div>
-				<h1>Character Selection</h3>
+				<h1>Choose Your Character</h3>
 				<hr />
-				<p>Who are you again, detective?</p>
 				<table>
 					<tr>
-						<td>
-							<input type="radio" id="suggestion_who" name="suggestion_who" value="mustard"><label for="suggestion_who">Col. Mustard</label><br />
-							<input type="radio" id="suggestion_who" name="suggestion_who" value="green"><label for="suggestion_who">Mr. Green</label><br />
-							<input type="radio" id="suggestion_who" name="suggestion_who" value="peacock"><label for="suggestion_who">Mrs. Peacock</label><br />
-							<input type="radio" id="suggestion_who" name="suggestion_who" value="scarlet"><label for="suggestion_who">Mrs. Scarlet</label><br />
-							<input type="radio" id="suggestion_who" name="suggestion_who" value="white"><label for="suggestion_who">Mrs. White</label><br />
-							<input type="radio" id="suggestion_who" name="suggestion_who" value="plum"><label for="suggestion_who">Prof. Plum</label><br />
-						</td>
-					<tr>
+						<td class="select-character character-scarlet" bio=".character-bio-scarlet" char="scarlet"><image class="select-char-img border-scarlet" src="/assets/chars/scarlet.png"><br />Ms. Scarlet</td>
+						<td class="select-character character-plum" bio=".character-bio-plum" char="plum"><image class="select-char-img border-plum" src="/assets/chars/plum.png"><br />Prof. Plum</td>
+						<td class="select-character character-peacock" bio=".character-bio-peacock" char="peacock"><image class="select-char-img border-peacock" src="/assets/chars/peacock.png"><br />Mrs. Peacock</td>
+						<td class="select-character character-green" bio=".character-bio-green" char="green"><image class="select-char-img border-green" src="/assets/chars/green.png"><br />Mr. Green</td>
+						<td class="select-character character-mustard" bio=".character-bio-mustard" char="mustard"><image class="select-char-img border-mustard" src="/assets/chars/mustard.png"><br />Col. Mustard</td>
+						<td class="select-character character-white" bio=".character-bio-white" char="white"><image class="select-char-img border-white" src="/assets/chars/white.png"><br />Mrs. White</td>
+					</tr>
+					<table>
+						<tr>
+							<td class="character-bio character-bio-scarlet hide border-scarlet" colspan="6">
+								The sultry and enigmatic Ms. Scarlet had always been the talk of the town.
+								By day, she was a high-society art dealer; by night, she indulged in a
+								clandestine romance with Mr. Boddy. Their affair was a whirlwind of passion
+								and secrecy, with stolen moments and hidden rendezvous. But Mrs. Scarlet
+								wasn't just a temptress: she was ambitious. She had counted on Mr. Boddy
+								to fund her gallery expansion. When he hesitated, citing his public ties
+								to Mrs. White, she was furious. But did her frustration turn deadly? If not,
+								Ms. Scarlet had every reason to want the truth uncovered. Clearing her
+								name would restore her reputation, and perhaps even her business.
+							</td>
+							<td class="character-bio character-bio-plum hide border-plum" colspan="6">
+								Professor Plum was a brilliant, if slightly scatterbrained, inventor whose
+								latest creation had caught Mr. Boddy's eye. Boddy's investment was meant
+								to be the breakthrough Plum had dreamed of: a device that would revolutionize
+								renewable energy. But just as they began to celebrate, Plum discovered
+								troubling news: Boddy had patented the invention in his own name. Furious
+								and feeling betrayed, Plum had stormed into the mansion on the night of
+								the murder, demanding answers. Did his anger lead to violence? If not,
+								Plum needed to clear his name and reclaim his work. His entire career&#45;and
+								the world-changing invention&#45;was at stake.
+							</td>
+							<td class="character-bio character-bio-peacock hide border-peacock" colspan="6">
+								Mrs. Peacock was as sharp in the boardroom as she was dazzling at galas.
+								An investor in Mr. Boddy's expansive empire, she had turned modest
+								beginnings into unimaginable wealth. But while Mr. Boddy was charming, he
+								was also reckless, and recent business missteps had jeopardized her
+								investments. Her patience with his carelessness wore thin, particularly
+								after he announced a risky venture she hadn't approved. The night of his
+								death, Mrs. Peacock had demanded answers. Did their confrontation escalate?
+								If not, she needed the killer found. Mr. Boddy's demise left her portfolio&#45;and
+								her future&#45;in peril, and she wouldn't rest until she had secured both.
+							</td>
+							<td class="character-bio character-bio-green hide border-green" colspan="6">
+								Mr. Green had been by Mr. Boddy's side through every business deal, every
+								scandal, every triumph. They were a dynamic duo, complementing each other's
+								strengths and covering each other's weaknesses. But while Mr. Green was loyal,
+								he wasn't blind. He knew Mr. Boddy had been siphoning funds from their company
+								to cover personal debts. Worse, Mr. Boddy's risky ventures were putting their
+								reputation on the line. On the night of his murder, Mr. Green had confronted
+								his old friend, vowing to take control of the business. Did that confrontation
+								go too far? If not, Mr. Green needed the real killer exposed. His life's
+								work&#45;and his future&#45;depended on it.
+							</td>
+							<td class="character-bio character-bio-mustard hide border-mustard" colspan="6">
+								Col. Mustard and Mr. Boddy had been inseparable during their high school years,
+								with a bond forged over pranks and shared ambitions. But five years ago,
+								a mysterious argument had shattered their friendship, with Mustard vowing
+								revenge. Only recently had they reconciled, or so it seemed. The Colonel had
+								returned to the mansion for a weekend of cigars and old war stories, but
+								beneath his jovial exterior lay lingering doubts. On the night of the murder,
+								rumors swirled that Boddy had double-crossed him yet again. Did old wounds drive
+								him to murder? If not, Mustard had to prove his innocence. He owed it to their
+								shared past&#45;and his own honor&#45;to find the real killer.
+							</td>
+							<td class="character-bio character-bio-white hide border-white" colspan="6">
+								Mrs. White was the epitome of grace and decorum, known to all as Mr. Boddy's
+								loyal partner in life and philanthropy. The two had shared a sprawling estate
+								for decades, hosting glamorous fundraisers and co-chairing numerous charities.
+								But beneath her genteel demeanor simmered a quiet resentment. While Mrs. White
+								loved Mr. Boddy deeply, she had long suspected his heart wasn't as devoted as
+								his public persona suggested. Discovering whispers of his affair with Mrs. Scarlet
+								stung worse than any betrayal she could imagine. Yet, Mrs. White's true motive
+								wasn't revenge: it was justice. She needed the truth, not only to clear her
+								name but to find out who would dare destroy the life she had built alongside him.
+							</td>
+						</tr>
 				</table>
-				<input type="submit" id="choose_detective" class="popup-submit" name="choose_detective" value="Choose Detective">
+				<form type="submit" id="select-character-form">
+					<input type="hidden" id="choose-character-key" name="choose-character-key">
+					<input type="submit" class="choose-character-submit input-submit" id="choose-character-button" value="Choose Character" disabled>
+				</form>
 			</div>
-			<div class="fog-overlay">&nbsp;</div>
+			<div class="fog-overlay dark-overlay">&nbsp;</div>
 		</div>
-
+		
 		<!-- DISPROVE POPUP -->
 		<div id="cl-disprove-wrapper" class="cl-disprove-wrapper popup-wrapper hide">
 			<div class="cl-disprove-inner popup-inner">
@@ -142,44 +185,23 @@
 				<h1>Disprove</h3>
 				<hr />
 				<p>So what evidence would you like to show to prove him wrong?</p>
-				<form id="disprove-form">
 				<table>
 					<tr>
 						<td>
-							<span class="disprove_mustard hide"><input type="radio" id="disprove_card" name="disprove_card" value="mustard"><label for="disprove_card">Col. Mustard</label></span><br />
-							<span class="disprove_green hide"><input type="radio" id="disprove_card" name="disprove_card" value="green"><label for="disprove_card">Mr. Green</label></span><br />
-							<span class="disprove_peacock hide"><input type="radio" id="disprove_card" name="disprove_card" value="peacock"><label for="disprove_card">Mrs. Peacock</label></span><br />
-							<span class="disprove_scarlet hide"><input type="radio" id="disprove_card" name="disprove_card" value="scarlet"><label for="disprove_card">Mrs. Scarlet</label></span><br />
-							<span class="disprove_white hide"><input type="radio" id="disprove_card" name="disprove_card" value="white"><label for="disprove_card">Mrs. White</label></span><br />
-							<span class="disprove_plum hide"><input type="radio" id="disprove_card" name="disprove_card" value="plum"><label for="disprove_card">Prof. Plum</label></span><br />
-						</td>
-						<td>
-							<span class="disprove_candlestick hide"><input type="radio" id="disprove_card" name="disprove_card" value="candlestick"><label for="disprove_card">Candlestick</label></span><br />
-							<span class="disprove_knife hide"><input type="radio" id="disprove_card" name="disprove_card" value="knife"><label for="disprove_card">Knife</label></span><br />
-							<span class="disprove_pipe hide"><input type="radio" id="disprove_card" name="disprove_card" value="pipe"><label for="disprove_card">Lead Pipe</label></span><br />
-							<span class="disprove_revolver hide"><input type="radio" id="disprove_card" name="disprove_card" value="revolver"><label for="disprove_card">Revolver</label></span><br />
-							<span class="disprove_rope hide"><input type="radio" id="disprove_card" name="disprove_card" value="rope"><label for="disprove_card">Rope</label></span><br />
-							<span class="disprove_wrench hide"><input type="radio" id="disprove_card" name="disprove_card" value="wrench"><label for="disprove_card">Wrench</label></span><br />
-						</td>
-						<td>
-							<span class="disprove_ballroom hide"><input type="radio" id="disprove_card" name="disprove_card" value="ballroom"><label for="disprove_card">Ballroom</label></span><br />
-							<span class="disprove_billiards hide"><input type="radio" id="disprove_card" name="disprove_card" value="billiards"><label for="disprove_card">Billiards Room</label></span><br />
-							<span class="disprove_conservatory hide"><input type="radio" id="disprove_card" name="disprove_card" value="Conservatory"><label for="disprove_card">Conservatory</label></span><br />
-							<span class="disprove_dining hide"><input type="radio" id="disprove_card" name="disprove_card" value="dining"><label for="disprove_card">Dining Room</label></span><br />
-							<span class="disprove_hall hide"><input type="radio" id="disprove_card" name="disprove_card" value="hall"><label for="disprove_card">Hall</label></span><br />
-							<span class="disprove_kitchen hide"><input type="radio" id="disprove_card" name="disprove_card" value="kitchen"><label for="disprove_card">Kitchen</label></span><br />
-							<span class="disprove_library hide"><input type="radio" id="disprove_card" name="disprove_card" value="library"><label for="disprove_card">Library</label></span><br />
-							<span class="disprove_lounge hide"><input type="radio" id="disprove_card" name="disprove_card" value="lounge"><label for="disprove_card">Lounge</label></span><br />
-							<span class="disprove_study hide"><input type="radio" id="disprove_card" name="disprove_card" value="study"><label for="disprove_card">Study</label></span><br />
+							<input type="radio" id="evidence" name="evidence" value="billiards"><label for="evidence">Billard's Room</label><br />
+							<input type="radio" id="evidence" name="evidence" value="mustard"><label for="evidence">Col. Mustard</label><br />
+							<input type="radio" id="evidence" name="evidence" value="kitchen"><label for="evidence">Kitchen</label><br />
+							<input type="radio" id="evidence" name="evidence" value="knife"><label for="evidence">Knife</label><br />
+							<input type="radio" id="evidence" name="evidence" value="plum"><label for="evidence">Prof. Plum</label><br />
+							<input type="radio" id="evidence" name="evidence" value="study"><label for="evidence">Study</label><br />
 						</td>
 					<tr>
 				</table>
-				</form>
-				<input type="submit" id="disprove_submit" class="popup-submit" name="disprove_submit" value="Disprove">
+				<input type="submit" id="disprove" class="popup-submit" name="disprove" value="Disprove">
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-
+		
 		<!-- DISPROVEN POPUP -->
 		<div id="cl-disproven-wrapper" class="cl-disproven-wrapper popup-wrapper hide">
 			<div class="cl-disproven-inner popup-inner">
@@ -193,7 +215,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-
+		
 		<!-- GAME IN PROGRESS POPUP -->
 		<div id="cl-game-in-progress-wrapper" class="cl-game-in-progress-wrapper popup-wrapper hide">
 			<div class="cl-game-in-progress-inner popup-inner">
@@ -204,7 +226,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-
+		
 		<!-- GOOD-SUGGESTION POPUP -->
 		<div id="cl-good-suggestion-wrapper" class="cl-good-suggestion-wrapper popup-wrapper hide">
 			<div class="cl-good-suggestion-inner popup-inner">
@@ -217,7 +239,7 @@
 		</div>
 
 		<!-- LOADING POPUP -->
-		<div id="loading" class="cl-loading-wrapper popup-wrapper hide">
+		<div id="loading" class="cl-loading-wrapper popup-wrapper">
 			<div class="loader-mid">
 				<img class="title-image" src="assets/title.png">
 				<div class="title-text no-select">Cl<span class="red">u</span>e-Le<span class="red">s</span>s</div>
@@ -244,7 +266,7 @@
 					</table>
 					<input type="submit" class="input-submit" id="login-button" value="Login">
 				</form>
-				<p>[<a onclick="$('#login-form-wrapper').addClass('hide'); $('#register-form-wrapper').addClass('hide');">Register</a>]</p>
+				<p>[<a onclick="$('#login-form-wrapper').addClass('hide'); $('#register-form-wrapper').removeClass('hide');">Register</a>]</p>
 			</div>
 			<div class="fog-overlay dark-overlay">&nbsp;</div>
 		</div>
@@ -260,48 +282,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-
-        <!-- MOVE PLAYER TO SPACE -->
-		<div id="cl-move-token-to-space-wrapper" class="cl-move-token-to-space-wrapper popup-wrapper hide">
-			<div class="cl-move-token-to-space-inner popup-inner">
-				<div class="popup-control popup-close" closes="#cl-move-token-to-space-wrapper"><img src="assets/control/close.png"></div>
-				<h1>Move</h3>
-				<hr />
-				<p>So detective, which location should we investigate next?</p>
-				<table>
-					<tr>
-						<td>
-                            <span class="move_ballroom hide"><input type="radio" id="move_to_where" name="move_to_where" value="ballroom"><label for="move_to_where">Ballroom</label></span><br />
-							<span class="move_billiards hide"><input type="radio" id="move_to_where" name="move_to_where" value="billiards"><label for="move_to_where">Billard's Room</label></span><br />
-							<span class="move_conservatory hide"><input type="radio" id="move_to_where" name="move_to_where" value="conservatory"><label for="move_to_where">Conservatory</label></span><br />
-							<span class="move_dining hide"><input type="radio" id="move_to_where" name="move_to_where" value="dining"><label for="move_to_where">Dining Room</label></span><br />
-							<span class="move_hall hide"><input type="radio" id="move_to_where" name="move_to_where" value="hall"><label for="move_to_where">Hall</label></span><br />
-							<span class="move_kitchen hide"><input type="radio" id="move_to_where" name="move_to_where" value="kitchen"><label for="move_to_where">Kitchen</label></span><br />
-							<span class="move_library hide"><input type="radio" id="move_to_where" name="move_to_where" value="library"><label for="move_to_where">Library</label></span><br />
-							<span class="move_lounge hide"><input type="radio" id="move_to_where" name="move_to_where" value="lounge"><label for="move_to_where">Lounge</label></span><br />
-							<span class="move_study hide"><input type="radio" id="move_to_where" name="move_to_where" value="study"><label for="move_to_where">Study</label></span><br />
-						</td>
-						<td>
-							<span class="move_study-hall hide"><input type="radio" id="move_to_where" name="move_to_where" value="study-hall"><label for="move_to_where">study-hall</label></span><br />
-							<span class="move_study-library hide"><input type="radio" id="move_to_where" name="move_to_where" value="study-library"><label for="move_to_where">study-library</label></span><br />
-							<span class="move_hall-lounge hide"><input type="radio" id="move_to_where" name="move_to_where" value="hall-lounge"><label for="move_to_where">hall-lounge</label></span><br />
-							<span class="move_hall-billiards hide"><input type="radio" id="move_to_where" name="move_to_where" value="hall-billiards"><label for="move_to_where">hall-billiards</label></span><br />
-							<span class="move_lounge-dining hide"><input type="radio" id="move_to_where" name="move_to_where" value="lounge-dining"><label for="move_to_where">lounge-dining</label></span><br />
-							<span class="move_library-billiards hide"><input type="radio" id="move_to_where" name="move_to_where" value="library-billiards"><label for="move_to_where">library-billiards</label></span><br />
-							<span class="move_billiards-dining hide"><input type="radio" id="move_to_where" name="move_to_where" value="billiards-dining"><label for="move_to_where">billiards-dining</label></span><br />
-							<span class="move_library-conservatory hide"><input type="radio" id="move_to_where" name="move_to_where" value="library-conservatory"><label for="move_to_where">library-conservatory</label></span><br />
-							<span class="move_billiards-ballroom hide"><input type="radio" id="move_to_where" name="move_to_where" value="billiards-ballroom"><label for="move_to_where">billiards-ballroom</label></span><br />
-							<span class="move_dining-kitchen hide"><input type="radio" id="move_to_where" name="move_to_where" value="dining-kitchen"><label for="move_to_where">dining-kitchen</label></span><br />
-							<span class="move_conservatory-ballroom hide"><input type="radio" id="move_to_where" name="move_to_where" value="conservatory-ballroom"><label for="move_to_where">conservatory-ballroom</label></span><br />
-							<span class="move_ballroom-kitchen hide"><input type="radio" id="move_to_where" name="move_to_where" value="ballroom-kitchen"><label for="move_to_where">ballroom-kitchen</label></span><br />
-						</td>
-					<tr>
-				</table>
-				<input type="submit" id="move_to_space" class="popup-submit" name="move_to_space" value="Move Token to Space">
-			</div>
-			<div class="fog-overlay">&nbsp;</div>
-		</div>
-
+		
 		<!-- MOVE TOKEN TO HALLWAY -->
 		<div id="cl-move-token-to-hallway-wrapper" class="cl-move-token-to-hallway-wrapper popup-wrapper hide">
 			<div class="cl-move-token-to-hallway-inner popup-inner">
@@ -322,7 +303,7 @@
 						<td>
 							<input type="radio" id="move_to_where" name="move_to_where" value="study-hall"><label for="move_to_where">study-hall</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="study-library"><label for="move_to_where">study-library</label><br />
-							<input type="radio" id="move_to_where" name="move_to_where" value="hall-lounge"><label for="move_to_where">hall-lounge</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="hall-lounge"><label for="move_to_where">hall-lounge</label><br />							
 							<input type="radio" id="move_to_where" name="move_to_where" value="hall-billiards"><label for="move_to_where">hall-billiards</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="lounge-dining"><label for="move_to_where">lounge-dining</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="library-billiards"><label for="move_to_where">library-billiards</label><br />
@@ -339,7 +320,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-
+		
 		<!-- MOVE TOKEN TO ROOM -->
 		<div id="cl-move-token-to-room-wrapper" class="cl-move-token-to-room-wrapper popup-wrapper hide">
 			<div class="cl-move-token-to-room-inner popup-inner">
@@ -366,7 +347,7 @@
 						<td>
 							<input type="radio" id="move_to_where" name="move_to_where" value="ballroom"><label for="move_to_where">Ballroom</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="billiards"><label for="move_to_where">Billard's Room</label><br />
-							<input type="radio" id="move_to_where" name="move_to_where" value="Conservatory"><label for="move_to_where">Conservatory</label><br />
+							<input type="radio" id="move_to_where" name="move_to_where" value="Conservatory"><label for="move_to_where">Conservatory</label><br />							
 							<input type="radio" id="move_to_where" name="move_to_where" value="dining"><label for="move_to_where">Dining Room</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="hall"><label for="move_to_where">Hall</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="kitchen"><label for="move_to_where">Kitchen</label><br />
@@ -401,24 +382,6 @@
 			<div class="fog-overlay dark-overlay">&nbsp;</div>
 		</div>
 
-		<!-- SELECT GAME -->
-		<div id="select-game-wrapper" class="cl-select-game-wrapper popup-wrapper hide">
-			<div class="cl-select-game-inner popup-inner">
-				<h1>Select a Game</h3>
-				<hr />
-				<p id="select-game-welcome-message">Ahh, well met, detective!<br />What case would you like to work on?</p>
-				<div id="login-popup-error" class="error hide"></div>
-				<table id="game-list-table" class="formless mt-10 block-center">
-					<tr id="join-game-template" class="hide"><td><form id="join-game-form" game-id="[GAME-ID]"><input type="submit" class="text-input join-game-button input-submit" value="Game Name"></form></td></tr>
-					<tr id="join-game-no-games"><td>There are currently no other games.</td></tr>
-				</table>
-				<form id="create-game-form">
-					<input type="submit" class="input-submit mt-10" id="create-game-button" value="Create New Game">
-				</form>
-			</div>
-			<div class="fog-overlay dark-overlay">&nbsp;</div>
-		</div>
-
 		<!-- START LOBBY POPUP -->
 		<div id="cl-start-lobby-wrapper" class="cl-start-lobby-wrapper popup-wrapper hide">
 			<div class="cl-start-lobby-inner popup-inner">
@@ -431,7 +394,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-
+		
 		<!-- SUGGESTION POPUP -->
 		<div id="cl-suggestion-wrapper" class="cl-suggestion-wrapper popup-wrapper hide">
 			<div class="cl-suggestion-inner popup-inner">
@@ -478,6 +441,34 @@
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
 
+		<!-- WAITING TO START -->
+		<div id="waiting-to-start" class="cl-waiting-to-start-wrapper popup-wrapper hide">
+			<div class="waiting-to-start-mid">
+				<img id="teaser-image" url_pattern="/assets/teasers/teaser[[NUM]].png">
+				<div id="teaser-text" class="no-select">Cl<span class="red">u</span>e-Le<span class="red">s</span>s</div>
+				<div id="start-game-popup-button" class="hide">Start Game</div>
+				<div class="infopanel-stripe">
+					<table id="waiting-to-start-infopanel">
+						<tr>
+							<td rowspan="2" class="waiting-to-start-character"><image class="waiting-to-start-character-img" url_pattern="/assets/teasers/teaser[[NUM]].png" /><br />Ms. Scarlet</td>
+						</tr>
+						<tr>
+							<td>
+								Picked: <span id="characters-picked"></span>
+							</td>
+							<td>
+								To Pick: <span id="number-still-picking"></span>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<form id="start-game-form">
+					<input type="submit" class="input-submit" id="start-game-button" value="Start Game">
+				</form>
+			</div>
+			<div class="fog-overlay dark-overlay">&nbsp;</div>
+		</div>
+		
 		<!-- WIN POPUP -->
 		<div id="cl-win-wrapper" class="cl-win-wrapper popup-wrapper hide">
 			<div class="cl-win-inner popup-inner">
@@ -490,69 +481,24 @@
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
 
-		<!-- SHOW VALID ACTIONS POPUP -->
-		<div id="cl-actions-wrapper" class="cl-actions-wrapper popup-wrapper hide">
-			<div class="cl-actions-inner popup-inner">
-				<div class="popup-control popup-close" closes="#cl-actions-wrapper"><img src="assets/control/close.png"></div>
-				<h1>Pick an action</h3>
-				<hr />
-				<p>So what's the plan, detective?</p>
-				<table>
-					<tr>
-						<td>
-                            <span class="list-of-actions"></span>
-							<span class="selected_move hide"><input type="radio" id="selected_action" name="suggestion_who" value="move"><label for="suggestion_who">Move</label></span><br />
-							<span class="selected_suggestion hide"><input type="radio" id="selected_action" name="suggestion_who" value="suggestion"><label for="suggestion_who">Make a suggestion</label></span><br />
-							<span class="selected_accusation hide"><input type="radio" id="selected_action" name="suggestion_who" value="accusation"><label for="suggestion_who">Make an accusation</label></span><br />
-						</td>
-					<tr>
-				</table>
-				<p>in ##ROOM##.</p>
-				<input type="submit" id="chosen_action" class="popup-submit" name="chosen_action" value="Chosen Action">
-			</div>
-			<div class="fog-overlay">&nbsp;</div>
-		</div>
-
-		<!-- ACTION INVALID POPUP -->
-		<div id="cl-action-invalid-wrapper" class="cl-action-invalid-wrapper popup-wrapper hide">
-			<div class="cl-actions-invalid-inner popup-inner">
-				<div class="popup-control popup-close" closes="#cl-action-invalid-wrapper"><img src="assets/control/close.png"></div>
-				<h1>Invalid Action Selected</h3>
-				<hr />
-				<p>What's that detective? You know better than that. You can't perform that action right now.</p>
-			</div>
-			<div class="fog-overlay">&nbsp;</div>
-		</div>
-
-		<!-- CANNOT DISPROVE POPUP -->
-		<div id="cl-cannot-disprove-wrapper" class="cl-cannot-disprove-wrapper popup-wrapper hide">
-			<div class="cl-cannot-disprove-inner popup-inner">
-				<div class="popup-control popup-close" closes="#cl-cannot-disprove-wrapper"><img src="assets/control/close.png"></div>
-				<h1>Cannot Disprove</h3>
-				<hr />
-				<p>Looks like we're still missing needed evidence, detective. We can't disprove the suggestion.</p>
-			</div>
-			<div class="fog-overlay">&nbsp;</div>
-		</div>
-
 		<canvas id="glCanvas" class="cl-canvas" width="600" height="600"></canvas>
 		<script>
-			// DECLARE GAME VARS ***************************************************************************************************************************************
+			// DECLARE GAME VARS
 			var game_started;
 			var your_username;
 			var your_turn = false;
 			var current_characters_turn;
+			var your_character = false;
 			var enforce_valid_character_move = false;
 			var unavailable_characters = [];
-			var selected_character;
-            var current_location;
+			var django_channel_name;
+			var NUMBER_TEASERS = 6;
 		</script>
 		<script src="map.js"></script>
 	</div>
-
 	<div class="cl-panel">
-		<!-- <div id="chat-window"></div> -->
-		<div id="admin-buttons" class="">
+		<div id="chat-window"></div>
+		<div id="admin-buttons" class="hide">
 			<button onclick="$('#cl-accusation-wrapper').removeClass('hide');">Accusation Popup</button><br />
 			<button onclick="$('#cl-bad-accusation-wrapper').removeClass('hide');">Bad Accusation Popup</button><br />
 			<button onclick="$('#cl-cards-wrapper').removeClass('hide');">Cards Popup</button><br />
@@ -568,9 +514,6 @@
 			<button onclick="$('#cl-suggestion-wrapper').removeClass('hide');">Suggestion Popup</button><br />
 			<button onclick="$('#cl-test-command-wrapper').removeClass('hide');">Test Command Popup</button><br />
 			<button onclick="$('#cl-win-wrapper').removeClass('hide');">Win Popup</button><br />
-			<button onclick="$('#cl-actions-wrapper').removeClass('hide');">Available Actions</button><br />
-			<button onclick="$('#cl-action-invalid-wrapper').removeClass('hide');">Action Invalid</button><br />
-			<button onclick="$('#cl-cannot-disprove-wrapper').removeClass('hide');">Cannot Disprove</button><br />
 			<div>---</div>
 			<button id="allow-map-interact" onclick="$('#disallow-map-interact').removeClass('hide'); $('#allow-map-interact').addClass('hide'); your_turn = true;">Set "Your Turn"</button>
 			<button id="disallow-map-interact" class="hide" onclick="$('#allow-map-interact').removeClass('hide'); $('#disallow-map-interact').addClass('hide'); your_turn = false;">Set "Not Your Turn"</button><br />
@@ -579,484 +522,6 @@
 			<button id="open-loading-window" onclick="$('#loading').removeClass('hide');">Open Loading Popup</button><br />
 			<button id="close-loading-window" onclick="$('#loading').addClass('hide');">Close Loading Popup</button><br />
 		</div>
-	</div>
-
-	<!-- DETECTIVE'S NOTEBOOK -->
-	<div id="cl-notebook" class="cl-notebook" style="height: 100vh; width: 830 px">
-		<div id="notebook">
-			<table width="830" style="background-color:white">
-				<tr>
-					<td width="10"></td>
-					<td width="210"></td>
-					<td width="10"></td>
-					<td height="20" width="600"><b>Detective's Notebook</b></td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"></td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="text" style="width: 60px" value=" P1"></td>
-								<td height="20" width="100"><input type="text" style="width: 60px" value=" P2"></td>
-								<td height="20" width="100"><input type="text" style="width: 60px" value=" P3"></td>
-								<td height="20" width="100"><input type="text" style="width: 60px" value=" P4"></td>
-								<td height="20" width="100"><input type="text" style="width: 60px" value=" P5"></td>
-								<td height="20" width="100"><input type="text" style="width: 60px" value=" P6"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"><b>Suspects</b></td>
-					<td width="10"></td>
-					<td width="600">
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Mustard</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Plum</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Green</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Peacock</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Scarlet</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; White</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr height="10"></tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"><b>Weapons</b></td>
-					<td width="10"></td>
-					<td width="600">
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Knife</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Candlestick</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Revolver</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Rope</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Lead Pipe</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Wrench</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr height="10"></tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"><b>Rooms</b></td>
-					<td width="10"></td>
-					<td width="600">
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Hall</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Lounge</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Dining Room</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Kitchen</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Ballroom</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Conservatory</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Billiard Room</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Library</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td width="10"></td>
-					<td width="210"> &nbsp; Study</td>
-					<td width="10"></td>
-					<td width="600">
-						<table>
-							<tr>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr height="30"></tr>
-			</table>
-		</div>
-		<style>
-			/* Multi-Checkbox Button Style */
-			.multi-checkbox {
-			  background: transparent;
-			  border: none;
-			  color: black;
-			  text-align: center;
-			  text-decoration: none;
-			  display: inline-block;
-			  font-size: 35px;
-			  cursor: pointer;
-			}
-			
-			.guess-component {
-			  width: 100;
-			}
-			
-			/* Text changes depending on button status */
-			.checked {
-			  font-weight: bold;
-			}
-			
-			.x {
-			  text-decoration: line-through;
-			}
-		</style>
-		<!-- this script's source for the detective's notebook checkboxes is https://github.com/lowlydba/clue-sheet/tree/main/assets/css -->
-		<script>
-			function statusButtonChanger (control) {
-				const Data = [
-				  { status: 'unchecked', value: '\u2B1C' },
-				  { status: 'x', value: '\u274c' },
-				  { status: 'question', value: '\u2753' },
-				  { status: '!', value: '\u2757' },
-				  { status: 'checked', value: '\u2705' }
-				]
-			  
-				let index = Data.map(function (e) { return e.value }).indexOf(control.value)
-				index++
-				if ((index) >= Data.length) {
-				  index = 0
-				}
-				control.value = Data[index].value
-				const clue = $(control).closest('td').siblings('.guess-component') // eslint-disable-line no-undef
-				switch (Data[index].status) {
-				  case 'x':
-					clue.toggleClass('x').siblings().removeClass('checked')
-					break
-				  case 'checked':
-					clue.toggleClass('checked').siblings().removeClass('x')
-					break
-				  default:
-					clue.removeClass('x checked')
-				}
-			  }
-			  
-			  // Attach function to all checkboxes
-			  window.onload = function () {
-				const elements = document.getElementsByClassName('multi-checkbox')
-				for (let i = 0; i < elements.length; i++) {
-				  elements[i].onclick = function () {
-					statusButtonChanger(this)
-				  }
-				}
-			  }
-		</script>
 	</div>
 </body>
 </html>
