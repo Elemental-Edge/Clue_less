@@ -12,52 +12,52 @@ class GameBoard:
         """Creates the default Clue board layout with all rooms and connections"""
         # Creates all room for the default Clue board layout
         study_room = CornerRoom("study")
-        self.dictionary["study"] = study_room
+        self.dictionarySpaces["study"] = study_room
         hall_room = Room("hall")
-        self.dictionary["hall"] = hall_room
+        self.dictionarySpaces["hall"] = hall_room
         lounge_room = CornerRoom("lounge")
-        self.dictionary["lounge"] = lounge_room
+        self.dictionarySpaces["lounge"] = lounge_room
         library_room = Room("library")
-        self.dictionary["library"] = library_room
+        self.dictionarySpaces["library"] = library_room
         billiard_room = Room("billiards")
-        self.dictionary["billiards"] = billiard_room
+        self.dictionarySpaces["billiards"] = billiard_room
         dining_room = Room("dining")
-        self.dictionary["dining"] = dining_room
+        self.dictionarySpaces["dining"] = dining_room
         conservatory_room = CornerRoom("conservatory")
-        self.dictionary["conservatory"] = conservatory_room
+        self.dictionarySpaces["conservatory"] = conservatory_room
         ballroom_room = Room("ballroom")
-        self.dictionary["ballroom"] = ballroom_room
+        self.dictionarySpaces["ballroom"] = ballroom_room
         kitchen_room = CornerRoom("kitchen")
-        self.dictionary["kitchen"] = kitchen_room
+        self.dictionarySpaces["kitchen"] = kitchen_room
 
         # Creats hallways between rooms
         # Horizontal hallways first (left to right)
         study_hall = Hallway("study-hall")
-        self.dictionary["study-hall"] = study_hall
+        self.dictionarySpaces["study-hall"] = study_hall
         hall_lounge = Hallway("hall-lounge")
-        self.dictionary["hall-lounge"] = hall_lounge
+        self.dictionarySpaces["hall-lounge"] = hall_lounge
         library_billiard = Hallway("library-billiards")
-        self.dictionary["library-billiards"] = library_billiard
+        self.dictionarySpaces["library-billiards"] = library_billiard
         billiard_dining = Hallway("billiards-dining")
-        self.dictionary["billiards-dining"] = billiard_dining
+        self.dictionarySpaces["billiards-dining"] = billiard_dining
         conservatory_ballroom = Hallway("conservatory-ballroom")
-        self.dictionary["conservatory-ballroom"] = conservatory_ballroom
+        self.dictionarySpaces["conservatory-ballroom"] = conservatory_ballroom
         ballroom_kitchen = Hallway("ballroom-kitchen")
-        self.dictionary["ballroom-kitchen"] = ballroom_kitchen
+        self.dictionarySpaces["ballroom-kitchen"] = ballroom_kitchen
 
         # Vertical hallways (top to bottom)
         study_library = Hallway("study-library")
-        self.dictionary["study-library"] = study_library
+        self.dictionarySpaces["study-library"] = study_library
         library_conservatory = Hallway("library-conservatory")
-        self.dictionary["library-conservatory"] = library_conservatory
+        self.dictionarySpaces["library-conservatory"] = library_conservatory
         hall_billiard = Hallway("hall-billiards")
-        self.dictionary["hall-billiards"] = hall_billiard
+        self.dictionarySpaces["hall-billiards"] = hall_billiard
         billiard_ballroom = Hallway("billiards-ballroom")
-        self.dictionary["billiards-ballroom"] = billiard_ballroom
+        self.dictionarySpaces["billiards-ballroom"] = billiard_ballroom
         lounge_dining = Hallway("lounge-dining")
-        self.dictionary["lounge-dining"] = lounge_dining
+        self.dictionarySpaces["lounge-dining"] = lounge_dining
         dining_kitchen = Hallway("dining-kitchen")
-        self.dictionary["dining-kitchen"] = dining_kitchen
+        self.dictionarySpaces["dining-kitchen"] = dining_kitchen
 
         # Connect rooms with hallways
         study_hall.add_adjacent_space(study_room)
@@ -111,13 +111,13 @@ class GameBoard:
             study_library, library_conservatory,
             hall_billiard, billiard_ballroom,
             lounge_dining, dining_kitchen])
-        
-    def get_all_spaces(self) -> List[Space]:
-        """Returns all sapces on the board"""
-        return self.spaces
 
     def get_space_by_name(self, space_name: str) -> Space:
         return self.dictionarySpaces[space_name]
+    
+    # def get_all_spaces(self) -> List[Space]:
+    #     """Returns all sapces on the board"""
+    #     return self.spaces
 
     # def get_starting_positions(self):
 

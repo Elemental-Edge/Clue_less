@@ -10,7 +10,7 @@
 <body>
 
 	<div id="cl-board" class="cl-board">
-
+			
 		<!-- ACCUSATION POPUP -->
 		<div id="cl-accusation-wrapper" class="cl-accusation-wrapper popup-wrapper hide">
 			<div class="cl-accusation-inner popup-inner">
@@ -40,7 +40,7 @@
 						<td>
 							<input type="radio" id="accusation_where" name="accusation_where" value="ballroom"><label for="accusation_where">Ballroom</label><br />
 							<input type="radio" id="accusation_where" name="accusation_where" value="billiards"><label for="accusation_where">Billard's Room</label><br />
-							<input type="radio" id="accusation_where" name="accusation_where" value="Conservatory"><label for="accusation_where">Conservatory</label><br />							
+							<input type="radio" id="accusation_where" name="accusation_where" value="Conservatory"><label for="accusation_where">Conservatory</label><br />
 							<input type="radio" id="accusation_where" name="accusation_where" value="dining"><label for="accusation_where">Dining Room</label><br />
 							<input type="radio" id="accusation_where" name="accusation_where" value="hall"><label for="accusation_where">Hall</label><br />
 							<input type="radio" id="accusation_where" name="accusation_where" value="kitchen"><label for="accusation_where">Kitchen</label><br />
@@ -55,7 +55,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- BAD-ACCUSATION POPUP -->
 		<div id="cl-bad-accusation-wrapper" class="cl-bad-accusation-wrapper popup-wrapper hide">
 			<div class="cl-disprove-inner popup-inner">
@@ -67,7 +67,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- CARDS POPUP -->
 		<div id="cl-cards-wrapper" class="cl-cards-wrapper popup-wrapper hide">
 			<div class="cl-disprove-inner popup-inner">
@@ -109,7 +109,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- CHARACTER SELECTION POPUP -->
 		<div id="cl-character-selection-wrapper" class="cl-character-selection-wrapper popup-wrapper hide">
 			<div class="cl-character-selection-inner popup-inner">
@@ -133,7 +133,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- DISPROVE POPUP -->
 		<div id="cl-disprove-wrapper" class="cl-disprove-wrapper popup-wrapper hide">
 			<div class="cl-disprove-inner popup-inner">
@@ -172,11 +172,11 @@
 						</td>
 					<tr>
 				</table>
-				<input type="submit" id="disprove" class="popup-submit" name="disprove" value="Disprove">
+				<input type="submit" id="disprove_submit" class="popup-submit" name="disprove_submit" value="Disprove">
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- DISPROVEN POPUP -->
 		<div id="cl-disproven-wrapper" class="cl-disproven-wrapper popup-wrapper hide">
 			<div class="cl-disproven-inner popup-inner">
@@ -190,7 +190,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- GAME IN PROGRESS POPUP -->
 		<div id="cl-game-in-progress-wrapper" class="cl-game-in-progress-wrapper popup-wrapper hide">
 			<div class="cl-game-in-progress-inner popup-inner">
@@ -201,7 +201,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- GOOD-SUGGESTION POPUP -->
 		<div id="cl-good-suggestion-wrapper" class="cl-good-suggestion-wrapper popup-wrapper hide">
 			<div class="cl-good-suggestion-inner popup-inner">
@@ -214,7 +214,7 @@
 		</div>
 
 		<!-- LOADING POPUP -->
-		<div id="loading" class="cl-loading-wrapper popup-wrapper">
+		<div id="loading" class="cl-loading-wrapper popup-wrapper hide">
 			<div class="loader-mid">
 				<img class="title-image" src="assets/title.png">
 				<div class="title-text no-select">Cl<span class="red">u</span>e-Le<span class="red">s</span>s</div>
@@ -298,7 +298,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- MOVE TOKEN TO HALLWAY -->
 		<div id="cl-move-token-to-hallway-wrapper" class="cl-move-token-to-hallway-wrapper popup-wrapper hide">
 			<div class="cl-move-token-to-hallway-inner popup-inner">
@@ -319,7 +319,7 @@
 						<td>
 							<input type="radio" id="move_to_where" name="move_to_where" value="study-hall"><label for="move_to_where">study-hall</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="study-library"><label for="move_to_where">study-library</label><br />
-							<input type="radio" id="move_to_where" name="move_to_where" value="hall-lounge"><label for="move_to_where">hall-lounge</label><br />							
+							<input type="radio" id="move_to_where" name="move_to_where" value="hall-lounge"><label for="move_to_where">hall-lounge</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="hall-billiards"><label for="move_to_where">hall-billiards</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="lounge-dining"><label for="move_to_where">lounge-dining</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="library-billiards"><label for="move_to_where">library-billiards</label><br />
@@ -336,7 +336,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- MOVE TOKEN TO ROOM -->
 		<div id="cl-move-token-to-room-wrapper" class="cl-move-token-to-room-wrapper popup-wrapper hide">
 			<div class="cl-move-token-to-room-inner popup-inner">
@@ -363,7 +363,7 @@
 						<td>
 							<input type="radio" id="move_to_where" name="move_to_where" value="ballroom"><label for="move_to_where">Ballroom</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="billiards"><label for="move_to_where">Billard's Room</label><br />
-							<input type="radio" id="move_to_where" name="move_to_where" value="Conservatory"><label for="move_to_where">Conservatory</label><br />							
+							<input type="radio" id="move_to_where" name="move_to_where" value="Conservatory"><label for="move_to_where">Conservatory</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="dining"><label for="move_to_where">Dining Room</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="hall"><label for="move_to_where">Hall</label><br />
 							<input type="radio" id="move_to_where" name="move_to_where" value="kitchen"><label for="move_to_where">Kitchen</label><br />
@@ -415,7 +415,7 @@
 			</div>
 			<div class="fog-overlay dark-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- START LOBBY POPUP -->
 		<div id="cl-start-lobby-wrapper" class="cl-start-lobby-wrapper popup-wrapper hide">
 			<div class="cl-start-lobby-inner popup-inner">
@@ -428,7 +428,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- SUGGESTION POPUP -->
 		<div id="cl-suggestion-wrapper" class="cl-suggestion-wrapper popup-wrapper hide">
 			<div class="cl-suggestion-inner popup-inner">
@@ -474,7 +474,7 @@
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
-		
+
 		<!-- WIN POPUP -->
 		<div id="cl-win-wrapper" class="cl-win-wrapper popup-wrapper hide">
 			<div class="cl-win-inner popup-inner">
@@ -534,7 +534,7 @@
 
 		<canvas id="glCanvas" class="cl-canvas" width="600" height="600"></canvas>
 		<script>
-			// DECLARE GAME VARS
+			// DECLARE GAME VARS ***************************************************************************************************************************************
 			var game_started;
 			var your_username;
 			var your_turn = false;
@@ -546,9 +546,10 @@
 		</script>
 		<script src="map.js"></script>
 	</div>
+
 	<div class="cl-panel">
-		<div id="chat-window"></div>
-		<div id="admin-buttons" class="hide">
+		<!-- <div id="chat-window"></div> -->
+		<div id="admin-buttons" class="">
 			<button onclick="$('#cl-accusation-wrapper').removeClass('hide');">Accusation Popup</button><br />
 			<button onclick="$('#cl-bad-accusation-wrapper').removeClass('hide');">Bad Accusation Popup</button><br />
 			<button onclick="$('#cl-cards-wrapper').removeClass('hide');">Cards Popup</button><br />
@@ -575,6 +576,484 @@
 			<button id="open-loading-window" onclick="$('#loading').removeClass('hide');">Open Loading Popup</button><br />
 			<button id="close-loading-window" onclick="$('#loading').addClass('hide');">Close Loading Popup</button><br />
 		</div>
+	</div>
+
+	<!-- DETECTIVE'S NOTEBOOK -->
+	<div id="cl-notebook" class="cl-notebook" style="height: 100vh; width: 830 px">
+		<div id="notebook">
+			<table width="830" style="background-color:white">
+				<tr>
+					<td width="10"></td>
+					<td width="210"></td>
+					<td width="10"></td>
+					<td height="20" width="600"><b>Detective's Notebook</b></td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"></td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="text" style="width: 60px" value=" P1"></td>
+								<td height="20" width="100"><input type="text" style="width: 60px" value=" P2"></td>
+								<td height="20" width="100"><input type="text" style="width: 60px" value=" P3"></td>
+								<td height="20" width="100"><input type="text" style="width: 60px" value=" P4"></td>
+								<td height="20" width="100"><input type="text" style="width: 60px" value=" P5"></td>
+								<td height="20" width="100"><input type="text" style="width: 60px" value=" P6"></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"><b>Suspects</b></td>
+					<td width="10"></td>
+					<td width="600">
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Mustard</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Plum</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Green</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Peacock</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Scarlet</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; White</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr height="10"></tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"><b>Weapons</b></td>
+					<td width="10"></td>
+					<td width="600">
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Knife</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Candlestick</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Revolver</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Rope</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Lead Pipe</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Wrench</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr height="10"></tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"><b>Rooms</b></td>
+					<td width="10"></td>
+					<td width="600">
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Hall</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Lounge</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Dining Room</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Kitchen</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Ballroom</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Conservatory</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Billiard Room</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Library</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="10"></td>
+					<td width="210"> &nbsp; Study</td>
+					<td width="10"></td>
+					<td width="600">
+						<table>
+							<tr>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+								<td height="20" width="100"><input type="button" class="multi-checkbox" value="&#x2B1C;" /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr height="30"></tr>
+			</table>
+		</div>
+		<style>
+			/* Multi-Checkbox Button Style */
+			.multi-checkbox {
+			  background: transparent;
+			  border: none;
+			  color: black;
+			  text-align: center;
+			  text-decoration: none;
+			  display: inline-block;
+			  font-size: 35px;
+			  cursor: pointer;
+			}
+			
+			.guess-component {
+			  width: 100;
+			}
+			
+			/* Text changes depending on button status */
+			.checked {
+			  font-weight: bold;
+			}
+			
+			.x {
+			  text-decoration: line-through;
+			}
+		</style>
+		<!-- this script's source for the detective's notebook checkboxes is https://github.com/lowlydba/clue-sheet/tree/main/assets/css -->
+		<script>
+			function statusButtonChanger (control) {
+				const Data = [
+				  { status: 'unchecked', value: '\u2B1C' },
+				  { status: 'x', value: '\u274c' },
+				  { status: 'question', value: '\u2753' },
+				  { status: '!', value: '\u2757' },
+				  { status: 'checked', value: '\u2705' }
+				]
+			  
+				let index = Data.map(function (e) { return e.value }).indexOf(control.value)
+				index++
+				if ((index) >= Data.length) {
+				  index = 0
+				}
+				control.value = Data[index].value
+				const clue = $(control).closest('td').siblings('.guess-component') // eslint-disable-line no-undef
+				switch (Data[index].status) {
+				  case 'x':
+					clue.toggleClass('x').siblings().removeClass('checked')
+					break
+				  case 'checked':
+					clue.toggleClass('checked').siblings().removeClass('x')
+					break
+				  default:
+					clue.removeClass('x checked')
+				}
+			  }
+			  
+			  // Attach function to all checkboxes
+			  window.onload = function () {
+				const elements = document.getElementsByClassName('multi-checkbox')
+				for (let i = 0; i < elements.length; i++) {
+				  elements[i].onclick = function () {
+					statusButtonChanger(this)
+				  }
+				}
+			  }
+		</script>
 	</div>
 </body>
 </html>

@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4744f2d5-bea9-4fd7-bc99-e2584abb5988" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/test.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/gameboardGroupings/gameboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,20 +47,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "frontend__3",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PyCharm 2024.2.0.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;frontend__3&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PyCharm 2024.2.0.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Clue_less" type="Python.DjangoServer" factoryName="Django server">
       <module name="Clue_less" />
@@ -113,7 +117,10 @@
       <workItem from="1733363869510" duration="10000" />
       <workItem from="1733363894601" duration="3047000" />
       <workItem from="1733379203579" duration="613000" />
-      <workItem from="1733425819137" duration="10042000" />
+      <workItem from="1733425819137" duration="10390000" />
+      <workItem from="1733438319186" duration="685000" />
+      <workItem from="1733446189065" duration="3000" />
+      <workItem from="1733446196801" duration="66000" />
     </task>
     <servers />
   </component>
