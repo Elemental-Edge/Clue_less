@@ -19,10 +19,12 @@ class SpaceType(Enum):
         that represents the room type.
         """
         # Returns the SpaceType Name
-        return self.name.replace("_", " ").titegit()
+        return self.name.replace("_", " ").title()
+
 
 class Space:
     def __init__(self, name: str = SPACE_NAME):
+        """Constructor initializes the class."""
         self._name: str = name
         self._space_type: SpaceType = None
         self._players: List['Player'] = []
@@ -33,6 +35,8 @@ class Space:
         # _players list length
 
     def __eq__(self, other: object) -> bool:
+        """Overloads the equality operator to check for space equality via
+           memory address comparison"""
         return self is other
 
     def get_player_count(self) -> int:
@@ -61,6 +65,7 @@ class Space:
             raise ValueError(f"{space._name} cannot be adjacent to itself")
 
     def remove_adjacent_space(self, space_name: str) -> Space | None:
+        """"""
         removed_space = self.get_adjacent_space(space_name)
         if removed_space is not None:
             removed_space.remove_adjacent_space(self._name)

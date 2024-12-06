@@ -6,11 +6,10 @@ from Backend.cardGroupings.Card import Card, CardType
 from Backend.GameManagement.playerGroupings.Actions import Accusation, Suggestion, Actions
 from Backend.gameboardGroupings.turn_order import TurnOrder
 from Backend.GameManagement.playerGroupings.player import Player
-from Backend.gameboardGroupings.space import Room, Hallway, Space
+from Backend.gameboardGroupings.space import Space
 from Backend.gameboardGroupings.gameboard import GameBoard
 import random
 
-# TODO: Must have odd players to join the game
 
 class GameState(Enum):
     WAITING_FOR_PLAYERS = auto()
@@ -24,6 +23,7 @@ class GameProcessor:
 
     MIN_PLAYERS = 3
     MAX_PLAYERS = 6
+    MIN_ACTIVATE_PLAYERS = 2
     
     def __init__(self, game_id: str):
         # Game identification
@@ -63,8 +63,8 @@ class GameProcessor:
         if self.state != GameState.WAITING_FOR_PLAYERS:
             raise ValueError("Cannot add players after game has started")
 
-        if len(self.players) >= self.MAX_PLAYERS:
-            raise ValueError("Maximum number of players reached")
+        if self.turnOrder.get_player_count() + 1 > self.MAX_PLAYERS:
+            raise ValueError("Maximum number of players reached, cannot join the game")
 
         # Create new player
         player = Player(player_name, player_id)
@@ -82,10 +82,10 @@ class GameProcessor:
 
     def start_game(self) -> bool:
         """Initialize and start the game."""
-        if len(self.players) < self.MIN_PLAYERS:
+        if self.turnOrder.get_player_count() < self.MIN_PLAYERS:
             raise ValueError(f"Need at least {self.MIN_PLAYERS} players to start")
-        if len(self.players) % self.MIN_PLAYERS != 0:
-            raise ValueError(f"{len(self.players)} players, must have a multiple of {self.MIN_PLAYERS} players to start.")
+        if self.turnOrder.get_player_count() % self.MIN_PLAYERS != 0:
+            raise ValueError(f"{self.turnOrder.get_player_count()} players, must have a multiple of {self.MIN_PLAYERS} players to start.")
 
         self.state = GameState.INITIALIZING
 
@@ -138,8 +138,8 @@ class GameProcessor:
         if player != self.current_turn.p:
             raise ValueError("Not this player's turn")
 
-        suggestion = Suggestion(aTurnOrder= self.turnOrder)
-        disprovePlayer, disproveHand = suggestion.makeSuggestion(aSuspect,aWeapon,aRoom)
+        suggestion = Suggestion(self.turnOrder)
+        disprovePlayer, disproveHand = suggestion.makeSuggestion(aSuspect, aWeapon, aRoom)
 
         return disprovePlayer, disproveHand
 
@@ -163,20 +163,20 @@ class GameProcessor:
     
     def is_game_over(self) -> bool:
         # Check if game is over
-        active_players = self.turnOrder.get_turn_order()
-        if active_players < 2:
+        active_players = self.turnOrder.get_active_player_count()
+        if active_players < self.MIN_ACTIVATE_PLAYERS:
             self.state = GameState.GAME_OVER
 
     def end_turn(self):
         """End current turn and start next player's turn."""
         self.turnOrder.advance_turn()
 
-
     def get_valid_moves(self, player: Player) -> List[Space]:
         """Get valid moves for a player."""
-        if player != self.current_turn.p:
-            return []
-        return player.get_valid_moves()
+        valid_moves = []
+        if player == self.turnOrder.get_current_turn():
+            valid_moves = player.get_valid_moves()
+        return valid_moves
 
     def move_player(self, player: Player, target_space: Space) -> bool:
         """Move a player to a new space."""

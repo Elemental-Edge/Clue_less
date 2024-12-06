@@ -15,9 +15,10 @@ class Node:
 class TurnOrder:
     """Manages the turn order using a circular singly linked list."""
     def __init__(self):
-        self.head = None  # First node in the list
-        self.tail = None  # Last node in the list
-        self.current = None  # Current player's turn
+        self._head = None  # First node in the list
+        self._tail = None  # Last node in the list
+        self._current = None  # Current player's turn
+        self._player_count = 0
 
     def add_player(self, player: Player):
         """
@@ -25,17 +26,19 @@ class TurnOrder:
         Creates a new node for the player and appends it to the end of the circular list.
         """
         new_node = Node(player)
-        if self.head is None:
+        if self._head is None:
             # First player in the list
-            self.head = new_node
-            self.tail = new_node
+            self._head = new_node
+            self._tail = new_node
             new_node.next = new_node  # Circular reference
-            self.current = new_node
+            self._current = new_node
+            self._player_count += 1
         else:
             # Append the new node at the end
-            self.tail.next = new_node
-            new_node.next = self.head
-            self.tail = new_node
+            self._tail.next = new_node
+            new_node.next = self._head
+            self._tail = new_node
+            self._player_count += 1
 
     def remove_player(self, player: Player) -> None | Player:
         """
@@ -43,28 +46,32 @@ class TurnOrder:
         Traverses the list to find the player and removes their node.
         If the player is the only one, clears the list.
         """
-        if self.head:
-            prev = self.tail
-            current = self.head
+        if self._head:
+            prev = self._tail
+            current = self._head
         else:   # no active players
             return None
 
-        while current != self.tail or prev == self.tail:  # Traverse until full cycle
+        while current != self._tail or prev == self._tail:  # Traverse until full cycle
             if current.player == player:
-                if current == self.head and current == self.tail:
+                if current == self._head and current == self._tail:
                     # Only one player in the list
-                    self.head = None
-                    self.tail = None
-                    self.current = None
+                    self._head = None
+                    self._tail = None
+                    self._current = None
+                    self._player_count -= 1
                 else:
                     # Update links to remove the node
                     prev.next = current.next
-                    if current == self.head:
-                        self.head = current.next
-                    if current == self.tail:
-                        self.tail = prev
-                    if current == self.current:
-                        self.current = current.next
+                    if current == self._head:
+                        self._head = current.next
+                        self._player_count -= 1
+                    if current == self._tail:
+                        self._tail = prev
+                        self._player_count -= 1
+                    if current == self._current:
+                        self._current = current.next
+                        self._player_count -= 1
                 return current.player  # Return the removed player
             prev = current
             current = current.next
@@ -75,46 +82,46 @@ class TurnOrder:
         Get the player whose turn it is.
         Returns the player at the `current` node.
         """
-        return self.current.player if self.current else None
+        return self._current.player if self._current else None
 
     def advance_turn(self):
         """
         Move to the next player's turn.
         Updates the `current` pointer to the next node in the list.
         """
-        if self.current:
-            self.current = self.current.next
+        if self._current:
+            self._current = self._current.next
 
     def reverse_order(self):
         """
         Reverse the order of players in the turn order.
         Reverses the direction of the `next` pointers and updates the `head` and `tail`.
         """
-        if self.head is None or self.head.next == self.head:
+        if self._head is None or self._head.next == self._head:
             return  # No players or only one player
 
-        prev = self.tail
-        current = self.head
-        first_node = self.head
+        prev = self._tail
+        current = self._head
+        first_node = self._head
 
-        while current != first_node or prev == self.tail:
+        while current != first_node or prev == self._tail:
             next_node = current.next
             current.next = prev
             prev = current
             current = next_node
 
         # Update head and tail and reconnect the circular link
-        self.tail = self.head
-        self.head = prev
-        self.tail.next = self.head
-        self.current = self.head
+        self._tail = self._head
+        self._head = prev
+        self._tail.next = self._head
+        self._current = self._head
 
     def randomize_order(self):
         """
         Randomize the turn order of players.
         Collects all players into a list, shuffles the list, and rebuilds the circular linked list.
         """
-        if self.head is None or self.head.next == self.head:
+        if self._head is None or self._head.next == self._head:
             return  # No players or only one player
 
         # Collect all players
@@ -124,9 +131,9 @@ class TurnOrder:
         shuffle(players)
 
         # Rebuild the circular list
-        self.head = None
-        self.tail = None
-        self.current = None
+        self._head = None
+        self._tail = None
+        self._current = None
         for player in players:
             self.add_player(player)
 
@@ -136,15 +143,15 @@ class TurnOrder:
         Traverses the circular list and collects all players in order.
         """
         players = []
-        if self.head is None:
+        if self._head is None:
             return players
 
-        current = self.head
+        current = self._head
 
-        while current != self.tail or len(players) == 0:  # Ensure full cycle
+        while current != self._tail or len(players) == 0:  # Ensure full cycle
             players.append(current.player)
             current = current.next
-        players.append(self.tail.player)  # Add the tail player to the list
+        players.append(self._tail.player)  # Add the tail player to the list
 
         return players
     
@@ -154,3 +161,22 @@ class TurnOrder:
             if not player.is_eliminated():
                 activate_players.append(player)
         return activate_players
+    
+    def get_active_player_count(self) -> int:
+        count = 0
+        if self._head:
+            current = self._head
+            while current != self._tail:  # Ensure full cycle
+                if not current.player.is_eliminated:
+                    current = current.next
+                    count += 1
+        return count
+
+    def get_player_count(self) -> int:
+        return self._player_count
+    
+    def __iter__(self) -> Iterator[Player]:
+        pass
+
+    def __next__(self) -> Player:
+        pass
