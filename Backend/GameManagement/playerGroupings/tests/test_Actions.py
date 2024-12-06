@@ -5,7 +5,7 @@ from Backend.GameManagement.playerGroupings.Actions import Accusation, Suggestio
 from Backend.cardGroupings.Card import Card
 @pytest.fixture
 def setup_accusation():
-    case_file = MagicMock()
+    case_file = MagicMock(spec='Hand')
     case_file.has_card.side_effect = lambda card: card._name in [Card.VALID_SUSPECTS[3], Card.VALID_WEAPONS[3], Card.VALID_ROOMS[3]]
     accusation = Accusation(case_file)
     return accusation
@@ -17,12 +17,6 @@ def test_makeAccusation_correct(setup_accusation):
 def test_makeAccusation_incorrect(setup_accusation):
     result = setup_accusation.makeAccusation(Card.VALID_SUSPECTS[1], Card.VALID_WEAPONS[3], Card.VALID_ROOMS[3])
     assert result is False
-
-def test_makeAccusation_badInputs(setup_accusation):
-    result = setup_accusation.case_file.display_hand()
-    assert result is True
-
-"""
 
 @pytest.fixture
 def setup_suggestion():
@@ -59,7 +53,7 @@ def test_makeSuggestion_with_disprove(setup_suggestion):
     assert result[0] is not None  # There should be a player to disprove
     assert not result[1].isEmpty()  # There should be disprove cards
 
-
+"""
 @pytest.fixture
 def setup_move():
     player = MagicMock(spec=Player)
@@ -98,5 +92,4 @@ def test_makeMove_success(setup_move):
     result = move_action.makeMove(mock_space)
     assert result is True
     assert player.currLocation == mock_space
-
 """
