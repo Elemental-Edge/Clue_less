@@ -5,8 +5,8 @@ class GameBoard:
     """Represents the class Clue gameboard."""
     def __init__(self):
         self.spaces: List[Space] = []
-        self.setup_gameboard()
         self.dictionarySpaces = {}
+        self.setup_gameboard()
 
     def setup_gameboard(self):
         """Creates the default Clue board layout with all rooms and connections"""
@@ -62,37 +62,37 @@ class GameBoard:
         # Connect rooms with hallways
         study_hall.add_adjacent_space(study_room)
         study_hall.add_adjacent_space(hall_room)
-        
+
         hall_lounge.add_adjacent_space(hall_room)
         hall_lounge.add_adjacent_space(lounge_room)
-        
+
         library_billiard.add_adjacent_space(library_room)
         library_billiard.add_adjacent_space(billiard_room)
-        
+
         billiard_dining.add_adjacent_space(billiard_room)
         billiard_dining.add_adjacent_space(dining_room)
-        
+
         conservatory_ballroom.add_adjacent_space(conservatory_room)
         conservatory_ballroom.add_adjacent_space(ballroom_room)
-        
+
         ballroom_kitchen.add_adjacent_space(ballroom_room)
         ballroom_kitchen.add_adjacent_space(kitchen_room)
-        
+
         study_library.add_adjacent_space(study_room)
         study_library.add_adjacent_space(library_room)
-        
+
         library_conservatory.add_adjacent_space(library_room)
         library_conservatory.add_adjacent_space(conservatory_room)
-        
+
         hall_billiard.add_adjacent_space(hall_room)
         hall_billiard.add_adjacent_space(billiard_room)
-        
+
         billiard_ballroom.add_adjacent_space(billiard_room)
         billiard_ballroom.add_adjacent_space(ballroom_room)
-        
+
         lounge_dining.add_adjacent_space(lounge_room)
         lounge_dining.add_adjacent_space(dining_room)
-        
+
         dining_kitchen.add_adjacent_space(dining_room)
         dining_kitchen.add_adjacent_space(kitchen_room)
 
@@ -114,7 +114,7 @@ class GameBoard:
 
     def get_space_by_name(self, space_name: str) -> Space:
         return self.dictionarySpaces[space_name]
-    
+
     # def get_all_spaces(self) -> List[Space]:
     #     """Returns all sapces on the board"""
     #     return self.spaces

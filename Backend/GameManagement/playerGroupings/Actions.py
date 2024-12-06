@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 from Backend.GameManagement.playerGroupings.player import Player
-from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
 from Backend.gameboardGroupings.turn_order import TurnOrder
 from Backend.cardGroupings.Card import Card, CardType
 from Backend.cardGroupings.Hand import Hand
@@ -15,7 +14,7 @@ class Actions():
         from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
         self.p : 'Player' = player
         self.pt : 'Player_Turn' = playerTurn
-    
+
     @abstractmethod
     def __str__(self):
         pass
@@ -43,7 +42,7 @@ class Accusation(Actions) :
         return ( self.case_file.has_card(suspect)
             and self.case_file.has_card(weapon)
             and self.case_file.has_card(room))
-    
+
     def __str__(self):
         return "accusation"
 
@@ -92,7 +91,7 @@ class Suggestion(Actions):
         for el in disproveCards.get_hand():
             toReturnDisproveCardsList.append(el.__str__())
         return nextPlayer, toReturnDisproveCardsList
-    
+
     def __str__(self):
         return "suggestion"
 
@@ -123,7 +122,7 @@ class Move(Actions):
 
         # TODO: broadcast move
         return True
-    
+
     def __str__(self):
         return "move"
 
