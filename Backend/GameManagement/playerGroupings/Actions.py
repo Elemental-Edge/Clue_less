@@ -131,7 +131,7 @@ class Move(Actions):
             self.get_player().get_player_turn().set_hasEnteredRoom()
 
         retVal = current_player.set_current_location(selected_destination)
-        if (retVal):
+        if (not retVal):
             return False
         self.get_player().get_player_turn().set_hasMoved()
         return True

@@ -197,36 +197,20 @@ def setup_move():
     turn_order.add_player(player4)
 
     move_action = Move(turn_order)
-    return move_action
+    return move_action, room_kitchen, room_Living, hallway1
 
 def test_makeMove_invalid_destination(setup_move):
-    move_action = setup_move
+    move_action = setup_move[0]
     with pytest.raises(ValueError, match=f"Empty Destination Object Case File"):
         result = move_action.makeMove(None)
 
 def test_makeMove_hallway(setup_move):
-    move_action = setup_move
-    mock_space = Hallway("Kitchen")
-    result = move_action.makeMove(mock_space)
+    move_action, kitchen, living, Hallway= setup_move
+    result = move_action.makeMove(Hallway)
     assert result is True
 
 def test_makeMove_not_adjacent(setup_move):
-    move_action, playerTurn = setup_move
-    mock_space = Space("Kitchen")
+    move_action = setup_move[0]
+    mock_space = Room("Bathroom")
     move_action.makeMove(mock_space)
-    assert mock_space not in playerTurn.get_player().currLocation.get_adjacent_spaces()
-    assert mock_space not in playerTurn.get_player().currLocation.get_adjacent_spaces()
-
-def test_makeMove_success(setup_move):
-    move_action, playerTurn = setup_move
-    move_action, playerTurn = setup_move
-    mock_space = MagicMock()
-    mock_space.get_space_type.return_value = SpaceType.ROOM
-    playerTurn.get_player().currLocation.get_adjacent_spaces.return_value = [mock_space]
-    playerTurn.get_player().currLocation.get_adjacent_spaces.return_value = [mock_space]
-
-    result = move_action.makeMove(mock_space)
-    assert result is True
-    assert playerTurn.get_player().currLocation == mock_space
-
-    assert playerTurn.get_player().currLocation == mock_space
+    assert mock_space not in move_action.get_player().get_current_location().get_adjacent_spaces()
