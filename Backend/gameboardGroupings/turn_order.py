@@ -78,7 +78,7 @@ class TurnOrder:
             current = current.next
         return None  # Player not found
 
-    def get_current_turn(self) -> Player | None:
+    def get_current_turn(self) -> Player:
         """
         Get the player whose turn it is.
         Returns the player at the `current` node.

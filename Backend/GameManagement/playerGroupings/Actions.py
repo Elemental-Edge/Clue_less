@@ -118,8 +118,11 @@ class Move(Actions):
             raise ValueError("Empty Destination Object Case File")
 
         current_player = self.get_player()
+        currentLocation = current_player.get_current_location()
+        if (None == currentLocation):
+            return False
         # Check if Destination is in Adjacent Spaces
-        if not aDest in current_player.currLocation.get_adjacent_spaces():
+        if not aDest in currentLocation.get_adjacent_spaces():
             return False
         # have player select a move
         selected_destination = aDest
@@ -127,21 +130,11 @@ class Move(Actions):
         if selected_destination.get_space_type() == SpaceType.ROOM:
             self.get_player().get_player_turn().set_hasEnteredRoom()
 
-        selected_destination.add_player(current_player)
-
-        current_player.prevLocation = current_player.currLocation
-        current_player.currLocation.remove_player(current_player)
-
-        self.get_player().currLocation = selected_destination
+        retVal = current_player.set_current_location(selected_destination)
+        if (retVal):
+            return False
         self.get_player().get_player_turn().set_hasMoved()
-        # TODO: broadcast move
         return True
 
     def __str__(self):
         return "move"
-
-
-
-
-
-
