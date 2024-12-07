@@ -1,12 +1,12 @@
 import pytest
-from unittest.mock import MagicMock
 from Backend.cardGroupings.Card import Card, CardType
 from Backend.cardGroupings.Hand import Hand
 from Backend.GameManagement.playerGroupings.player import Player  # Replace 'your_module' with the actual module name
-from Backend.gameboardGroupings.space import Hallway
+
+
 @pytest.fixture
 def player():
-    player = Player("Aron")
+    player = Player("Aron", 1)
     player.playerHand = Hand()  # Assign a mock hand to the player
     return player
 
@@ -18,6 +18,8 @@ def test_receive_card_dealt(player):
     card = Card(Card.VALID_SUSPECTS[4], CardType.SUSPECT)  # Assuming Card has a default constructor
     player.receive_card_dealt(card)
     assert len(player.get_hand().get_hand()) == 1  # Check that the card has been added
+
+
 """
 def test_get_valid_moves_empty_hallway(player):
     player.set_current_location(Hallway("Kitchen")) # Set the current location to an empty hallway
