@@ -463,15 +463,88 @@ const initializeDjangoChannels = (ws_url) => {
 				your_username = data.username;
 				$("#cl-character-selection-wrapper").removeClass("hide");
 				for (let i = 0; i < data.characters_chosen; i++) {
-					$(`.select-character.character-${data.characters_chosen[i]}`).addClass("unselectable");
+					$(`.select-character.character-${data.characters_chosen[i]}`).addClass("unselectable");	
 				}
 				return;
-				
-			
-			default:
-				console.error(`Unknown command from server: ${data.command}.`);
-				return;
-		}
+
+            case "show-valid-actions":
+                // need to check which valid actions and adjust/hide appropriately
+                for (element in data.actions) {
+                    if (element == "move") {
+                        $('#selected_move').removeClass('hide');
+                    }
+                    if (element == "suggestion") {
+                        $('#selected_suggestion').removeClass('hide');
+                    }
+                    if (element == "accusation") {
+                        $('#selected_accusation').removeClass('hide');
+                    }
+                }
+                $('#cl-actions-wrapper').removeClass('hide');
+                return;
+
+            case "disprove-select":
+                $("#cl-suggestion-wrapper").addClass('hide');
+                // unhide possible disprove cards
+                if (selected_character == data.disprover) { // TODO: make sure selected_character is a String of current character formatted
+                    for (card in data.disproveCards) {
+                        $('#disprove_' + card).removeClass('hide');
+                    }
+                    $("#cl-disprove-wrapper").removeClass('hide');
+                }
+                return;
+
+            case "cannot-disprove":
+                $("#cl-cannot-disprove-wrapper").removeClass('hide');
+                return;
+
+            case "makeAccusation":
+                $('#cl-actions-wrapper').addClass('hide');
+                // unhide accusation popup
+                $("#cl-accusation-wrapper").removeClass('hide');
+                return;
+
+            case "makeSuggestion":
+                $('#cl-actions-wrapper').addClass('hide');
+                // unhide suggestion popup
+                $("#cl-suggestion-wrapper").removeClass('hide');
+                // const tokenToMove = $('input[name="token_to_move"]:checked').val(); // jQuery selector for checked radio button
+                // const locationToMove = $('input[name="move_to_where"]:checked').val(); // jQuery selector for checked radio button
+                // moveCircleToRoom(getCircleByKey(tokenToMove), getRoomByKey(locationToMove));
+                // $(".cl-move-token-to-room-wrapper").addClass("hide");
+                return;
+
+            case "move":
+                $('#cl-actions-wrapper').addClass('hide');
+                for (elem in data.possibleDestinations) {
+                    $('#move_' + elem).removeClass('hide');
+                }
+                $("#cl-move-token-wrapper").removeClass('hide');
+
+            case "win":
+                // unhide win popup
+                $("#cl-win-wrapper").removeClass('hide');
+                return;
+
+            case "selected-action-invalid":
+                $('#cl-actions-wrapper').addClass('hide');
+                $('#cl-action-invalid-wrapper').removeClass('hide');
+                return;
+
+            case "eliminate":
+                $('#cl-bad-accusation-wrapper').removeClass('hide');
+                return;
+
+            case "show-dealt-cards":
+                for (c in cards) {
+                    $('#dealt_' + c).removeClass('hide');
+                }
+                $('#cl-cards-wrapper').removeClass('hide');
+
+            default:
+                console.error(`Unknown command from server: ${data.command}.`);
+                return;
+        }
         // Handle the received message (customize as needed)
         // add functions for each response here
     };
@@ -511,9 +584,9 @@ $("#command-to-backend-submit").on("click", function() {
 // SEND STRING CLI COMMANDS TO BACKEND
 $("form").on("submit", function(e) {
 
-	// stop form submission
-	e.preventDefault();
-	
+    // stop form submission
+    e.preventDefault();
+
 	// login form
 	if ($(this).attr("id") == "login-form") {
 		sendMessageToBackend(socket, `login ${$("#login-username").val()} ${$("#login-password").val()}`);
@@ -536,14 +609,57 @@ $("form").on("submit", function(e) {
 		return;
 	}
 
+	// make accusation
+    if ($(this).attr("id") == "accusation-form") {
+        sendMessageToBackend(socket, `accusation ${$("#accusation_who:checked").val()} ${$("#accusation_with:checked").val()} ${$("#accusation_where:checked").val()}`);
+        return;
+    }
+
+    // make suggestion
+    if ($(this).attr("id") == "make_suggestion") {
+        sendMessageToBackend(socket, `suggestion ${$("#suggestion-who:checked").val()} ${$("#suggestion_with:checked").val()} ${current_location}`);
+        return;
+    }
+
+    // make actual move
+    if ($(this).attr("id") == "move_to_space") {
+        sendMessageToBackend(socket, `actualMove ${$("#move_to_where:checked").val()}`);
+        return;
+    }
+
+    // action chosen
+    if ($(this).attr("id") == "chosen_action") {
+        // make a check to see if suggestion is valid
+        if ($("#selected_action").equals("move")) {
+            $('#cl-actions-wrapper').addClass('hide');
+            sendMessageToBackend(socket, `validMoves`);
+        }
+        elif ($("#selected_action").equals("suggestion"))
+        {
+            $('#cl-actions-wrapper').addClass('hide');
+            sendMessageToBackend(socket, `suggestion`);
+        }
+            elif ($("#selected_action").equals("accusation"))
+        {
+            $('#cl-actions-wrapper').addClass('hide');
+            sendMessageToBackend(socket, `accusation`);
+        }
+    }
+
 	// select character form
 	if ($(this).attr("id") == "start-game-form") {
 		// submit to backend
 		sendMessageToBackend(socket, `start-game`);
 		return;
 	}
-	
-	console.error(`Unknown form.`);
+
+    if ($(this).attr("id") == "disprove_submit") {
+        sendMessageToBackend(socket, `disproveReceived ${selected_character} ${$("#disprove_card").val()}`);
+        return;
+    }
+
+    console.error(`Unknown form.`);
+
 });
 
 $("#move_to_hallway").on("click", function() {
@@ -559,6 +675,22 @@ $("#move_to_room").on("click", function() {
 	moveCircleToRoom(getCircleByKey(tokenToMove), getRoomByKey(locationToMove));
 	$(".cl-move-token-to-room-wrapper").addClass("hide");
 });
+
+// button simultaneously moves player token while submitting move-player-form to backend (see above case)
+$("#move_to_space").on("click", function() {
+    const tokenToMove = $('input[name="token_to_move"]:checked').val(); // jQuery selector for checked radio button
+    const locationToMove = $('input[name="move_to_where"]:checked').val(); // jQuery selector for checked radio button
+    dest = getHallwayByKey(locationToMove)
+    if (dest == null) {
+        dest = getRoomByKey(locationToMove)
+        moveCircleToRoom(getCircleByKey(tokenToMove), dest);
+    }
+    else {
+        moveCircleToHallway(getCircleByKey(tokenToMove), dest);
+    }
+    $(".cl-move-token-to-space-wrapper").addClass("hide");
+});
+
 
 $(".popup-close").on("click", function() { $($(this).attr("closes")).addClass("hide"); });
 

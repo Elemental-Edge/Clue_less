@@ -17,6 +17,22 @@ canvas {
     display: block; /* Remove any extra space below the canvas */
 }
 
+.spiral_notepad {
+    background-image:url('assets/notepad_spirals.jpg');
+    background-size:contain;
+	background-repeat: no-repeat;
+	width: 665px;
+	height: 110px;
+}
+
+.spiral_notepad_half {
+    background-image:url('assets/notepad_spirals_small.jpg');
+    background-size:contain;
+	background-repeat: no-repeat;
+	width: 440px;
+	height: 110px;
+}
+
 .cl-board {
 	height: 2160px;
 	width: 2960px;
@@ -27,7 +43,7 @@ canvas {
 }
 
 .cl-panel {
-	width: 800px;
+	width: 500px;
 	height: 100vh;
 	padding: 20px;
 	border-left: 1px solid black;
@@ -135,8 +151,15 @@ input[type="radio"] {
 	display: none;
 }
 
-.loader-mid,
-.waiting-to-start-mid {
+.hide-with-bg {
+	background-color: #5db567;
+}
+
+.hide-with-bg {
+	background-color: #5db567;
+}
+
+.loader-mid, .waiting-to-start-mid {
 	color: #eeeeee;
 	text-align: center; /* Optional: Center text inside the div */
     padding: 20px; /* Optional: Add some padding */

@@ -426,7 +426,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         "actions": actions_list.__str__()  # TODO: need to implement toString for Actions
                     }))
 
-
                 case "accusation":
                     suspect = command[1]
                     weapon = command[2]
@@ -481,18 +480,36 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                 case "validMoves":    # show valid moves
                     possibleSpaces = self.game_processor_instance.get_current_player().get_valid_moves()
-                    stringPossibleSpaces = []
+                    stringsPossibleSpaces = []
                     for sp in possibleSpaces:
-                        stringPossibleSpaces.append(sp.__str__())
+                        stringsPossibleSpaces.append(sp.__str__())
 
                     return await self.send(json.dumps({
                         "command": "show-valid-moves",
-                        "possibleDestinations": stringPossibleSpaces
+                        "possibleDestinations": stringsPossibleSpaces
                     }))
 
                 case "actualMove":  # actual movement
                     dest = command[1]
                     self.game_processor_instance.move_player(self.game_processor_instance.get_current_player(), self.game_processor_instance.get_space_by_name(dest))
+
+                    # now get valid actions
+                    actions_list = self.game_processor_instance.get_valid_actions()
+
+                    return await self.send(json.dumps({
+                        "command": "show-valid-actions",
+                        "actions": actions_list.__str__()  # TODO: need to implement toString for Actions
+                    }))
+                
+                case "joinGame":
+                    playerToAdd = command[1]
+                    try:
+                        self.game_processor_instance.add_player(playerToAdd, self.scope["session"].get("_auth_user_id", None))
+                    except ValueError as e:
+                        print(f"Value error message: {e}")
+                        await self.send(
+                            json.dumps({"status": "error", "message": "Value error."})
+                        )
              
                 # unknown case
                 case _:
