@@ -17,25 +17,10 @@ def setup_accusation():
                                                                  Card.VALID_WEAPONS[3],
                                                                  Card.VALID_ROOMS[3]]
         # Create a mock player and turn order for testing
-    player1 = Player("Jon")
-    player2 = Player("Jamar")
-    player3 = Player("Aron")
-    player4 = Player("Jamie")
-    turn_order = TurnOrder()
-    turn_order.add_player(player1)
-    turn_order.add_player(player2)
-    turn_order.add_player(player3)
-    turn_order.add_player(player4)
-    accusation = Accusation(turn_order, case_file)
-    case_file = MagicMock(spec=Hand)
-    case_file.has_card.side_effect = lambda card: card._name in [Card.VALID_SUSPECTS[3],
-                                                                 Card.VALID_WEAPONS[3],
-                                                                 Card.VALID_ROOMS[3]]
-        # Create a mock player and turn order for testing
-    player1 = Player("Jon")
-    player2 = Player("Jamar")
-    player3 = Player("Aron")
-    player4 = Player("Jamie")
+    player1 = Player("Jon", 1)
+    player2 = Player("Jamar", 2)
+    player3 = Player("Aron", 3)
+    player4 = Player("Jamie", 4)
     turn_order = TurnOrder()
     turn_order.add_player(player1)
     turn_order.add_player(player2)
@@ -95,10 +80,10 @@ def setup_suggestion():
     from Backend.gameboardGroupings.turn_order import TurnOrder
     from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
     # Create a mock player and turn order for testing
-    player1 = Player("Jon")
-    player2 = Player("Jamar")
-    player3 = Player("Aron")
-    player4 = Player("Jamie")
+    player1 = Player("Jon", 1)
+    player2 = Player("Jamar", 2)
+    player3 = Player("Aron", 3)
+    player4 = Player("Jamie", 4)
     turn_order = TurnOrder()
     turn_order.add_player(player1)
     turn_order.add_player(player2)
@@ -184,12 +169,12 @@ def setup_move():
     hallway1.add_adjacent_space(room_Living)
     hallway1.add_adjacent_space(room_kitchen)
 
-    player1 = Player("Jon")
+    player1 = Player("Jon", 1)
     player1.set_current_location(room_kitchen)
-    player2 = Player("Jamar")
+    player2 = Player("Jamar", 2)
     player2.set_current_location(room_Living)
-    player3 = Player("Aron")
-    player4 = Player("Jamie")
+    player3 = Player("Aron", 3)
+    player4 = Player("Jamie", 4)
     turn_order = TurnOrder()
     turn_order.add_player(player1)
     turn_order.add_player(player2)
@@ -212,5 +197,36 @@ def test_makeMove_hallway(setup_move):
 def test_makeMove_not_adjacent(setup_move):
     move_action = setup_move[0]
     mock_space = Room("Bathroom")
-    move_action.makeMove(mock_space)
+    result = move_action.makeMove(mock_space)
+    assert result is False
     assert mock_space not in move_action.get_player().get_current_location().get_adjacent_spaces()
+
+def test_move_to_adjacent_room(setup_move):
+    move_action, kitchen, living, Hallway= setup_move
+    # Valid # of players in room and move player to hallway
+    assert move_action.get_player().get_current_location().get_player_count() == 1
+    result = move_action.makeMove(Hallway)
+    assert result is True
+    # Check current position, previous position and room counts
+    assert move_action.get_player().get_current_location() == Hallway
+    assert move_action.get_player().get_previous_location() == kitchen
+    assert move_action.get_player().get_previous_location().get_player_count() == 0
+    assert move_action.get_player().get_player_turn().get_hasMoved() is True
+    assert result is True
+    # Move player to living room and valid # of persons currently in living room
+    result = move_action.makeMove(living)
+    assert move_action.get_player().get_current_location() == living
+    assert move_action.get_player().get_current_location().get_player_count() == 2
+    assert result is True
+
+def test_move_two_Players_to_Hallway(setup_move):
+    move_action, kitchen, living, Hallway= setup_move
+    assert move_action.get_player().get_current_location().get_player_count() == 1
+    result = move_action.makeMove(Hallway)
+    assert result is True
+    assert move_action.get_player().get_current_location() == Hallway
+
+    # Advance turn order and attempt to move next player to hallway
+    move_action._turn_order.advance_turn()
+    result = move_action.makeMove(Hallway)
+    assert result is False

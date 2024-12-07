@@ -16,6 +16,7 @@ class Actions():
 
     def get_player(self):
         return self._turn_order.get_current_turn()
+
     @abstractmethod
     def __str__(self):
         pass

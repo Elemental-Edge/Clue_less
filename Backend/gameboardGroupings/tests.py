@@ -49,14 +49,14 @@ class SpaceTest(unittest.TestCase):
     def test_remove_player(self):
         """Tests removing a player from the space."""
         self.space1.add_player(self.player)
-        self.space1.remove_player(self.player.playerID)
+        self.space1.remove_player(self.player._playerID)
         self.assertNotIn(self.player, self.space1.get_players())
 
     def test_get_player_count(self):
         """Tests retrieving the count of players in the space."""
         self.space1.add_player(self.player)
         self.assertEqual(self.space1.get_player_count(), 1)
-        self.space1.remove_player(self.player.playerID)
+        self.space1.remove_player(self.player._playerID)
         self.assertEqual(self.space1.get_player_count(), 0)
 
     def test_is_adjacent_room(self):
@@ -82,7 +82,7 @@ class SpaceTest(unittest.TestCase):
     def test_is_player_in_room(self):
         """Tests checking if a player is in the space."""
         self.space1.add_player(self.player)
-        self.assertTrue(self.space1.is_player_in_room(self.player.character))
+        self.assertTrue(self.space1.is_player_in_room(self.player._character))
 
     def test_clear_players(self):
         """Tests clearing all players from the space."""
@@ -180,7 +180,7 @@ class HallwayTest(unittest.TestCase):
     def test_remove_player(self):
         """Tests removing a player from the hallway."""
         self.hallway.add_player(self.player)
-        self.hallway.remove_player(self.player.playerID)
+        self.hallway.remove_player(self.player._playerID)
         self.assertNotIn(self.player, self.hallway.get_players())
         self.assertTrue(self.hallway.is_empty())
 

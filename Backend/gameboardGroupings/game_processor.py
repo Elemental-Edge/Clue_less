@@ -24,11 +24,11 @@ class GameProcessor:
     MIN_PLAYERS = 3
     MAX_PLAYERS = 6
     MIN_ACTIVATE_PLAYERS = 2
-    
+
     def __init__(self, game_id: str):
         # Game identification
         self.game_id: str = game_id
-        
+
         # Game components
         self.game_board: GameBoard = GameBoard()
         self.main_deck: Deck = Deck()
@@ -40,7 +40,7 @@ class GameProcessor:
 
         self.turnOrder: TurnOrder = TurnOrder()
         self._initialize_deck()
-    
+
     def __str__(self):
         return self.state
 
@@ -72,11 +72,11 @@ class GameProcessor:
         available_characters = set(Card.VALID_SUSPECTS)
         - {p.get_character_name() for p in self.players}
         # {Mustard, Plum} - {Mustard} = {Plum} rand = {Plum}
-        player.character = random.choice(list(available_characters))
+        player._character = random.choice(list(available_characters))
 
         # Set starting position
         starting_positions = self.game_board.get_starting_positions()
-        player.currLocation = starting_positions[player.character]
+        player._currLocation = starting_positions[player._character]
 
         self.turnOrder.add_player(player)
 
@@ -156,12 +156,12 @@ class GameProcessor:
                 return True
             else:
                 # TODO: Consider moving is_game_over() function to the
-                # consumer.py and changing it name. 
+                # consumer.py and changing it name.
                 current_turn.set_player_eliminated(True)
                 self.is_game_over()
                 return False
         return False
-    
+
     def is_game_over(self) -> bool:
         # Check if game is over
         active_players = self.turnOrder.get_active_player_count()
@@ -187,23 +187,23 @@ class GameProcessor:
         if target_space not in self.get_valid_moves(player):
             return False
 
-        player.prevLocation = player.get_current_location()
+        player._prevLocation = player.get_current_location()
         player.set_current_location(target_space)
         return True
-    
+
     def get_game_winner(self) -> Player:
         return self.winner
-    
+
     def get_current_player(self) -> Player:
         return self.turnOrder.get_current_turn()
- 
+
     def handle_disprove(self, aDisprover: Player, aDisproveCard: Card):
         # TODO: let the current_player see the disprove card
         # TODO: broadcast the event (not the card) to all players
         pass
     def get_case_file(self) -> Hand:
         return self.case_file
- 
+
     def get_valid_actions(self) -> List[Actions]:
         return self.current_turn.get_valid_actions()
 
