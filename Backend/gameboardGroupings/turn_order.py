@@ -1,11 +1,12 @@
 from typing import List
 from random import shuffle
+from typing import Iterator
 from Backend.GameManagement.playerGroupings.player import Player
 
 
 class Node:
-    """A node in the circular singly circular linked list. Stores the 
-       reference to Player Object and the next Player in 
+    """A node in the circular singly circular linked list. Stores the
+       reference to Player Object and the next Player in
        the singly circular linked list"""
     def __init__(self, player: Player):
         self.player = player  # Player this node represents
@@ -154,14 +155,14 @@ class TurnOrder:
         players.append(self._tail.player)  # Add the tail player to the list
 
         return players
-    
+
     def get_active_players(self) -> List[Player]:
         activate_players = []
         for player in self.get_turn_order():
             if not player.is_eliminated():
                 activate_players.append(player)
         return activate_players
-    
+
     def get_active_player_count(self) -> int:
         count = 0
         if self._head:
@@ -174,9 +175,18 @@ class TurnOrder:
 
     def get_player_count(self) -> int:
         return self._player_count
-    
-    def __iter__(self) -> Iterator[Player]:
-        pass
+
+    def __iter__(self) -> Iterator[Player] | None:
+        if not self._head:
+            return None
+
+        current = self._head
+        first_iteration = True
+
+        while current and (first_iteration or current != self._head):
+            yield current.player  # Yield the player at the current node
+            current = current.next
+            first_iteration = False  # After the first iteration, we set this to False
 
     def __next__(self) -> Player:
         pass

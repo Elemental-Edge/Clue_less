@@ -16,7 +16,7 @@ def test_invalid_weapon_name():
         Card("Club Dallas", CardType.WEAPON)
 
 def test_valid_suspect_name():
-    Card("Miss Scarlet", CardType.SUSPECT)  # Should not raise an exception
+    Card("scarlet", CardType.SUSPECT)  # Should not raise an exception
 
 def test_valid_room_name():
     Card(Card.VALID_ROOMS[0], CardType.ROOM)  # Should not raise an exception
@@ -41,4 +41,4 @@ def test_card_repr(card):
 
 def test_card_str(card):
     """Test the __str__ method."""
-    assert str(card) == f"name='{Card.VALID_SUSPECTS[2]}', card_type=CardType.SUSPECT"
+    assert str(card) == f"name='{Card.VALID_SUSPECTS[2]}'"

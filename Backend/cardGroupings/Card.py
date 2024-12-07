@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
     print(card1)  # Output: Card(name="Colonel Mustard", card_type=CardType.SUSPECT)
     print(card2)  # Output: Card(name="Library", card_type=CardType.ROOM)
-    print(card3)  # Output: Card(nasm="Golden Caribbean Macheté", card_type=CardType.Weapon)
+    print(card3)  # Output: Card(name="Golden Caribbean Macheté", card_type=CardType.Weapon)
 
     # Comparing cards
     card4 = Card(Card.VALID_SUSPECTS[2], CardType.SUSPECT)

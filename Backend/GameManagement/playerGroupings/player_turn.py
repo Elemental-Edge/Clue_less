@@ -1,48 +1,51 @@
 
 from __future__ import annotations
-from Backend.GameManagement.playerGroupings.Actions import Actions, Suggestion, Accusation, Move
-from Backend.GameManagement.playerGroupings.player import Player
-from Backend.cardGroupings import Hand
+from typing import List
 
 class Player_Turn():
-    p: Player
-    isActive: bool
-    hasMadeAccusation: bool
-    hasMadeSuggestion: bool
-    hasEnteredRoom: bool
-    hasMoved: bool
 
-    def __init__(self, aPlayer: Player, aCaseFile: Hand):
-        p = aPlayer
-        self.isActive = False
-        self.hasMadeAccusation = False
-        self.hasMadeSuggestion = False
-        self.hasEnteredRoom = False
-        self.hasMoved = False
-        self.caseFile = aCaseFile
+    def __init__(self):
+        self.reset()
+        pass
+    def reset(self):
+        self._isActive: bool = False
+        self._hasMadeAccusation: bool = False
+        self._hasMadeSuggestion: bool = False
+        self._hasEnteredRoom: bool = False
+        self._hasMoved: bool = False
 
+    def get_hasMadeAccusation(self) -> bool:
+        return self._hasMadeAccusation
 
+    def get_hasMadeSuggestion(self) -> bool:
+        return self._hasMadeSuggestion
+
+    def get_hasMoved(self) -> bool:
+        return self._hasMoved
+
+    def get_hasEnteredRoom(self) -> bool:
+        return self._hasEnteredRoom
+
+    def set_hasMadeAccusation(self, val: bool = True):
+        self._hasMadeAccusation = val
+
+    def set_hasMoved(self, val: bool = True):
+        self._hasMoved = val
+
+    def set_hasMadeSuggestion(self, val: bool = True):
+        self._hasMadeSuggestion = val
+
+    def set_hasEnteredRoom(self, val: bool = True):
+        self._hasEnteredRoom = True
     # isActive becomes True only when get_valid_actions() is called
-    def get_valid_actions(self):
+
+    def get_valid_actions(self) -> List[str]:
         return_list = []
-        self.isActive = True
-        if self.hasEnteredRoom and not self.hasMadeSuggestion:
-            return_list.append(Suggestion(self.p, self))
-        if not self.hasMadeAccusation:
-            return_list.append(Accusation(self.caseFile))
-        if not self.hasMoved:
-            return_list.append(Move(self.p, self))
+        self._isActive = True
+        if (self._hasEnteredRoom or self._hasMoved) and not self._hasMadeSuggestion:
+            return_list.append("Suggestion")
+        if not self._hasMadeAccusation:
+            return_list.append("Accusation")
+        if not self._hasMoved and not self._hasMadeAccusation:
+            return_list.append("Move")
         return return_list
-
-    def take_action(self, action: Actions):
-        action.perform_action()
-        # TODO: Dont end turn right away. If they move into a room, they can make a suggestion/accusation
-        end_turn()
-
-    def end_turn(self):
-        self.isActive = False
-        self.hasMadeAccusation = False
-        self.hasMadeSuggestion = False
-        self.hasEnteredRoom = False
-        self.hasMoved = False
-

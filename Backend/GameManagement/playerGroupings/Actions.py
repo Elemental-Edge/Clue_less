@@ -3,26 +3,28 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from Backend.GameManagement.playerGroupings.player import Player
 from Backend.gameboardGroupings.turn_order import TurnOrder
+
 from Backend.cardGroupings.Card import Card, CardType
 from Backend.cardGroupings.Hand import Hand
 from Backend.gameboardGroupings.space import SpaceType,Space
 
 class Actions():
-    def __init__(self, player: Player, playerTurn: Player_Turn):
-        from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
-        self.p : 'Player' = player
-        self.pt : 'Player_Turn' = playerTurn
+    def __init__(self, aTurnOrder: TurnOrder):
 
+        self._turn_order : TurnOrder = aTurnOrder
+
+    def get_player(self):
+        return self._turn_order.get_current_turn()
     @abstractmethod
     def __str__(self):
         pass
 
 class Accusation(Actions) :
 
-    def __init__(self, aCaseFile: Hand):
-        self.case_file = aCaseFile
+    def __init__(self, aTurnOrder, aCaseFile: Hand):
+        super().__init__(aTurnOrder)
+        self._case_file = aCaseFile
 
     def makeAccusation(self, aSuspect: str, aWeapon: str, aRoom: str) -> bool:
         """
@@ -33,25 +35,31 @@ class Accusation(Actions) :
             aRoom (str): Represents cards that indicate various locations or rooms.
             aWeapon (str): Represents cards that depict weapons that can be used in the game.
         """
+        if None == self._turn_order:
+            raise ValueError("Turn Order Object is None: No Players in Turn Order")
+
+        if None == self._case_file:
+            raise ValueError("Case File Object is NULL")
 
         suspect = Card(aSuspect, card_type = CardType.SUSPECT)
         weapon = Card(aWeapon, card_type=CardType.WEAPON)
         room = Card(aRoom, card_type=CardType.ROOM)
 
+        self.get_player().get_player_turn().set_hasMadeAccusation()
         # Check if accusation hands matches the case file
-        return ( self.case_file.has_card(suspect)
-            and self.case_file.has_card(weapon)
-            and self.case_file.has_card(room))
+        return ( self._case_file.has_card(suspect)
+            and self._case_file.has_card(weapon)
+            and self._case_file.has_card(room))
 
     def __str__(self):
         return "accusation"
 
 class Suggestion(Actions):
-    def __init__(self, aPlayer: Player, aTurnOrder: TurnOrder):
-        super().__init__(aPlayer)
-        self.turnOrder = aTurnOrder
 
-    def makeSuggestion(self, aSuspect: str, aWeapon: str, aRoom: str) -> tuple[Player, list[str]]:
+    def __init__(self, aTurnOrder):
+        super().__init__(aTurnOrder)
+
+    def makeSuggestion(self, aSuspect: str, aWeapon: str, aRoom: str) -> tuple['Player', list[str]]:
         """
         Checks if the accusation made by the user was correct.
 
@@ -60,66 +68,72 @@ class Suggestion(Actions):
             aRoom (str): Represents cards that indicate various locations or rooms.
             aWeapon (str): Represents cards that depict weapons that can be used in the game.
         """
+
+        if None == self._turn_order:
+            raise ValueError("Turn Order Object is None: No Players in Turn Order")
+
         suggestedCards = Hand()
         suggestedCards.add_card(Card(aSuspect, card_type = CardType.SUSPECT))
         suggestedCards.add_card(Card(aWeapon, card_type=CardType.WEAPON))
         suggestedCards.add_card(Card(aRoom, card_type=CardType.ROOM))
 
-        #TODO: Verify that turnOrder is a list
-        turnList_iter = iter(self.turnOrder)
-        nextPlayer: Optional['Player'] = None
-        if None != self.p:
-            raise ValueError("Current Player not defined! :-(")
         # output list of player's cards that match suggestion
         disproveCards = Hand()
-        nextPlayer = next(turnList_iter)
-        while nextPlayer != self.p:
-            if None == nextPlayer:
+        # nextPlayer = next(turnList_iter)
+        first_run : bool = True
+        disprove_Player : 'Player' | None = None
+        for player in self._turn_order:
+            if None == player:
                 break
-            if nextPlayer.isEliminated:
+            if (first_run and player == self.get_player()):
+                continue
+            first_run = False
+            if player.is_eliminated():
                 continue
             # Check player's hand for matching cards
             for card in suggestedCards.get_hand():
-                if nextPlayer.get_hand().has_card(card):
+                if player.get_hand().has_card(card):
                     disproveCards.add_card(card)
-
+                    disprove_Player = player
             if not disproveCards.isEmpty():
                 break
-            nextPlayer = next(turnList_iter)
 
         toReturnDisproveCardsList = []
         for el in disproveCards.get_hand():
             toReturnDisproveCardsList.append(el.__str__())
-        return nextPlayer, toReturnDisproveCardsList
+        self.get_player().get_player_turn().set_hasMadeSuggestion()
+        return disprove_Player, toReturnDisproveCardsList
 
     def __str__(self):
         return "suggestion"
 
 class Move(Actions):
 
+    def __init__(self, aTurnOrder):
+        super().__init__(aTurnOrder)
+
     def makeMove(self, aDest: 'Space') -> bool:
 
         if None == aDest:
-            return False
-        if SpaceType.HALLWAY == aDest.get_space_type():
-            return False
+            raise ValueError("Empty Destination Object Case File")
 
+        current_player = self.get_player()
         # Check if Destination is in Adjacent Spaces
-        if not aDest in self.p.currLocation.get_adjacent_spaces():
+        if not aDest in current_player.currLocation.get_adjacent_spaces():
             return False
         # have player select a move
         selected_destination = aDest
 
         if selected_destination.get_space_type() == SpaceType.ROOM:
-            self.pt.hasEnteredRoom = True
+            self.get_player().get_player_turn().set_hasEnteredRoom()
 
-        selected_destination.add_player(self.p)
+        selected_destination.add_player(current_player)
 
-        self.p.prevLocation = self.p.currLocation
-        self.p.currLocation.remove_player(self.p)
+        current_player.prevLocation = current_player.currLocation
+        current_player.currLocation.remove_player(current_player)
 
-        self.p.currLocation = selected_destination
-
+        self.get_player().currLocation = selected_destination
+        self.get_player().get_player_turn().set_hasMoved()
         # TODO: broadcast move
         return True
 

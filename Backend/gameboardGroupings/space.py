@@ -1,7 +1,7 @@
 from __future__ import annotations
 from enum import Enum, auto
 from typing import List
-from Backend.GameManagement.playerGroupings.player import Player
+# from Backend.GameManagement.playerGroupings.player import Player
 from Backend.cardGroupings.Card import CardType, Card
 
 SPACE_NAME = ""
@@ -43,7 +43,7 @@ class Space:
         """Returns the number of players in the space."""
         return self._player_count
 
-    def get_players(self) -> List[Player]:
+    def get_players(self) -> List["Player"]:
         """Returns list of players in the space."""
         return self._players
 
@@ -100,15 +100,17 @@ class Space:
                 break
         return is_room
 
+    """_summary_
+
     def add_player(self, player: Player) -> bool:
-        """Adds a player to the space"""
+        \"""Adds a player to the space\"""
         is_success = False
         if not self.is_player_in_room(player):
             self._players.append(player)
             self._player_count += 1
             is_success = True
         return is_success
-
+    """
 
     def is_player_in_room(self, player_id: int) -> bool:
         """Returns True if the player's associated ID is found in the players
@@ -120,9 +122,11 @@ class Space:
                 break
         return in_room
 
-    def remove_player(self, player_id: int) -> Player | None:
-        """Removes a player from the space, based on the player's associated ID
-        number."""
+    """
+
+    def remove_player(self, player_id: int) -> "Player" | None:
+        \"""Removes a player from the space, based on the players associated ID
+        number.\"""
         # change function to take a player object
         player_index = self.get_player_index(player_id)
         player = None
@@ -131,6 +135,7 @@ class Space:
             self._player_count -= 1
         return player
 
+    """
     def get_player_index(self, player_id: int) -> int:
         """Gets a player index based on the playerID"""
         current_index = 0
@@ -149,7 +154,7 @@ class Space:
         self._players.clear()
         self._player_count = 0
 
-    def get_player_by_id(self, player_id: int) -> Player | None:
+    def get_player_by_id(self, player_id: int) -> "Player" | None:
         """Gets the player associated with a player id"""
         found_player = None
         for player in self._players:
@@ -158,7 +163,7 @@ class Space:
                 break
         return found_player
 
-    def get_player_by_character(self, character_name: str) -> Player | None:
+    def get_player_by_character(self, character_name: str) -> "Player" | None:
         """Gets the player associated with a specific character name"""
         found_player = None
         for player in self._players:
@@ -228,7 +233,7 @@ class CornerRoom(Room):
             secret_passage._secret_passage = self
         else:
             raise ValueError(f"{self._name} cannot be adjacent to itself")
-    
+
     def remove_secret_passage(self) -> CornerRoom | None:
         removed_room = None
         if self.has_secret_passage():
@@ -254,7 +259,7 @@ class Hallway(Space):
         """Returns True if no players are in the hallway"""
         return self._current_player is None
 
-    def add_player(self, player: Player) -> bool:
+    def add_player(self, player: "Player") -> bool:
         """Overrides the base class function to add a player. Only adds
         a player if the hallway is empty."""
         is_success = False
