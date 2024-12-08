@@ -442,9 +442,9 @@ const initializeDjangoChannels = (ws_url) => {
 				return;
 				
 			case "successful-create-game":
-				alert("TODO: Game created on backend.  Finish logic on front end.");
-				$('#cl-loading-wrapper').removeClass("hide");
-				$('#cl-loading-wrapper').removeClass("hide");
+				$('#cl-loading-wrapper').addClass("hide");
+				$('#cl-character-selection-wrapper').addClass("hide");
+				$('#cl-waiting-to-start-wrapper').addClass("hide");
 				return;
 				
 			case "successful-login":
@@ -516,16 +516,26 @@ const initializeDjangoChannels = (ws_url) => {
                 // $(".cl-move-token-to-room-wrapper").addClass("hide");
                 return;
 
-            case "move":
+            case "show-valid-moves":
                 $('#cl-actions-wrapper').addClass('hide');
                 for (elem in data.possibleDestinations) {
                     $('#move_' + elem).removeClass('hide');
                 }
+				$('#cl-move-player-wrapper').removeClass('hide');
+
                 $("#cl-move-token-wrapper").removeClass('hide');
+				$('#disallow-map-interact').removeClass('hide');
+				$('#allow-map-interact').addClass('hide');
+				your_turn = true;
 
             case "win":
                 // unhide win popup
                 $("#cl-win-wrapper").removeClass('hide');
+                return;
+			
+			case "lose":
+				// unhide lose popup
+				$("#cl-lose-wrapper").removeClass('hide');
                 return;
 
             case "selected-action-invalid":
@@ -540,8 +550,13 @@ const initializeDjangoChannels = (ws_url) => {
             case "show-dealt-cards":
                 for (c in cards) {
                     $('#dealt_' + c).removeClass('hide');
+					cross_out(c);
                 }
                 $('#cl-cards-wrapper').removeClass('hide');
+			
+			case "invalid-action":
+                $('#cl-action-invalid-wrapper').removeClass('hide');
+                return;
 
             default:
                 console.error(`Unknown command from server: ${data.command}.`);
@@ -612,7 +627,7 @@ $("form").on("submit", function(e) {
 	}
 
 	// start game
-	if ($(this).attr("id") == "start_game") {
+	if ($(this).attr("id") == "start-game-form") {
 		sendMessageToBackend(socket, `startGame`);
 	}
 
@@ -623,19 +638,19 @@ $("form").on("submit", function(e) {
     }
 
     // make suggestion
-    if ($(this).attr("id") == "make_suggestion") {
-        sendMessageToBackend(socket, `suggestion ${$("#suggestion-who:checked").val()} ${$("#suggestion_with:checked").val()} ${current_location}`);
+    if ($(this).attr("id") == "suggestion-formn") {
+        sendMessageToBackend(socket, `suggestion ${$("#suggestion-who:checked").val()} ${$("#suggestion_with:checked").val()}`);
         return;
     }
 
     // make actual move
-    if ($(this).attr("id") == "move_to_space") {
+    if ($(this).attr("id") == "move-player-form") {
         sendMessageToBackend(socket, `actualMove ${$("#move_to_where:checked").val()}`);
         return;
     }
 
     // action chosen
-    if ($(this).attr("id") == "chosen_action") {
+    if ($(this).attr("id") == "valid-actions-form") {
         // make a check to see if suggestion is valid
         if ($("#selected_action").equals("move")) {
             $('#cl-actions-wrapper').addClass('hide');
@@ -651,6 +666,7 @@ $("form").on("submit", function(e) {
             $('#cl-actions-wrapper').addClass('hide');
             sendMessageToBackend(socket, `accusation`);
         }
+		return;
     }
 
 	// select character form
@@ -660,14 +676,24 @@ $("form").on("submit", function(e) {
 		return;
 	}
 
-    if ($(this).attr("id") == "disprove_submit") {
-        sendMessageToBackend(socket, `disproveReceived ${selected_character} ${$("#disprove_card").val()}`);
+    if ($(this).attr("id") == "disprove-form") {
+        sendMessageToBackend(socket, `disproveReceived ${$("#evidence:checked").val()}`);
         return;
     }
 
     console.error(`Unknown form.`);
 
 });
+
+$("input").on("submit", function(e) {
+	e.preventDefault()
+
+	// end turn chosen
+	if ($(this).attr("id") == "end_turn_action") {
+		sendMessageToBackend(socket, `endTurn`);
+		return;
+	}
+})
 
 $("#move_to_hallway").on("click", function() {
 	const tokenToMove = $('input[name="token_to_move"]:checked').val(); // jQuery selector for checked radio button
@@ -890,3 +916,50 @@ setTimeout(() => {
 	$("#login-popup-button").removeClass("hide");
 	$(".loader-stripe").addClass("hide");
 }, 3000);
+
+function cross_out(itemStr) {
+	const elements = document.getElementsByClassName(itemStr)
+	console.log(elements)
+	for (let i = 0; i < elements.length; i++) {
+		elements[i].value = '\u274c'
+	}
+}
+
+<!-- this script's source for the detective's notebook checkboxes is https://github.com/lowlydba/clue-sheet/tree/main/assets/css -->
+function statusButtonChanger (control) {
+	const Data = [
+	  { status: 'unchecked', value: '\u2B1C' },
+	  { status: 'x', value: '\u274c' },
+	  { status: 'question', value: '\u2753' },
+	  { status: '!', value: '\u2757' },
+	  { status: 'checked', value: '\u2705' }
+	]
+  
+	let index = Data.map(function (e) { return e.value }).indexOf(control.value)
+	index++
+	if ((index) >= Data.length) {
+	  index = 0
+	}
+	control.value = Data[index].value
+	const clue = $(control).closest('td').siblings('.guess-component') // eslint-disable-line no-undef
+	switch (Data[index].status) {
+	  case 'x':
+		clue.toggleClass('x').siblings().removeClass('checked')
+		break
+	  case 'checked':
+		clue.toggleClass('checked').siblings().removeClass('x')
+		break
+	  default:
+		clue.removeClass('x checked')
+	}
+}
+  
+// Attach function to all checkboxes
+window.onload = function () {
+	const elements = document.getElementsByClassName('multi-checkbox')
+	for (let i = 0; i < elements.length; i++) {
+		elements[i].onclick = function () {
+			statusButtonChanger(this)
+		}
+	}
+}
