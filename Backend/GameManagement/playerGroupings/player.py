@@ -7,10 +7,10 @@ from Backend.GameManagement.playerGroupings.player_turn import Player_Turn
 
 class Player:
 
-    def __init__(self, name: str, playerID: int):
+    def __init__(self, char_name: str, playerID: int):
         self._playerID: int = playerID
-        self._playerName = name
-        self._character: str = None
+        self._playerName = "TODO"
+        self._character: str = char_name
         self._isEliminated = False
         self._player_turn = Player_Turn()
         self._playerHand: Hand = Hand()

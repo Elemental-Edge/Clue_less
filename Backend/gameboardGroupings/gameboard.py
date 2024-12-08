@@ -140,6 +140,5 @@ class GameBoard:
             ValidHallways.BALLROOM_KITCHEN
         )
 
-    def get_starting_position(self, character_name: str) -> Space:
-        """returns the starting space location of the character"""
-        return self._start_positions[character_name]
+    def get_starting_positions(self) -> Dict[str, Space]:
+        return self._start_positions

@@ -387,7 +387,7 @@ const initializeDjangoChannels = (ws_url) => {
 				// are you the one that just picked a character?
 				if (django_channel_name == data.selected_by) {
 					// you chose this character; run logic
-					$(`.waiting-to-start-character`).addClass("hide");
+					$(".cl-character-selection-wrapper").addClass("hide");
 					$("#teaser-image").attr("src", $("#teaser-image").attr("url_pattern").replace("[[NUM]]", getRandomInt(NUMBER_TEASERS)));
 					$("#teaser-text").text(getCircleByKey(data.character).name);
 					$("#teaser-text").attr("char", data.character);
@@ -423,6 +423,30 @@ const initializeDjangoChannels = (ws_url) => {
 
 				return;
 
+			case "cannot-disprove":
+				$("#cl-cannot-disprove-wrapper").removeClass('hide');
+				return;
+
+			case "disprove-select":
+				$("#cl-suggestion-wrapper").addClass('hide');
+				// unhide possible disprove cards
+				if (selected_character == data.disprover) { // TODO: make sure selected_character is a String of current character formatted
+					for (card in data.disproveCards) {
+						$('#disprove_' + card).removeClass('hide');
+					}
+					$("#cl-disprove-wrapper").removeClass('hide');
+				}
+				return;
+
+			case "eliminate":
+				$('#cl-bad-accusation-wrapper').removeClass('hide');
+				return;
+
+			case "game-in-progress":
+				$('.popup-wrapper').addClass('hide');
+				$("#cl-waiting-for-next-game-wrapper").removeClass("hide");
+				return;
+
 			case "player-joined-game":
 				$("#number-still-picking").text(data.number_players_choosing_char);
 				return;
@@ -442,11 +466,29 @@ const initializeDjangoChannels = (ws_url) => {
 				return;
 				
 			case "successful-create-game":
-				$('#cl-loading-wrapper').addClass("hide");
-				$('#cl-character-selection-wrapper').addClass("hide");
-				$('#cl-waiting-to-start-wrapper').addClass("hide");
+				$('#waiting-to-start').addClass("hide");
+				your_turn = your_character == data.first_char_turn;
+				if (!your_turn) { return; }
+				// CONNECT TO: SHOW-VALID-ACTIONS
+				// NO RETURN!! WE WANT THIS BEHAVIOR
+				// BECAUSE IF IT IS YOUR TURN, WE
+				// WANT TO SHOW VALID ACTIONS!!!!
+			case "show-valid-actions":
+				// need to check which valid actions and adjust/hide appropriately
+				for (element in data.actions) {
+					if (element == "move") {
+						$('#selected_move').removeClass('hide');
+					}
+					if (element == "suggestion") {
+						$('#selected_suggestion').removeClass('hide');
+					}
+					if (element == "accusation") {
+						$('#selected_accusation').removeClass('hide');
+					}
+				}
+				$('#cl-actions-wrapper').removeClass('hide');
 				return;
-				
+
 			case "successful-login":
 				$("#login-popup-error").addClass("hide");
 				$("#register-popup-error").addClass("hide");
@@ -469,36 +511,9 @@ const initializeDjangoChannels = (ws_url) => {
 				}
 				return;
 
-            case "show-valid-actions":
-                // need to check which valid actions and adjust/hide appropriately
-                for (element in data.actions) {
-                    if (element == "move") {
-                        $('#selected_move').removeClass('hide');
-                    }
-                    if (element == "suggestion") {
-                        $('#selected_suggestion').removeClass('hide');
-                    }
-                    if (element == "accusation") {
-                        $('#selected_accusation').removeClass('hide');
-                    }
-                }
-                $('#cl-actions-wrapper').removeClass('hide');
-                return;
 
-            case "disprove-select":
-                $("#cl-suggestion-wrapper").addClass('hide');
-                // unhide possible disprove cards
-                if (selected_character == data.disprover) { // TODO: make sure selected_character is a String of current character formatted
-                    for (card in data.disproveCards) {
-                        $('#disprove_' + card).removeClass('hide');
-                    }
-                    $("#cl-disprove-wrapper").removeClass('hide');
-                }
-                return;
 
-            case "cannot-disprove":
-                $("#cl-cannot-disprove-wrapper").removeClass('hide');
-                return;
+
 
             case "makeAccusation":
                 $('#cl-actions-wrapper').addClass('hide');
@@ -541,10 +556,6 @@ const initializeDjangoChannels = (ws_url) => {
             case "selected-action-invalid":
                 $('#cl-actions-wrapper').addClass('hide');
                 $('#cl-action-invalid-wrapper').removeClass('hide');
-                return;
-
-            case "eliminate":
-                $('#cl-bad-accusation-wrapper').removeClass('hide');
                 return;
 
             case "show-dealt-cards":
@@ -626,11 +637,6 @@ $("form").on("submit", function(e) {
 		return;
 	}
 
-	// start game
-	if ($(this).attr("id") == "start-game-form") {
-		sendMessageToBackend(socket, `startGame`);
-	}
-
 	// make accusation
     if ($(this).attr("id") == "accusation-form") {
         sendMessageToBackend(socket, `accusation ${$("#accusation_who:checked").val()} ${$("#accusation_with:checked").val()} ${$("#accusation_where:checked").val()}`);
@@ -670,11 +676,11 @@ $("form").on("submit", function(e) {
     }
 
 	// select character form
-	if ($(this).attr("id") == "start-game-form") {
-		// submit to backend
-		sendMessageToBackend(socket, `start-game`);
-		return;
-	}
+    if ($(this).attr("id") == "start-game-form") {
+        // submit to backend
+        sendMessageToBackend(socket, `startGame`);
+        return;
+    }
 
     if ($(this).attr("id") == "disprove-form") {
         sendMessageToBackend(socket, `disproveReceived ${$("#evidence:checked").val()}`);

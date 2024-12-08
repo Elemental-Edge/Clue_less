@@ -22,7 +22,7 @@ MIN_ACTIVATE_PLAYERS = 2
 MAX_PLAYERS = 6
 
 
-class GameStatus(Enum):
+class GameState(Enum):
     """Enum that represents the game status"""
 
     OPEN = auto()
@@ -77,6 +77,7 @@ class GameProcessor:
         # Game state
         self._game_status: GameStatus = GameStatus.OPEN
         self._winner: Player = None
+        self._players_choosing_character = 0
 
         self._turn_order: TurnOrder = TurnOrder()
         # initializes the turn order
@@ -137,7 +138,7 @@ class GameProcessor:
             )
 
         # Create new player
-        player = Player(player_name, player_id)
+        player = Player(char_name, player_id)
         self._turn_order.add_player(player)
         self._player_lobby_count += 1
 
@@ -205,9 +206,13 @@ class GameProcessor:
         self._game_status = GameStatus.IN_PROGRESS
 
         # Set starting position
-        starting_positions = self._game_board.get_starting_positions()
-        player.set_current_location()
-        player._currLocation = starting_positions[player._character]
+        self._game_board.set_starting_positions()
+
+        # old code
+        # players = self._turn_order.get_turn_order()
+        # for p in players:
+        #     p.set_current_location()
+        #     p._currLocation = starting_positions[p._character]
 
 
     def handle_suggestion(
@@ -244,6 +249,9 @@ class GameProcessor:
                 self.is_game_over()
                 return False
         return False
+
+    def is_game_status_in_game(self) -> bool:
+        return GameStatus.IN_PROGRESS == self._game_status or GameStatus.INITIALIZING == self._game_status
 
     def is_game_over(self) -> bool:
         # Check if game is over
@@ -287,7 +295,7 @@ class GameProcessor:
         return self._case_file
 
     def get_valid_actions(self) -> List[Actions]:
-        return self.current_turn.get_valid_actions()
+        return self._turn_order.get_current_turn().get_player_turn().get_valid_actions()
 
     def get_turn_order(self) -> list[str]:
         active_players = self._turn_order.get_turn_order()
@@ -307,6 +315,17 @@ class GameProcessor:
 
     def get_player_count(self) -> int:
         return self._turn_order.get_player_count()
+
+    def get_player_choosing_characters_count(self) -> int:
+        return self._players_choosing_character
+
+    def choosing_characters_count_plus(self) -> int:
+        self._players_choosing_character = self._players_choosing_character + 1
+        return self._players_choosing_character
+
+    def choosing_characters_count_minus(self) -> int:
+        self._players_choosing_character = self._players_choosing_character - 1
+        return self._players_choosing_character
 
     def get_max_players(self) -> int:
         return self._max_players

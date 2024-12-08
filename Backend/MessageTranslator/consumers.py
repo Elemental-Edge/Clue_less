@@ -4,13 +4,10 @@ from channels.layers import get_channel_layer
 from asgiref.sync import sync_to_async
 import string
 from django.apps import apps
+from django.contrib.auth import logout
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
-    game_in_progress = False
-    number_players = 0
-    MAX_PLAYERS = 6
-    number_choosing_character = 0
     char_to_channel = {}
     channel_to_char = {}
     VALID_CHARS = {"green", "scarlet", "plum", "mustard", "peacock", "white"}
@@ -119,7 +116,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         if user is not None:
 
                             # check max players
-                            if self.number_players >= self.MAX_PLAYERS:
+                            if self.game_processor_instance.get_player_count() >= self.game_processor_instance.get_max_players():
                                 # too many players
                                 return await self.send(
                                     json.dumps(
@@ -132,27 +129,25 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                 )
 
                             # check for game in session
-                            if self.game_in_progress:
+                            if self.game_processor_instance.is_game_status_in_game():
                                 # too many players
                                 return await self.send(
                                     json.dumps(
                                         {
                                             "command": "set-text-and-unhide",
                                             "selector": "#login-popup-error",
-                                            "text": "Game currently in process.",
+                                            "text": "Game currently in process.  Join again later.",
                                         }
                                     )
                                 )
 
-                            self.number_choosing_character = (
-                                self.number_choosing_character + 1
-                            )
+                            self.game_processor_instance.choosing_characters_count_plus()
 
                             # Broadcast player joining to others
                             await self.sendToGame(
                                 {
                                     "command": "player-joined-game",
-                                    "number_players_choosing_char": self.number_choosing_character,
+                                    "number_players_choosing_char": self.game_processor_instance.get_player_choosing_characters_count(),
                                 }
                             )
 
@@ -162,12 +157,22 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                 self.channel_name,  # The user's unique channel
                             )
 
+                            # validate game has not started
+                            if self.game_processor_instance.is_game_status_in_game():
+                                return await self.send(
+                                    json.dumps(
+                                        {
+                                            "command": "game-in-progress",
+                                        }
+                                    )
+                                )
+
                             await self.send(
                                 json.dumps(
                                     {
                                         "command": "successful-login",
-                                        "username": "TODO: Fix Jamie!!",
-                                        "number_players_choosing_char": self.number_choosing_character,
+                                        "username": self.scope.get('user').username,
+                                        "number_players_choosing_char": self.game_processor_instance.get_player_choosing_characters_count(),
                                         "characters_chosen": list(
                                             self.char_to_channel.keys()
                                         ),
@@ -299,15 +304,13 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         )
                         await sync_to_async(user.save)()
 
-                        self.number_choosing_character = (
-                            self.number_choosing_character + 1
-                        )
+                        self.game_processor_instance.choosing_characters_count_plus()
 
                         # Broadcast player joining to others
                         await self.sendToGame(
                             {
                                 "command": "player-joined-game",
-                                "number_players_choosing_char": self.number_choosing_character,
+                                "number_players_choosing_char": self.game_processor_instance.get_player_choosing_characters_count(),
                             }
                         )
 
@@ -317,12 +320,22 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             self.channel_name,  # The user's unique channel
                         )
 
+                        # validate game has not started
+                        if self.game_processor_instance.is_game_status_in_game():
+                            return await self.send(
+                                json.dumps(
+                                    {
+                                        "command": "game-in-progress",
+                                    }
+                                )
+                            )
+
                         return await self.send(
                             json.dumps(
                                 {
                                     "command": "successful-register",
-                                    "username": "TODO: Jamie again1",
-                                    "number_players_choosing_char": self.number_choosing_character,
+                                    "username": self.scope.get('user').username,
+                                    "number_players_choosing_char": self.game_processor_instance.get_player_choosing_characters_count(),
                                     "characters_chosen": list(
                                         self.char_to_channel.keys()
                                     ),
@@ -360,13 +373,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 # selectCharacter
                 case "selectCharacter":
                     # first, validate game has not started
-                    if self.game_in_progress:
-                        # TODO: force logout
+                    if self.game_processor_instance.is_game_status_in_game():
                         return await self.send(
                             json.dumps(
                                 {
-                                    "command": "unrecoverable-error",
-                                    "error": "Tried to select character after game was in progress!",
+                                    "command": "game-in-progress",
                                 }
                             )
                         )
@@ -381,14 +392,13 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                     self.char_to_channel[command[1]] = self.channel_name
                     self.channel_to_char[self.channel_name] = command[1]
-                    self.number_choosing_character = self.number_choosing_character - 1
+                    self.game_processor_instance.choosing_characters_count_minus()
 
                     # added this part - Jon
-                    playerToAdd = command[1]
                     try:
                         self.game_processor_instance.add_player(
-                            playerToAdd,
-                            555555, #TODO: Jamie self.scope["session"].get("_auth_user_id", None),
+                            command[1],
+                            self.scope.get('user').id
                         )
                         # TODO: need to add character info to add_player()
                     except ValueError as e:
@@ -404,7 +414,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             "command": "character-selected",
                             "selected_by": self.channel_name,
                             "character": command[1],
-                            "number_players_choosing_char": self.number_choosing_character,
+                            "number_players_choosing_char": self.game_processor_instance.get_player_choosing_characters_count(),
                             "characters_chosen": list(self.char_to_channel.keys()),
                         }
                     )
@@ -420,6 +430,27 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     return await self.send(
                         json.dumps({"command": "show-dealt-cards", "cards": cardsStr})
                     )
+                
+
+
+                case "startGame":
+                    if self.game_processor_instance.is_game_status_in_game():
+                        return
+
+                    # start game and get turn and valid actions of who goes first
+                    self.game_processor_instance.start_game()
+                    first_char_turn = self.game_processor_instance.get_current_player().get_character()
+                    actions_list = self.game_processor_instance.get_valid_actions()
+
+                    return await self.sendToGame(
+                        {
+                            "command": "successful-create-game",
+                            "first_char_turn": first_char_turn,
+                            "actions": actions_list.__str__(),  # TODO: need to implement toString for Actions
+                        }
+                    )
+      
+
 
                 # get valid actions list for current player
                 case "getValidActions":
@@ -584,7 +615,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     try:
                         self.game_processor_instance.add_player(
                             playerToAdd,
-                            55555, # TODO: Jamie self.scope["session"].get("_auth_user_id", None),
+                            self.scope.get('user').id
                         )
                     except ValueError as e:
                         print(f"Value error message: {e}")
@@ -592,11 +623,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             json.dumps({"status": "error", "message": "Value error."})
                         )
 
-                case "startGame":
-                    self.game_processor_instance.start_game()
-                    return await self.send(
-                        json.dumps({"command": "successful-create-game"})
-                    )
+
+                        
 
                 case "endTurn":
                     self.game_processor_instance.end_turn()
