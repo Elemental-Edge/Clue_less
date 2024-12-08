@@ -1,5 +1,7 @@
 from __future__ import annotations
 from enum import Enum
+from Backend.commons import ValidRooms, ValidSuspect, ValidWeapons
+
 
 class CardType(Enum):
     """
@@ -12,6 +14,7 @@ class CardType(Enum):
         ROOM (CardType): Represents cards that indicate various locations or rooms.
         WEAPON (CardType): Represents cards that depict weapons that can be used in the game.
     """
+
     SUSPECT = "Suspect"
     ROOM = "Room"
     WEAPON = "Weapon"
@@ -26,42 +29,13 @@ class Card:
         VALID_WEAPONS: List of valid weapons
         VALID_ROOMS: List of valid rooms
     """
-    VALID_SUSPECTS = [
-        "scarlet",
-        "plum",
-        "peacock",
-        "green",
-        "mustard",
-        "white"
-        ]
-
-    VALID_WEAPONS = [
-        "candlestick",
-        "dagger",
-        "pipe",
-        "revolver",
-        "rope",
-        "wrench"
-        ]
-
-    VALID_ROOMS = [
-        "ballroom",
-        "kitchen",
-        "library",
-        "study",
-        "hall",
-        "lounge",
-        "dining",
-        "conservatory",
-        "billiards"
-        ]
 
     def __init__(self, name: str, card_type: CardType):
-        if card_type == CardType.SUSPECT and name not in self.VALID_SUSPECTS:
+        if card_type == CardType.SUSPECT and name not in ValidSuspect:
             raise ValueError(f"{name} is not a valid suspect.")
-        elif card_type == CardType.WEAPON and name not in self.VALID_WEAPONS:
+        elif card_type == CardType.WEAPON and name not in ValidWeapons:
             raise ValueError(f"{name} is not a valid weapon.")
-        elif card_type == CardType.ROOM and name not in self.VALID_ROOMS:
+        elif card_type == CardType.ROOM and name not in ValidRooms:
             raise ValueError(f"{name} is not a valid room.")
 
         self._name = name
@@ -95,16 +69,17 @@ class Card:
     def __str__(self) -> str:
         return f"name='{self._name}'"
 
-if __name__ == "__main__":
-    card1 = Card(Card.VALID_SUSPECTS[2], CardType.SUSPECT)
-    card2 = Card(Card.VALID_ROOMS[4], CardType.ROOM)
-    card3 = Card(Card.VALID_WEAPONS[1], CardType.WEAPON)
 
-    print(card1)  # Output: Card(name="Colonel Mustard", card_type=CardType.SUSPECT)
-    print(card2)  # Output: Card(name="Library", card_type=CardType.ROOM)
-    print(card3)  # Output: Card(name="Golden Caribbean Macheté", card_type=CardType.Weapon)
+if __name__ == "__main__":
+    card1 = Card(ValidSuspect.GREEN, CardType.SUSPECT)
+    card2 = Card(ValidRooms.DINING, CardType.ROOM)
+    card3 = Card(ValidWeapons.DAGGER, CardType.WEAPON)
+
+    print(card1)
+    print(card2)
+    print(card3)
 
     # Comparing cards
-    card4 = Card(Card.VALID_SUSPECTS[2], CardType.SUSPECT)
+    card4 = Card(ValidSuspect.GREEN, CardType.SUSPECT)
     print(card1 == card4)  # Output: True
     print(card1 == card2)  # Output: False

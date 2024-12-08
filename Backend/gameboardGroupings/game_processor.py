@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import List, Optional, Dict, Set
+from typing import List, Optional
 from Backend.cardGroupings.Deck import Deck
 from Backend.cardGroupings.Hand import Hand
 from Backend.cardGroupings.Card import Card, CardType
@@ -12,6 +12,7 @@ from Backend.gameboardGroupings.turn_order import TurnOrder
 from Backend.GameManagement.playerGroupings.player import Player
 from Backend.gameboardGroupings.space import Space
 from Backend.gameboardGroupings.gameboard import GameBoard
+from Backend.commons import ValidRooms, ValidSuspect, ValidWeapons
 import random
 
 
@@ -51,15 +52,15 @@ class GameProcessor:
     def _initialize_deck(self) -> None:
         """Initialize the main deck with all cards."""
         # Add all suspect cards
-        for suspect in Card.VALID_SUSPECTS:
+        for suspect in ValidSuspect:
             self.main_deck.add_card(Card(suspect, CardType.SUSPECT))
 
         # Add all weapon cards
-        for weapon in Card.VALID_WEAPONS:
+        for weapon in ValidWeapons:
             self.main_deck.add_card(Card(weapon, CardType.WEAPON))
 
         # Add all room cards
-        for room in Card.VALID_ROOMS:
+        for room in ValidRooms:
             self.main_deck.add_card(Card(room, CardType.ROOM))
 
     def add_player(self, player_name: str, player_id: int) -> bool:
@@ -87,7 +88,10 @@ class GameProcessor:
     def start_game(self) -> bool:
         """Initialize and start the game."""
         if self.turnOrder.get_player_count() < self.MIN_PLAYERS:
-            raise ValueError(f"Need at least {self.MIN_PLAYERS} players to start")
+            raise ValueError(
+                f"Need at least {
+                             self.MIN_PLAYERS} players to start"
+            )
         if self.turnOrder.get_player_count() % self.MIN_PLAYERS != 0:
             raise ValueError(
                 f"{self.turnOrder.get_player_count()} players, must have a multiple of {self.MIN_PLAYERS} players to start."

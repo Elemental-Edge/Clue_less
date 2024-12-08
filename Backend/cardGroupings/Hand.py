@@ -1,17 +1,19 @@
 from __future__ import annotations
-from random import shuffle
 from Backend.cardGroupings.Card import Card, CardType
 
-class Hand():
+
+class Hand:
     """
     Hand: Representative a collection of Cards
 
-    This class provides methods for the management of a hand of cards. It provides
-    operations for shuffling, dealing, adding, and removing cards.
+    This class provides methods for the management of a hand of cards.
+    It provides operations for shuffling, dealing, adding,
+    and removing cards.
 
     Attributes:
         cards (List: Card): List of Cards in the hand
     """
+
     def __init__(self):
         # Initialize Hand with an empty list of cards
         self._cards = []
@@ -50,7 +52,7 @@ class Hand():
 
     def display_hand(self):
         """Display the cards in hand."""
-        return ', '.join(str(card) for card in self._cards)
+        return ", ".join(str(card) for card in self._cards)
 
     def isEmpty(self):
         "Returns true if the list is empty"
@@ -61,6 +63,7 @@ class Hand():
         for card in self._cards:
             toReturn.append(str(card) + " ")
         return toReturn
+
 
 # Sample
 if __name__ == "__main__":

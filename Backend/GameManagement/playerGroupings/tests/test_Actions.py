@@ -7,15 +7,16 @@ from Backend.GameManagement.playerGroupings.Actions import Accusation, Suggestio
 from Backend.cardGroupings.Card import Card, CardType
 from Backend.cardGroupings.Hand import Hand
 from Backend.gameboardGroupings.space import Hallway, Room
+from Backend.commons import ValidRooms, ValidSuspect, ValidWeapons
 
 
 @pytest.fixture
 def setup_accusation():
     case_file = MagicMock(spec=Hand)
     case_file.has_card.side_effect = lambda card: card._name in [
-        Card.VALID_SUSPECTS[3],
-        Card.VALID_WEAPONS[3],
-        Card.VALID_ROOMS[3],
+        ValidSuspect.GREEN,
+        ValidWeapons.REVOLVER,
+        ValidRooms.KITCHEN,
     ]
     # Create a mock player and turn order for testing
     player1 = Player("Jon", 1)
@@ -33,10 +34,10 @@ def setup_accusation():
 
 def test_makeAccusation_correct(setup_accusation):
     result = setup_accusation.makeAccusation(
-        Card.VALID_SUSPECTS[3], Card.VALID_WEAPONS[3], Card.VALID_ROOMS[3]
+        ValidSuspect.GREEN, ValidWeapons.REVOLVER, ValidRooms.KITCHEN
     )
     result = setup_accusation.makeAccusation(
-        Card.VALID_SUSPECTS[3], Card.VALID_WEAPONS[3], Card.VALID_ROOMS[3]
+        ValidSuspect.GREEN, ValidWeapons.REVOLVER, ValidRooms.KITCHEN
     )
     assert result is True
     assert (
@@ -49,7 +50,7 @@ def test_makeAccusation_correct(setup_accusation):
 
 def test_makeAccusation_incorrect(setup_accusation):
     result = setup_accusation.makeAccusation(
-        Card.VALID_SUSPECTS[1], Card.VALID_WEAPONS[3], Card.VALID_ROOMS[3]
+        ValidSuspect.WHITE, ValidWeapons.REVOLVER, ValidRooms.KITCHEN
     )
     assert result is False
 
@@ -60,25 +61,25 @@ def test_makeAccusation_bad_inputs(setup_accusation):
     accusation = Accusation(TurnOrder(), None)
     with pytest.raises(ValueError, match="Case File Object is NULL"):
         accusation.makeAccusation(
-            Card.VALID_SUSPECTS[0], Card.VALID_WEAPONS[0], Card.VALID_ROOMS[0]
+            ValidSuspect.GREEN, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN
         )
     accusation = Accusation(None, Hand())
     with pytest.raises(
         ValueError, match="Turn Order Object is None: No Players in Turn Order"
     ):
-        accusation.makeAccusation(name, Card.VALID_WEAPONS[0], Card.VALID_ROOMS[0])
+        accusation.makeAccusation(name, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN)
     with pytest.raises(ValueError, match=f"{name} is not a valid suspect."):
         setup_accusation.makeAccusation(
-            name, Card.VALID_WEAPONS[0], Card.VALID_ROOMS[0]
+            name, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN
         )
     assert (
         setup_accusation.get_player().get_player_turn().get_hasMadeAccusation() is False
     )
     with pytest.raises(
-        ValueError, match=f"{Card.VALID_WEAPONS[0]} is not a valid suspect."
+        ValueError, match=f"{ValidWeapons.CANDLESTICK} is not a valid suspect."
     ):
         setup_accusation.makeAccusation(
-            Card.VALID_WEAPONS[0], Card.VALID_SUSPECTS[0], Card.VALID_ROOMS[0]
+            ValidWeapons.CANDLESTICK, ValidSuspect.GREEN, ValidRooms.KITCHEN
         )
     assert (
         setup_accusation.get_player().get_player_turn().get_hasMadeAccusation() is False
@@ -115,16 +116,16 @@ def test_makeSuggestion_disproves(setup_suggestion):
     suggestion, player1, player2, player3, player4 = setup_suggestion
 
     # Set up test cards
-    suspect_card = Card(Card.VALID_SUSPECTS[0], card_type=CardType.SUSPECT)
-    weapon_card = Card(Card.VALID_WEAPONS[2], card_type=CardType.WEAPON)
-    room_card = Card(Card.VALID_ROOMS[4], card_type=CardType.ROOM)
+    suspect_card = Card(ValidSuspect.GREEN, card_type=CardType.SUSPECT)
+    weapon_card = Card(ValidWeapons.PIPE, card_type=CardType.WEAPON)
+    room_card = Card(ValidRooms.HALL, card_type=CardType.ROOM)
 
     # Add cards to player2's hand to disprove the suggestion
-    player1.get_hand().add_card(Card(Card.VALID_ROOMS[3], card_type=CardType.ROOM))
-    player3.get_hand().add_card(Card(Card.VALID_ROOMS[1], card_type=CardType.ROOM))
+    player1.get_hand().add_card(Card(ValidRooms.KITCHEN, card_type=CardType.ROOM))
+    player3.get_hand().add_card(Card(ValidRooms.BILLIARDS, card_type=CardType.ROOM))
     player3.get_hand().add_card(suspect_card)
-    player4.get_hand().add_card(Card(Card.VALID_ROOMS[5], card_type=CardType.ROOM))
-    player2.get_hand().add_card(Card(Card.VALID_ROOMS[2], card_type=CardType.ROOM))
+    player4.get_hand().add_card(Card(ValidRooms.KITCHEN, card_type=CardType.ROOM))
+    player2.get_hand().add_card(Card(ValidRooms.DINING, card_type=CardType.ROOM))
 
     # Create the suggestion
     player1.get_hand().add_card(suspect_card)
@@ -133,22 +134,22 @@ def test_makeSuggestion_disproves(setup_suggestion):
 
     # Execute the suggestion
     next_player, disproved_cards = suggestion.makeSuggestion(
-        Card.VALID_SUSPECTS[0], Card.VALID_WEAPONS[0], Card.VALID_ROOMS[0]
+        ValidSuspect.GREEN, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN
     )
 
     # Check the results
     assert next_player == player3
     assert suggestion.get_player().get_player_turn().get_hasMadeSuggestion() is True
-    assert Card.VALID_SUSPECTS[0] in disproved_cards[0]
+    assert ValidSuspect.GREEN == disproved_cards[0]
 
 
 def test_makeSuggestion_no_disprove(setup_suggestion):
     suggestion, player1, player2, player3, player4 = setup_suggestion
 
     # Set up test cards without any disproving cards
-    suspect_card = Card(Card.VALID_SUSPECTS[0], card_type=CardType.SUSPECT)
-    weapon_card = Card(Card.VALID_WEAPONS[2], card_type=CardType.WEAPON)
-    room_card = Card(Card.VALID_ROOMS[4], card_type=CardType.ROOM)
+    suspect_card = Card(ValidSuspect.GREEN, card_type=CardType.SUSPECT)
+    weapon_card = Card(ValidWeapons.PIPE, card_type=CardType.WEAPON)
+    room_card = Card(ValidRooms.HALL, card_type=CardType.ROOM)
 
     # Player2 has no cards to disprove the suggestion
     player2.get_hand()
@@ -160,7 +161,7 @@ def test_makeSuggestion_no_disprove(setup_suggestion):
 
     # Execute the suggestion
     next_player, disproved_cards = suggestion.makeSuggestion(
-        Card.VALID_SUSPECTS[0], Card.VALID_WEAPONS[0], Card.VALID_ROOMS[0]
+        ValidSuspect.GREEN, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN
     )
 
     # Check the results
@@ -176,16 +177,16 @@ def test_makeSuggestion_bad_inputs(setup_suggestion):
         ValueError, match="Turn Order Object is None: No Players in Turn Order"
     ):
         suggestion.makeSuggestion(
-            Card.VALID_SUSPECTS[0], Card.VALID_WEAPONS[0], Card.VALID_ROOMS[0]
+            ValidSuspect.GREEN, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN
         )
     suggestion = setup_suggestion[0]
     with pytest.raises(ValueError, match=f"{name} is not a valid suspect."):
-        suggestion.makeSuggestion(name, Card.VALID_WEAPONS[0], Card.VALID_ROOMS[0])
+        suggestion.makeSuggestion(name, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN)
     with pytest.raises(
-        ValueError, match=f"{Card.VALID_WEAPONS[0]} is not a valid suspect."
+        ValueError, match=f"{ValidWeapons.CANDLESTICK} is not a valid suspect."
     ):
         suggestion.makeSuggestion(
-            Card.VALID_WEAPONS[0], Card.VALID_SUSPECTS[0], Card.VALID_ROOMS[0]
+            ValidWeapons.CANDLESTICK, ValidSuspect.GREEN, ValidRooms.KITCHEN
         )
 
 

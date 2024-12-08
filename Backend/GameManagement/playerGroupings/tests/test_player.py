@@ -3,8 +3,9 @@ from Backend.cardGroupings.Card import Card, CardType
 from Backend.cardGroupings.Hand import Hand
 from Backend.GameManagement.playerGroupings.player import (
     Player,
-)  # Replace 'your_module' with the actual module name
+)
 from Backend.gameboardGroupings.space import Hallway, Room, CornerRoom
+from Backend.commons import ValidSuspect
 
 
 @pytest.fixture
@@ -20,13 +21,10 @@ def test_initialization(setup_player):
 
 
 def test_receive_card_dealt(setup_player):
-    card = Card(
-        Card.VALID_SUSPECTS[4], CardType.SUSPECT
-    )  # Assuming Card has a default constructor
+    card = Card(ValidSuspect.PLUM, CardType.SUSPECT)
     setup_player.receive_card_dealt(card)
-    assert (
-        len(setup_player.get_hand().get_hand()) == 1
-    )  # Check that the card has been added
+    # Check that the card has been added
+    assert len(setup_player.get_hand().get_hand()) == 1
 
 
 def test_get_valid_moves_empty_hallway(setup_player):

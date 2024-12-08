@@ -105,7 +105,7 @@ class Suggestion(Actions):
 
         toReturnDisproveCardsList = []
         for el in disproveCards.get_hand():
-            toReturnDisproveCardsList.append(el.__str__())
+            toReturnDisproveCardsList.append(el.get_name())
         self.get_player().get_player_turn().set_hasMadeSuggestion()
         return disprove_Player, toReturnDisproveCardsList
 

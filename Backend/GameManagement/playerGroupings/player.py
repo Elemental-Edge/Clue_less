@@ -17,6 +17,23 @@ class Player:
         self._currLocation: "Space" = None
         self._prevLocation: "Space" = None
 
+    def __eq__(self, other: object) -> bool:
+        """Overloads the equality operator to check for space equality via
+        memory address comparison"""
+        if self is other:
+            return True
+        if self._playerID != other._playerID:
+            return False
+        if self._playerName != other._playerName:
+            return False
+        if self._isEliminated != other._isEliminated:
+            return False
+        if self._currLocation != other._currLocation:
+            return False
+        if self._prevLocation != other._prevLocation:
+            return False
+        return True
+
     def receive_card_dealt(self, card: Card):
         self._playerHand.add_card(card)
 
@@ -82,7 +99,7 @@ class Player:
 
     def set_character(self, character_name: str):
         # TODO: Add a check to ensure a valid character name is set
-        self.character = character_name
+        self._character = character_name
 
     def is_eliminated(self) -> bool:
         return self._isEliminated

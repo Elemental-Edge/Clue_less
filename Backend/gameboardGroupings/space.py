@@ -34,7 +34,7 @@ class Space:
 
     def __eq__(self, other: object) -> bool:
         """Overloads the equality operator to check for space equality via
-           memory address comparison"""
+        memory address comparison"""
         if self is other:
             return True
         if self._space_type != other._space_type:
@@ -61,7 +61,7 @@ class Space:
 
     def add_adjacent_space(self, space: Space):
         """Adds a space to adjacent spaces list and creates reciprocal
-           connection by default"""
+        connection by default"""
         if space is None:
             raise ValueError("The adjacent space cannot be None")
         if space is not self:
@@ -71,9 +71,11 @@ class Space:
             raise ValueError(f"{space._name} cannot be adjacent to itself")
 
     def remove_adjacent_space(self, space_name: str) -> Space | None:
-        """"""
-        removed_space = self.get_adjacent_space(space_name)
-        if removed_space is not None:
+        """removes the adjacent space"""
+        space_index = self.get_adjacent_space_index(space_name)
+        removed_space = None
+        if space_index != -1:
+            removed_space = self._adjacent_spaces.pop(space_index)
             removed_space.remove_adjacent_space(self._name)
         return removed_space
 
@@ -81,7 +83,7 @@ class Space:
         space_index = self.get_adjacent_space_index(space_name)
         space = None
         if space_index != -1:
-            space = self._adjacent_spaces.pop(space_index)
+            space = self._adjacent_spaces[space_index]
 
         return space
 
@@ -113,7 +115,7 @@ class Space:
     def remove_player_count(self):
         """decrements the player count in the space."""
         self._player_count -= 1
-    
+
     def is_empty(self) -> bool:
         return self._player_count == 0
 
@@ -136,6 +138,7 @@ class Room(Space):
         """Adds a weapon to the room"""
         if weapon.get_card_type() == CardType.WEAPON:
             self._weapons.append(weapon)
+            self._weapon_count += 1
         else:
             raise ValueError("Card is not type Weapon")
 
@@ -145,23 +148,15 @@ class Room(Space):
         weapon = None
         if weapon_index != -1:
             weapon = self._weapons.pop(weapon_index)
+            self._weapon_count -= 1
         return weapon
 
     def get_weapon_index(self, weapon_name: str) -> int:
         """Gets a player index based on the playerID"""
-        current_index = 0
-        is_found = False
-        while current_index < self._weapon_count and not is_found:
-            if self._weapons[current_index].get_name == weapon_name:
-                is_found = True
-            else:
-                current_index += 1
-        if not is_found:
-            current_index = -1
-        return current_index
-    
-    def get_weapon(self):
-        pass
+        for index in range(self._weapon_count):
+            if self._weapons[index].get_name() == weapon_name:
+                return index
+        return -1
 
     def is_weapon_in_room(self) -> bool:
         pass

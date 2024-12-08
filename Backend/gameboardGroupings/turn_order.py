@@ -6,15 +6,17 @@ from Backend.GameManagement.playerGroupings.player import Player
 
 class Node:
     """A node in the circular singly circular linked list. Stores the
-       reference to Player Object and the next Player in
-       the singly circular linked list"""
+    reference to Player Object and the next Player in
+    the singly circular linked list"""
+
     def __init__(self, player: Player):
         self.player = player  # Player this node represents
-        self.next = None      # Pointer to the next node
+        self.next = None  # Pointer to the next node
 
 
 class TurnOrder:
     """Manages the turn order using a circular singly linked list."""
+
     def __init__(self):
         self._head = None  # First node in the list
         self._tail = None  # Last node in the list
@@ -50,10 +52,12 @@ class TurnOrder:
         if self._head:
             prev = self._tail
             current = self._head
-        else:   # no active players
+        else:  # no active players
             return None
 
-        while current != self._tail or prev == self._tail:  # Traverse until full cycle
+        first_run: bool = True
+        while first_run or current != self._head:  # Traverse until full cycle
+            first_run = False
             if current.player == player:
                 if current == self._head and current == self._tail:
                     # Only one player in the list
@@ -67,12 +71,13 @@ class TurnOrder:
                     if current == self._head:
                         self._head = current.next
                         self._player_count -= 1
-                    if current == self._tail:
+                    elif current == self._tail:
                         self._tail = prev
                         self._player_count -= 1
-                    if current == self._current:
-                        self._current = current.next
+                    else:
+                        self._current = prev.next
                         self._player_count -= 1
+
                 return current.player  # Return the removed player
             prev = current
             current = current.next
@@ -175,7 +180,7 @@ class TurnOrder:
 
     def get_player_count(self) -> int:
         return self._player_count
-    
+
     def in_turn_order(self, player_id: int) -> bool:
         pass
 
@@ -186,7 +191,7 @@ class TurnOrder:
         current = self._head
         first_iteration = True
 
-        while current and (first_iteration or current != self._head):
+        while None is not current and (first_iteration or current != self._head):
             yield current.player  # Yield the player at the current node
             current = current.next
             first_iteration = False  # After the first iteration, we set this to False
