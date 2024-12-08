@@ -43,7 +43,7 @@ class Player_Turn:
     def get_valid_actions(self) -> List[str]:
         return_list = []
         self._isActive = True
-        if (self._hasEnteredRoom or self._hasMoved) and not self._hasMadeSuggestion:
+        if self._hasEnteredRoom and not self._hasMadeSuggestion and not self._hasMoved:
             return_list.append("Suggestion")
         if not self._hasMadeAccusation:
             return_list.append("Accusation")

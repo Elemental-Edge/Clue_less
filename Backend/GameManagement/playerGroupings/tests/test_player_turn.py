@@ -60,4 +60,10 @@ def test_get_valid_actions_with_accusation_made(setup_player_turn):
 def test_get_valid_actions_with_movement(setup_player_turn):
     setup_player_turn.set_hasMoved(True)
     actions = setup_player_turn.get_valid_actions()
-    assert actions == ["Suggestion", "Accusation"]  # Cannot move again
+    assert actions == ["Accusation"]  # Cannot move again
+
+def test_get_valid_actions_w_eneted_and_moved(setup_player_turn):
+    setup_player_turn.set_hasMoved(True)
+    setup_player_turn.set_hasEnteredRoom(True)
+    actions = setup_player_turn.get_valid_actions()
+    assert actions == ["Accusation"]  # Cannot move again

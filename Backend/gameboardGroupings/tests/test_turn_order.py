@@ -20,10 +20,10 @@ def setup_turn_order():
     player3 = Player("Jon", 3)
     player3.set_character(ValidSuspect.PLUM)
 
-    player4 = Player("Jamie", 3)
+    player4 = Player("Jamie", 4)
     player4.set_character(ValidSuspect.PEACOCK)
 
-    player5 = Player("Ace", 3)
+    player5 = Player("Ace", 5)
     player5.set_character(ValidSuspect.MUSTARD)
 
     # Add players to the turn order
@@ -90,10 +90,10 @@ def test_advance_turn_moves_to_next_player(setup_turn_order):
 def test_remove_middle_player_maintains_circular_structure(setup_turn_order):
     turn_order, players = setup_turn_order
     # Act
-    removed_player = turn_order.remove_player(players[3])
+    removed_player = turn_order.remove_player(3)
 
     # Assert
-    assert removed_player == players[3]
+    assert removed_player == players[2]
     assert turn_order.get_player_count() == 4
     assert turn_order._head.player == players[0]
     assert turn_order._tail.player == players[4]
@@ -105,7 +105,7 @@ def test_remove_middle_player_maintains_circular_structure(setup_turn_order):
 def test_remove_head_player_maintains_circular_structure(setup_turn_order):
     turn_order, players = setup_turn_order
     # Act
-    removed_player = turn_order.remove_player(players[0])
+    removed_player = turn_order.remove_player(1)
 
     # Assert
     assert removed_player == players[0]
@@ -120,13 +120,13 @@ def test_remove_head_player_maintains_circular_structure(setup_turn_order):
 def test_remove_tail_player_maintains_circular_structure(setup_turn_order):
     turn_order, players = setup_turn_order
     # Act
-    removed_player = turn_order.remove_player(players[4])
+    removed_player = turn_order.remove_player(4)
 
     # Assert
-    assert removed_player == players[4]
+    assert removed_player == players[3]
     assert turn_order.get_player_count() == 4
     assert turn_order._head.player == players[0]
-    assert turn_order._tail.player == players[3]
+    assert turn_order._tail.player == players[4]
     assert turn_order._head.next.next.next == turn_order._tail
     assert turn_order._tail.next == turn_order._head
 
