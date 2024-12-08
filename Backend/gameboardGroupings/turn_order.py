@@ -184,6 +184,13 @@ class TurnOrder:
     def in_turn_order(self, player_id: int) -> bool:
         pass
 
+    def get_player(self, player_id: int) -> Player | None:
+        ret_player = None
+        for player in self:
+            if ret_player.get_playerID() == player_id:
+                ret_player = player
+        return ret_player
+
     def __iter__(self) -> Iterator[Player] | None:
         if not self._head:
             return None

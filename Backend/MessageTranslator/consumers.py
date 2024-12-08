@@ -1,11 +1,9 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
-from ..GameManagement.models import GameRoom
 from asgiref.sync import sync_to_async
 import string
 from django.apps import apps
-from django.core.cache import cache
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
@@ -49,10 +47,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             await self.accept()  # Accept the WebSocket connection
             await self.send(
                 json.dumps(
-                    {
-                        "command": "set-channel-name",
-                        "channel": self.channel_name
-                    }
+                    {"command": "set-channel-name", "channel": self.channel_name}
                 )
             )
         except Exception as e:
@@ -95,7 +90,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             del self.char_to_channel[c]
             del self.channel_to_char[self.channel_to_chair]
         except:
-            pass        # silence this if someone disconnects before selecting a char
+            pass  # silence this if someone disconnects before selecting a char
 
         # TODO: Add logic to update gameProcessor so one less player if someone leaves in a game
 
@@ -103,7 +98,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         try:
             # Parse the incoming WebSocket message
             command = text_data.split()
-            print(text_data) # TEST STATEMENT
+            print(text_data)  # TEST STATEMENT
             c = command[0]
             match c:
 
@@ -122,7 +117,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         )
 
                         if user is not None:
-
                             # check max players
                             if self.number_players >= self.MAX_PLAYERS:
                                 # too many players
@@ -135,7 +129,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                         }
                                     )
                                 )
-                            
+
                             session = self.scope["session"]
                             session["_auth_user_id"] = user.id
                             session["_auth_username"] = user.username
@@ -146,7 +140,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                             # Save the session (wrapped in sync_to_async)
                             await sync_to_async(session.save)()
-                            
+
                             print("Session ID after save:", session.session_key)
 
                             # check for game in session
@@ -162,27 +156,33 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                     )
                                 )
 
-                            self.number_choosing_character = self.number_choosing_character + 1
+                            self.number_choosing_character = (
+                                self.number_choosing_character + 1
+                            )
 
                             # Broadcast player joining to others
-                            await self.sendToGame({
-                                "command": "player-joined-game",
-                                "number_players_choosing_char": self.number_choosing_character,
-                            })
+                            await self.sendToGame(
+                                {
+                                    "command": "player-joined-game",
+                                    "number_players_choosing_char": self.number_choosing_character,
+                                }
+                            )
 
                             # Add user to gameslobby channel
                             await self.channel_layer.group_add(
                                 "activegame",  # Group name
                                 self.channel_name,  # The user's unique channel
                             )
-                            
+
                             await self.send(
                                 json.dumps(
                                     {
                                         "command": "successful-login",
                                         "username": session["_auth_username"],
                                         "number_players_choosing_char": self.number_choosing_character,
-                                        "characters_chosen": list(self.char_to_channel.keys())
+                                        "characters_chosen": list(
+                                            self.char_to_channel.keys()
+                                        ),
                                     }
                                 )
                             )
@@ -320,13 +320,17 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         # Save the session (wrapped in sync_to_async)
                         await sync_to_async(session.save)()
 
-                        self.number_choosing_character = self.number_choosing_character + 1
+                        self.number_choosing_character = (
+                            self.number_choosing_character + 1
+                        )
 
                         # Broadcast player joining to others
-                        await self.sendToGame({
-                            "command": "player-joined-game",
-                            "number_players_choosing_char": self.number_choosing_character,
-                        })
+                        await self.sendToGame(
+                            {
+                                "command": "player-joined-game",
+                                "number_players_choosing_char": self.number_choosing_character,
+                            }
+                        )
 
                         # Add user to gameslobby channel
                         await self.channel_layer.group_add(
@@ -340,7 +344,9 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                     "command": "successful-register",
                                     "username": session["_auth_username"],
                                     "number_players_choosing_char": self.number_choosing_character,
-                                    "characters_chosen": list(self.char_to_channel.keys())
+                                    "characters_chosen": list(
+                                        self.char_to_channel.keys()
+                                    ),
                                 }
                             )
                         )
@@ -371,31 +377,29 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             )
 
                     return
-                
+
                 # selectCharacter
                 case "selectCharacter":
                     # first, validate game has not started
-                    if (self.game_in_progress):
+                    if self.game_in_progress:
                         # TODO: force logout
                         return await self.send(
                             json.dumps(
                                 {
                                     "command": "unrecoverable-error",
-                                    "error": "Tried to select character after game was in progress!"
+                                    "error": "Tried to select character after game was in progress!",
                                 }
                             )
                         )
-                    
+
                     # next, validate char is a real character
                     if command[1] not in self.VALID_CHARS:
                         return await self.send(
                             json.dumps(
-                                {
-                                    "error": f"Invalid character selection: {command[1]}"
-                                }
+                                {"error": f"Invalid character selection: {command[1]}"}
                             )
-                        )    
-                    
+                        )
+
                     self.char_to_channel[command[1]] = self.channel_name
                     self.channel_to_char[self.channel_name] = command[1]
                     self.number_choosing_character = self.number_choosing_character - 1
@@ -403,7 +407,10 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     # added this part - Jon
                     playerToAdd = command[1]
                     try:
-                        self.game_processor_instance.add_player(playerToAdd, self.scope["session"].get("_auth_user_id", None))
+                        self.game_processor_instance.add_player(
+                            playerToAdd,
+                            self.scope["session"].get("_auth_user_id", None),
+                        )
                         # TODO: need to add character info to add_player()
                     except ValueError as e:
                         print(f"Value error message: {e}")
@@ -413,34 +420,40 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     # end added this part - Jon
 
                     # Now we can assume the character is good!  Sweeet!
-                    return await self.sendToGame({
-                        "command": "character-selected",
-                        "selected_by": self.channel_name,
-                        "character": command[1],
-                        "number_players_choosing_char": self.number_choosing_character,
-                        "characters_chosen": list(self.char_to_channel.keys())
-                    })
-                
+                    return await self.sendToGame(
+                        {
+                            "command": "character-selected",
+                            "selected_by": self.channel_name,
+                            "character": command[1],
+                            "number_players_choosing_char": self.number_choosing_character,
+                            "characters_chosen": list(self.char_to_channel.keys()),
+                        }
+                    )
 
                 # show/update dealt cards
                 case "showDealtCards":
                     cardsStr = []
-                    for card in self.game_processor_instance.get_current_player().get_hand():
+                    for (
+                        card
+                    ) in self.game_processor_instance.get_current_player().get_hand():
                         cardsStr.append(card.__str__())
 
-                    return await self.send(json.dumps({
-                        "command": "show-dealt-cards",
-                        "cards": cardsStr
-                    }))
+                    return await self.send(
+                        json.dumps({"command": "show-dealt-cards", "cards": cardsStr})
+                    )
 
                 # get valid actions list for current player
                 case "getValidActions":
                     actions_list = self.game_processor_instance.get_valid_actions()
 
-                    return await self.send(json.dumps({
-                        "command": "show-valid-actions",
-                        "actions": actions_list.__str__()  # TODO: need to implement toString for Actions
-                    }))
+                    return await self.send(
+                        json.dumps(
+                            {
+                                "command": "show-valid-actions",
+                                "actions": actions_list.__str__(),  # TODO: need to implement toString for Actions
+                            }
+                        )
+                    )
 
                 case "accusation":
                     suspect = command[1]
@@ -449,91 +462,129 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                     # TODO: Add a check to ensure that requesting user is the current player
                     # i.e. selected_character == self.game_processor_instance.get_current_player()
-                    result = self.game_processor_instance.handle_accusation(suspect, weapon, room)
+                    result = self.game_processor_instance.handle_accusation(
+                        suspect, weapon, room
+                    )
 
                     # TODO: Anytime the gamestate changes need to broadcast message to clients
                     if result:
                         # also need to enter win game state on back-end in addition to win popup
                         winCards = [suspect, weapon, room]
-                        return await self.send(json.dumps({
-                            "command": "win",
-                            "winner": self.game_processor_instance.get_current_player().__str__(),
-                            "winningCards": winCards
-                        }))
+                        return await self.send(
+                            json.dumps(
+                                {
+                                    "command": "win",
+                                    "winner": self.game_processor_instance.get_current_player().__str__(),
+                                    "winningCards": winCards,
+                                }
+                            )
+                        )
                     else:
                         # also need to eliminate player on backend in addition to lose popup
                         # send eliminated player information
-                        return await self.send(json.dumps({
-                            "command": "eliminate",
-                            "eliminated": self.game_processor_instance.get_current_player().__str__()
-                        }))
+                        return await self.send(
+                            json.dumps(
+                                {
+                                    "command": "eliminate",
+                                    "eliminated": self.game_processor_instance.get_current_player().__str__(),
+                                }
+                            )
+                        )
 
-                    return;
+                    return
 
                 case "suggestion":
                     suspect = command[1]
                     weapon = command[2]
                     room = command[3]
-                    disprover, disproveCards = self.game_processor_instance.handle_suggestion(self.game_processor_instance.get_current_player(), suspect, weapon, room)
+                    disprover, disproveCards = (
+                        self.game_processor_instance.handle_suggestion(
+                            self.game_processor_instance.get_current_player(),
+                            suspect,
+                            weapon,
+                            room,
+                        )
+                    )
 
                     # TODO: cannot-disprove popup, unhide for other players
                     # this is incorrect: need to send this json data to the disprove player, not current player
                     # but also the cannot-disprove info to other players
-                    return await self.send(json.dumps({
-                        "command": "disprove-select",
-                        "disprover": disprover.__str__(),
-                        "disproveCards": disproveCards
-                    }))
+                    return await self.send(
+                        json.dumps(
+                            {
+                                "command": "disprove-select",
+                                "disprover": disprover.__str__(),
+                                "disproveCards": disproveCards,
+                            }
+                        )
+                    )
 
                 case "disproveReceived":
                     disprover = command[1]
                     disproveCard = command[2]
                     # TODO: handle disprove simultaneously showing cannot-disprove to relevant users and disprove-select
-                    self.game_processor_instance.handle_disprove(disprover, disproveCard)  # TODO: need to implement this method
+                    self.game_processor_instance.handle_disprove(
+                        disprover, disproveCard
+                    )  # TODO: need to implement this method
                     self.game_processor_instance.end_turn()
 
-                    return;
+                    return
 
-                case "validMoves":    # show valid moves
-                    possibleSpaces = self.game_processor_instance.get_current_player().get_valid_moves()
+                case "validMoves":  # show valid moves
+                    possibleSpaces = (
+                        self.game_processor_instance.get_current_player().get_valid_moves()
+                    )
                     stringsPossibleSpaces = []
                     for sp in possibleSpaces:
                         stringsPossibleSpaces.append(sp.__str__())
 
-                    return await self.send(json.dumps({
-                        "command": "show-valid-moves",
-                        "possibleDestinations": stringsPossibleSpaces
-                    }))
+                    return await self.send(
+                        json.dumps(
+                            {
+                                "command": "show-valid-moves",
+                                "possibleDestinations": stringsPossibleSpaces,
+                            }
+                        )
+                    )
 
                 case "actualMove":  # actual movement
                     dest = command[1]
-                    self.game_processor_instance.move_player(self.game_processor_instance.get_current_player(), self.game_processor_instance.get_space_by_name(dest))
+                    self.game_processor_instance.move_player(
+                        self.game_processor_instance.get_current_player(),
+                        self.game_processor_instance.get_space_by_name(dest),
+                    )
 
                     # now get valid actions
                     actions_list = self.game_processor_instance.get_valid_actions()
 
-                    return await self.send(json.dumps({
-                        "command": "show-valid-actions",
-                        "actions": actions_list.__str__()  # TODO: need to implement toString for Actions
-                    }))
-                
+                    return await self.send(
+                        json.dumps(
+                            {
+                                "command": "show-valid-actions",
+                                "actions": actions_list.__str__(),  # TODO: need to implement toString for Actions
+                            }
+                        )
+                    )
+
                 case "joinGame":
                     playerToAdd = command[1]
                     try:
-                        self.game_processor_instance.add_player(playerToAdd, self.scope["session"].get("_auth_user_id", None))
+                        self.game_processor_instance.add_player(
+                            playerToAdd,
+                            self.scope["session"].get("_auth_user_id", None),
+                        )
                     except ValueError as e:
                         print(f"Value error message: {e}")
                         await self.send(
                             json.dumps({"status": "error", "message": "Value error."})
                         )
-                
+
                 case "startGame":
                     self.game_processor_instance.start_game()
-                    return await self.send(json.dumps({
-                        "command": "successful-create-game"
-                    }))
+                    return await self.send(
+                        json.dumps({"command": "successful-create-game"})
+                    )
 
-             
                 # unknown case
                 case _:
                     await self.send(
@@ -571,13 +622,9 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     async def sendToGame(self, dict):
         dict["type"] = "sendToGameHelper"
-        await self.channel_layer.group_send(
-            "activegame",
-            dict
-        )
+        await self.channel_layer.group_send("activegame", dict)
 
     async def sendToGameHelper(self, d):
         # Send the event data to the WebSocket
         del d["type"]
         await self.send(text_data=json.dumps(d))
-        
