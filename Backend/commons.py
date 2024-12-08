@@ -35,3 +35,21 @@ class ValidWeapons(Enum):
     REVOLVER = "revolver"
     ROPE = "rope"
     WRENCH = "wrench"
+
+
+class ValidHallways(Enum):
+    """Enum representations of Valid Hallways"""
+    # Horizontal Hallway connections
+    STUDY_HALL = f"{ValidRooms.STUDY}-{ValidRooms.HALL}"
+    HALLWAY_LOUNGE = f"{ValidRooms.HALL}-{ValidRooms.LOUNGE}"
+    LIBRARY_BILLIARDS = f"{ValidRooms.LIBRARY}-{ValidRooms.BILLIARDS}"
+    BILLIARDS_DINING = f"{ValidRooms.BILLIARDS}-{ValidRooms.DINING}"
+    CONSERVATORY_BALLROOM = f"{ValidRooms.CONSERVATORY}-{ValidRooms.BALLROOM}"
+    BALLROOM_KITCHEN = f"{ValidRooms.BALLROOM}-{ValidRooms.KITCHEN}"
+    # Vertical Hallway connections
+    STUDY_LIBRARY = f"{ValidRooms.STUDY}-{ValidRooms.LIBRARY}"
+    LIBRARY_CONSERVATORY = f"{ValidRooms.LIBRARY}-{ValidRooms.CONSERVATORY}"
+    HALL_BILLARD = f"{ValidRooms.HALL}-{ValidRooms.BILLIARDS}"
+    BILLIARD_BALLROOM = f"{ValidRooms.BILLIARDS}-{ValidRooms.BALLROOM}"
+    LOUNGE_DINING = f"{ValidRooms.LOUNGE}-{ValidRooms.DINING}"
+    DINING_KITCHEN = f"{ValidRooms.DINING}-{ValidRooms.KITCHEN}"

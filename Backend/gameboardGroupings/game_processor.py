@@ -7,9 +7,11 @@ from Backend.cardGroupings.Hand import Hand
 from Backend.gameboardGroupings.gameboard import GameBoard
 from Backend.gameboardGroupings.space import Space
 from Backend.gameboardGroupings.turn_order import TurnOrder
-from Backend.GameManagement.playerGroupings.Actions import (Accusation,
-                                                            Actions,
-                                                            Suggestion)
+from Backend.GameManagement.playerGroupings.Actions import (
+    Accusation,
+    Actions,
+    Suggestion,
+)
 from Backend.GameManagement.playerGroupings.player import Player
 from Backend.commons import ValidRooms, ValidSuspect, ValidWeapons
 
@@ -21,6 +23,7 @@ MIN_ACTIVATE_PLAYERS = 2
 
 class GameStatus(Enum):
     """Enum that represents the game status"""
+
     OPEN = auto()
 
 
@@ -92,16 +95,12 @@ class GameProcessor:
             raise ValueError("Cannot add players after game has started")
 
         if self._turn_order.get_player_count() + 1 > self._max_players:
-            raise ValueError("Maximum number of players reached, cannot join the game")
+            raise ValueError(
+                "Maximum number of players reached," "cannot join the game"
+            )
 
         # Create new player
         player = Player(player_name, player_id)
-        # TODO: review this function to determine if it can be simplified
-
-        # Set starting position
-        starting_positions = self._game_board.get_starting_positions()
-        player._currLocation = starting_positions[player._character]
-
         self._turn_order.add_player(player)
 
     def start_game(self):
@@ -125,6 +124,12 @@ class GameProcessor:
 
         # Start first turn
         self.game_status = GameStatus.IN_PROGRESS
+
+        
+        # Set starting position
+        starting_positions = self._game_board.get_starting_positions()
+        player.set_current_location()
+        player._currLocation = starting_positions[player._character]
 
     def _create_case_file(self) -> None:
         """Create the case file by selecting one of each card type."""
