@@ -59,7 +59,9 @@ class GameProcessor:
         self._min_players: int = min_players
         self._max_players: int = max_players
         self._min_activate_players: int = min_activate_players
-        self._available_characters: List[str] = Card.VALID_SUSPECTS
+        self._available_characters: List[str] = [
+            suspect.value for suspect in ValidSuspect
+        ]
         self._player_lobby_count: int = 0
         # Game components
         self._game_board: GameBoard = GameBoard()
@@ -67,32 +69,32 @@ class GameProcessor:
         self._case_file: Hand = Hand()
 
         # Game state
-        self.game_status: GameStatus = GameStatus.OPEN
+        self._game_status: GameStatus = GameStatus.OPEN
         self._winner: Player = None
 
         self._turn_order: TurnOrder = TurnOrder()
         self._initialize_deck()
 
     def __str__(self):
-        return self.game_status
+        return self._game_status
 
     def _initialize_deck(self) -> None:
         """Initialize the main deck with all cards."""
         # Add all suspect cards
         for suspect in ValidSuspect:
-            self.main_deck.add_card(Card(suspect, CardType.SUSPECT))
+            self._main_deck.add_card(Card(suspect, CardType.SUSPECT))
 
         # Add all weapon cards
         for weapon in ValidWeapons:
-            self.main_deck.add_card(Card(weapon, CardType.WEAPON))
+            self._main_deck.add_card(Card(weapon, CardType.WEAPON))
 
         # Add all room cards
         for room in ValidRooms:
-            self.main_deck.add_card(Card(room, CardType.ROOM))
+            self._main_deck.add_card(Card(room, CardType.ROOM))
 
     def add_player(self, player_name: str, player_id: int) -> bool:
         """Add a new player to the game."""
-        if self.game_status != GameStatus.OPEN:
+        if self._game_status != GameStatus.OPEN:
             raise ValueError("Cannot add players after game has started")
 
         if self._turn_order.get_player_count() + 1 > self._max_players:
@@ -113,7 +115,7 @@ class GameProcessor:
                 f"{self._turn_order.get_player_count()} players, must have a multiple of {self._min_players} players to start."
             )
 
-        self.game_status = GameStatus.INITIALIZING
+        self._game_status = GameStatus.INITIALIZING
 
         # Create case file
         self._create_case_file()
@@ -124,7 +126,7 @@ class GameProcessor:
         self._turn_order.randomize_order()
 
         # Start first turn
-        self.game_status = GameStatus.IN_PROGRESS
+        self._game_status = GameStatus.IN_PROGRESS
 
         # Set starting position
         starting_positions = self._game_board.get_starting_positions()
@@ -193,7 +195,7 @@ class GameProcessor:
             # Check if Accusation was correct
             if accusation.makeAccusation(suspect, weapon, room):
                 self._winner = current_turn
-                self.game_status = GameStatus.GAME_OVER
+                self._game_status = GameStatus.GAME_OVER
                 return True
             else:
                 # TODO: Consider moving is_game_over() function to the
@@ -207,7 +209,7 @@ class GameProcessor:
         # Check if game is over
         active_players = self._turn_order.get_active_player_count()
         if active_players < self._min_activate_players:
-            self.game_status = GameStatus.GAME_OVER
+            self._game_status = GameStatus.GAME_OVER
 
     def end_turn(self):
         """End current turn and start next player's turn."""
@@ -255,10 +257,10 @@ class GameProcessor:
         return self._game_board.get_space_by_name(dest)
 
     def get_game_status(self) -> int:
-        return self.game_status
+        return self._game_status
 
     def get_game_status_str(self) -> str:
-        return str(self.game_status)
+        return str(self._game_status)
 
     def get_player_count(self) -> int:
         return self._turn_order.get_player_count()
