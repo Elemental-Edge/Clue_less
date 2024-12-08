@@ -202,6 +202,3 @@ class TurnOrder:
             yield current.player  # Yield the player at the current node
             current = current.next
             first_iteration = False  # After the first iteration, we set this to False
-
-    def __next__(self) -> Player:
-        pass

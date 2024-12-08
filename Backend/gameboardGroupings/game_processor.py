@@ -60,6 +60,7 @@ class GameProcessor:
         self._max_players: int = max_players
         self._min_activate_players: int = min_activate_players
         self._available_characters: List[str] = Card.VALID_SUSPECTS
+        self._player_lobby_count: int = 0
         # Game components
         self._game_board: GameBoard = GameBoard()
         self._main_deck: Deck = Deck()
@@ -125,7 +126,6 @@ class GameProcessor:
         # Start first turn
         self.game_status = GameStatus.IN_PROGRESS
 
-        
         # Set starting position
         starting_positions = self._game_board.get_starting_positions()
         player.set_current_location()
@@ -173,11 +173,9 @@ class GameProcessor:
         self, player: Player, aSuspect: str, aWeapon: str, aRoom: str
     ) -> Optional[tuple[Player, Hand]]:
         """Handle a suggestion from a player."""
-        if not self.current_turn or not self.current_turn.isActive:
+        current_turn = self._turn_order.get_current_turn()
+        if not current_turn:
             raise ValueError("Not currently this player's turn")
-
-        if player != self.current_turn.p:
-            raise ValueError("Not this player's turn")
 
         suggestion = Suggestion(self._turn_order)
         disprovePlayer, disproveHand = suggestion.makeSuggestion(
@@ -191,7 +189,7 @@ class GameProcessor:
         # Eliminate player
         current_turn = self._turn_order.get_current_turn()
         if current_turn:
-            accusation = Accusation(self._case_file)
+            accusation = Accusation(self._turn_order, self._case_file)
             # Check if Accusation was correct
             if accusation.makeAccusation(suspect, weapon, room):
                 self._winner = current_turn
@@ -208,7 +206,7 @@ class GameProcessor:
     def is_game_over(self) -> bool:
         # Check if game is over
         active_players = self._turn_order.get_active_player_count()
-        if active_players < self.MIN_ACTIVATE_PLAYERS:
+        if active_players < self._min_activate_players:
             self.game_status = GameStatus.GAME_OVER
 
     def end_turn(self):
@@ -224,14 +222,14 @@ class GameProcessor:
 
     def move_player(self, player: Player, target_space: Space) -> bool:
         """Move a player to a new space."""
-        if player != self.current_turn.p or not self.current_turn.isActive:
+        current_player = self._turn_order.get_current_turn()
+        if player != current_player:
             return False
 
         if target_space not in self.get_valid_moves(player):
             return False
-
-        player._prevLocation = player.get_current_location()
         player.set_current_location(target_space)
+        player.set_hasEnterdRoom(True)
         return True
 
     def get_game_winner(self) -> Player:
@@ -317,4 +315,16 @@ class GameProcessor:
         return self._turn_order.get_player_count() >= self._max_players
 
     def can_join(self) -> bool:
+        pass
+
+    def get_player_lobby_count(self) -> int:
+        return self._player_lobby_count
+
+    def set_player_lobby_count(self, count: int):
+        pass
+
+    def increment_lobby_count(self) -> int:
+        pass
+
+    def decrement_lobby_count(self) -> int:
         pass
