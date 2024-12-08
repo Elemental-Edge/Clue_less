@@ -6,6 +6,7 @@ from Backend.cardGroupings.Card import Card, CardType
 
 class SpaceTypeTest(unittest.TestCase):
     """Tests the functionality of the SpaceType enumeration."""
+
     def setUp(self):
         """Sets up the test data for SpaceType tests."""
         self.space_type1 = SpaceType.ROOM
@@ -17,17 +18,24 @@ class SpaceTypeTest(unittest.TestCase):
 
 class SpaceTest(unittest.TestCase):
     """Tests the functionality of the Space class."""
+
     def setUp(self):
         """Sets up the test data for Space tests."""
         self.space1 = Space("Space1")
         self.space2 = Space("Space2")
-        self.player = Player(playerID=1, character="Player1")
+        self.player = Player("Player1", 1)
 
     def test_add_adjacent_space(self):
         """Tests adding an adjacent space."""
         self.space1.add_adjacent_space(self.space2)
-        self.assertIn(self.space2, self.space1._adjacent_spaces)
-        self.assertIn(self.space1, self.space2._adjacent_spaces)
+        self.assertIn(
+            self.space2,
+            self.space1.get_adjacent_spaces()
+        )
+        self.assertIn(
+            self.space1,
+            self.space2.get_adjacent_spaces()
+        )
 
     def test_add_adjacent_space_error(self):
         """Tests error handling when adding an invalid adjacent space."""
@@ -41,22 +49,22 @@ class SpaceTest(unittest.TestCase):
         self.assertNotIn(self.space2, self.space1.get_adjacent_spaces())
         self.assertNotIn(self.space1, self.space2.get_adjacent_spaces())
 
-    def test_add_player(self):
+    def test_add_player_count(self):
         """Tests adding a player to the space."""
-        self.space1.add_player(self.player)
-        self.assertIn(self.player, self.space1.get_players())
+        self.space1.add_player_count()
+        self.assertEqual(self.space1.get_player_count(), 1)
 
-    def test_remove_player(self):
+    def test_remove_player_count(self):
         """Tests removing a player from the space."""
-        self.space1.add_player(self.player)
-        self.space1.remove_player(self.player._playerID)
-        self.assertNotIn(self.player, self.space1.get_players())
+        self.space1.add_player_count()
+        self.space1.remove_player_count()
+        self.assertEqual(self.space1.get_player_count(), 0)
 
     def test_get_player_count(self):
         """Tests retrieving the count of players in the space."""
-        self.space1.add_player(self.player)
+        self.space1.add_player_count()
         self.assertEqual(self.space1.get_player_count(), 1)
-        self.space1.remove_player(self.player._playerID)
+        self.space1.remove_player_count()
         self.assertEqual(self.space1.get_player_count(), 0)
 
     def test_is_adjacent_room(self):
@@ -79,24 +87,14 @@ class SpaceTest(unittest.TestCase):
         self.space1.add_adjacent_space(self.space2)
         self.assertIn(self.space2, self.space1.get_adjacent_spaces())
 
-    def test_is_player_in_room(self):
-        """Tests checking if a player is in the space."""
-        self.space1.add_player(self.player)
-        self.assertTrue(self.space1.is_player_in_room(self.player._character))
-
-    def test_clear_players(self):
-        """Tests clearing all players from the space."""
-        self.space1.add_player(self.player)
-        self.space1.clear_players()
-        self.assertEqual(self.space1.get_player_count(), 0)
-
 
 class RoomTest(unittest.TestCase):
     """Tests the functionality of the Room class."""
+
     def setUp(self):
         """Sets up the test data for Room tests."""
         self.room = Room("Room1")
-        self.weapon = Card(name="Knife", card_type=CardType.WEAPON)
+        self.weapon = Card(CardType.name, card_type=CardType.WEAPON)
         self.non_weapon_card = Card(name="RoomKey", card_type=CardType.ITEM)
 
     def test_add_weapon(self):
@@ -124,6 +122,7 @@ class RoomTest(unittest.TestCase):
 
 class CornerRoomTest(unittest.TestCase):
     """Tests the functionality of the CornerRoom class."""
+
     def setUp(self):
         """Sets up the test data for CornerRoom tests."""
         self.corner_room1 = CornerRoom("CornerRoom1")
@@ -133,10 +132,8 @@ class CornerRoomTest(unittest.TestCase):
     def test_add_secret_passage(self):
         """Tests adding a secret passage to another corner room."""
         self.corner_room1.add_secret_passage(self.corner_room2)
-        self.assertEqual(self.corner_room1.get_secret_passage(),
-                         self.corner_room2)
-        self.assertEqual(self.corner_room2.get_secret_passage(),
-                         self.corner_room1)
+        self.assertEqual(self.corner_room1.get_secret_passage(), self.corner_room2)
+        self.assertEqual(self.corner_room2.get_secret_passage(), self.corner_room1)
 
     def test_remove_secret_passage(self):
         """Tests removing a secret passage."""
@@ -155,6 +152,7 @@ class CornerRoomTest(unittest.TestCase):
 
 class HallwayTest(unittest.TestCase):
     """Tests the functionality of the Hallway class."""
+
     def setUp(self):
         """Sets up the test data for Hallway tests."""
         self.hallway = Hallway("Hallway1")
@@ -174,16 +172,12 @@ class HallwayTest(unittest.TestCase):
     def test_is_empty(self):
         """Tests checking if the hallway is empty."""
         self.assertTrue(self.hallway.is_empty())
-        self.hallway.add_player(self.player)
+        self.hallway.add_player_count()
         self.assertFalse(self.hallway.is_empty())
 
     def test_remove_player(self):
         """Tests removing a player from the hallway."""
-        self.hallway.add_player(self.player)
-        self.hallway.remove_player(self.player._playerID)
-        self.assertNotIn(self.player, self.hallway.get_players())
+        self.hallway.add_player()
+        self.hallway.remove_player()
+        self.assertTrue(self.hallway.get_player_count(), 0)
         self.assertTrue(self.hallway.is_empty())
-
-
-#if __name__ == "__main__":
-#    unittest.main()

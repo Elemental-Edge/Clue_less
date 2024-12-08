@@ -175,6 +175,9 @@ class TurnOrder:
 
     def get_player_count(self) -> int:
         return self._player_count
+    
+    def in_turn_order(self, player_id: int) -> bool:
+        pass
 
     def __iter__(self) -> Iterator[Player] | None:
         if not self._head:

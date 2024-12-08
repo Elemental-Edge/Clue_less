@@ -35,7 +35,17 @@ class Space:
     def __eq__(self, other: object) -> bool:
         """Overloads the equality operator to check for space equality via
            memory address comparison"""
-        return self is other
+        if self is other:
+            return True
+        if self._space_type != other._space_type:
+            return False
+        if self._name != other._name:
+            return False
+        if self._name == other._name:
+            if self._space_type == SpaceType.HALLWAY:
+                if self._adjacent_spaces == other._adjacent_spaces:
+                    return True
+        return True
 
     def get_player_count(self) -> int:
         """Returns the number of players in the space."""
@@ -52,6 +62,8 @@ class Space:
     def add_adjacent_space(self, space: Space):
         """Adds a space to adjacent spaces list and creates reciprocal
            connection by default"""
+        if space is None:
+            raise ValueError("The adjacent space cannot be None")
         if space is not self:
             space._adjacent_spaces.append(self)
             self._adjacent_spaces.append(space)
@@ -147,6 +159,12 @@ class Room(Space):
         if not is_found:
             current_index = -1
         return current_index
+    
+    def get_weapon(self):
+        pass
+
+    def is_weapon_in_room(self) -> bool:
+        pass
 
 
 class CornerRoom(Room):
@@ -161,6 +179,8 @@ class CornerRoom(Room):
 
     def add_secret_passage(self, secret_passage: CornerRoom):
         """Adds a secrete passage to the room"""
+        if secret_passage is None:
+            raise ValueError("The secret passage cannot be None")
         if secret_passage is not self:
             self._secret_passage = secret_passage
             secret_passage._secret_passage = self
