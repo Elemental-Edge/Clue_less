@@ -5,27 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4744f2d5-bea9-4fd7-bc99-e2584abb5988" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/backup_old/green.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/backup_old/mustard.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/backup_old/peacock.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/backup_old/plum.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/backup_old/scarlet.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/backup_old/white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/logo_transparentbg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/notepad_spirals.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/notepad_spirals_small.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/MessageTranslator/consumers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/Thumbs.db" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/backup_old/Thumbs.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/green.png" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/green.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/mustard.png" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/mustard.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/peacock.png" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/peacock.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/plum.png" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/plum.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/scarlet.png" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/scarlet.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/white.png" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/assets/chars/white.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/map.css" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/map.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/[URL_FRONTEND]/map.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,20 +45,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Rebasing frontend__3",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PyCharm 2024.2.0.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;frontend__3&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\PyCharm 2024.2.0.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Clue_less" type="Python.DjangoServer" factoryName="Django server">
       <module name="Clue_less" />
@@ -144,6 +126,7 @@
       <workItem from="1733460685294" duration="895000" />
       <workItem from="1733534134149" duration="1865000" />
       <workItem from="1733539271538" duration="1000" />
+      <workItem from="1733616036079" duration="2000" />
     </task>
     <servers />
   </component>

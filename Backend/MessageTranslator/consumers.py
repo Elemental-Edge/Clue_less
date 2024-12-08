@@ -135,15 +135,19 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                         }
                                     )
                                 )
-
+                            
                             session = self.scope["session"]
                             session["_auth_user_id"] = user.id
                             session["_auth_username"] = user.username
                             user.backend = "django.contrib.auth.backends.ModelBackend"
                             session["_auth_user_backend"] = user.backend
 
+                            print("Session ID before save:", session.session_key)
+
                             # Save the session (wrapped in sync_to_async)
                             await sync_to_async(session.save)()
+                            
+                            print("Session ID after save:", session.session_key)
 
                             # check for game in session
                             if self.game_in_progress:
@@ -171,7 +175,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                 "activegame",  # Group name
                                 self.channel_name,  # The user's unique channel
                             )
-
+                            
                             await self.send(
                                 json.dumps(
                                     {
@@ -396,6 +400,18 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     self.channel_to_char[self.channel_name] = command[1]
                     self.number_choosing_character = self.number_choosing_character - 1
 
+                    # added this part - Jon
+                    playerToAdd = command[1]
+                    try:
+                        self.game_processor_instance.add_player(playerToAdd, self.scope["session"].get("_auth_user_id", None))
+                        # TODO: need to add character info to add_player()
+                    except ValueError as e:
+                        print(f"Value error message: {e}")
+                        await self.send(
+                            json.dumps({"status": "error", "message": "Value error."})
+                        )
+                    # end added this part - Jon
+
                     # Now we can assume the character is good!  Sweeet!
                     return await self.sendToGame({
                         "command": "character-selected",
@@ -510,6 +526,13 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         await self.send(
                             json.dumps({"status": "error", "message": "Value error."})
                         )
+                
+                case "startGame":
+                    self.game_processor_instance.start_game()
+                    return await self.send(json.dumps({
+                        "command": "successful-create-game"
+                    }))
+
              
                 # unknown case
                 case _:

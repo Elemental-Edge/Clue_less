@@ -443,6 +443,8 @@ const initializeDjangoChannels = (ws_url) => {
 				
 			case "successful-create-game":
 				alert("TODO: Game created on backend.  Finish logic on front end.");
+				$('#cl-loading-wrapper').removeClass("hide");
+				$('#cl-loading-wrapper').removeClass("hide");
 				return;
 				
 			case "successful-login":
@@ -607,6 +609,11 @@ $("form").on("submit", function(e) {
 		sendMessageToBackend(socket, `register ${$("#register-username").val()} ${$("#register-password").val()} ${$("#register-confirm").val()}`);
 		$("#login-password").val("");
 		return;
+	}
+
+	// start game
+	if ($(this).attr("id") == "start_game") {
+		sendMessageToBackend(socket, `startGame`);
 	}
 
 	// make accusation
