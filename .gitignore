@@ -6,4 +6,7 @@
 **/__pycache**/*
 **/migrations/**
 
-*.idea
+# project configurations
+**/.idea/**
+**/.vs/**
+**/.vscode/**
