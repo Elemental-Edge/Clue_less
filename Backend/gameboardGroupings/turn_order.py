@@ -2,6 +2,7 @@ from typing import List
 from random import shuffle
 from typing import Iterator
 from Backend.GameManagement.playerGroupings.player import Player
+from Backend.commons import ValidSuspect
 
 
 class Node:
@@ -218,3 +219,13 @@ class TurnOrder:
             self._current.player.get_player_turn().reset()
             is_success = True
         return is_success
+
+    def update_suggested_player(self, aCharacter: str, aSpace: "Space"):
+        if None is aSpace:
+            raise ValueError("Missing valid object")
+        turn_order = self.get_turn_order()
+        for player in turn_order:
+            if player.get_character() == aCharacter:
+                player.set_current_location(aSpace)
+                player.get_player_turn().set_hasEnteredRoom()
+                break

@@ -63,7 +63,7 @@ class Suggestion(Actions):
         super().__init__(aTurnOrder)
 
     def makeSuggestion(
-        self, aSuspect: str, aWeapon: str, aRoom: str
+        self, aSuspect: str, aWeapon: str, aRoom: str, aRoomSpace: "Space"
     ) -> tuple["Player", list[str]]:
         """
         Checks if the accusation made by the user was correct.
@@ -82,6 +82,7 @@ class Suggestion(Actions):
         suggestedCards.add_card(Card(aWeapon, card_type=CardType.WEAPON))
         suggestedCards.add_card(Card(aRoom, card_type=CardType.ROOM))
 
+        self._turn_order.update_suggested_player(aSuspect, aRoomSpace)
         # output list of player's cards that match suggestion
         disproveCards = Hand()
         # nextPlayer = next(turnList_iter)
@@ -134,7 +135,7 @@ class Move(Actions):
         selected_destination = aDest
 
         if selected_destination.get_space_type() == SpaceType.ROOM:
-            self.get_player().get_player_turn().set_hasEnteredRoom()
+            current_player.get_player_turn().set_hasEnteredRoom()
 
         retVal = current_player.set_current_location(selected_destination)
         if not retVal:

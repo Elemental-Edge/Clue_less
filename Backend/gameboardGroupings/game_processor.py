@@ -11,6 +11,7 @@ from Backend.GameManagement.playerGroupings.Actions import (
     Accusation,
     Actions,
     Suggestion,
+    Move
 )
 from Backend.GameManagement.playerGroupings.player import Player
 from Backend.commons import ValidRooms, ValidSuspect, ValidWeapons
@@ -217,9 +218,10 @@ class GameProcessor:
         if not current_turn:
             raise ValueError("Not currently this player's turn")
 
+        target_space = self._game_board.get_space_by_name(aRoom)
         suggestion = Suggestion(self._turn_order)
         disprovePlayer, disproveHand = suggestion.makeSuggestion(
-            aSuspect, aWeapon, aRoom
+            aSuspect, aWeapon, aRoom, target_space
         )
 
         return disprovePlayer, disproveHand
@@ -260,17 +262,20 @@ class GameProcessor:
             valid_moves = player.get_valid_moves()
         return valid_moves
 
-    def move_player(self, player: Player, target_space: Space) -> bool:
+    def handle_move(self, player: Player, atargetSpace: str) -> bool:
         """Move a player to a new space."""
+        #TODO: Update to make move
         current_player = self._turn_order.get_current_turn()
         if player != current_player:
             return False
-
-        if target_space not in self.get_valid_moves(player):
+        target_space = self._game_board.get_space_by_name(atargetSpace)
+        if None is not target_space and target_space not in self.get_valid_moves(player):
             return False
-        player.set_current_location(target_space)
-        player.set_hasEnterdRoom(True)
-        return True
+
+        move = Move(self._turn_order)
+        # Check if Accusation was correct
+        return None is not move and move.makeMove(target_space)
+
 
     def get_game_winner(self) -> Player:
         return self._winner

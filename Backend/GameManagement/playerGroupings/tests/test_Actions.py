@@ -132,9 +132,10 @@ def test_makeSuggestion_disproves(setup_suggestion):
     player1.get_hand().add_card(weapon_card)
     player1.get_hand().add_card(room_card)
 
+    kitchenSpace = Room(ValidRooms.KITCHEN)
     # Execute the suggestion
     next_player, disproved_cards = suggestion.makeSuggestion(
-        ValidSuspect.GREEN, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN
+        ValidSuspect.GREEN, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN, kitchenSpace
     )
 
     # Check the results
@@ -158,10 +159,11 @@ def test_makeSuggestion_no_disprove(setup_suggestion):
     player1.get_hand().add_card(suspect_card)
     player1.get_hand().add_card(weapon_card)
     player1.get_hand().add_card(room_card)
+    kitchenSpace = Room(ValidRooms.KITCHEN)
 
     # Execute the suggestion
     next_player, disproved_cards = suggestion.makeSuggestion(
-        ValidSuspect.GREEN, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN
+        ValidSuspect.GREEN, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN, kitchenSpace
     )
 
     # Check the results
@@ -172,21 +174,30 @@ def test_makeSuggestion_no_disprove(setup_suggestion):
 def test_makeSuggestion_bad_inputs(setup_suggestion):
     # Create a Suggestion instance
     name = "Jamar"
+    kitchenSpace = Room(ValidRooms.KITCHEN)
     suggestion = Suggestion(None)
     with pytest.raises(
         ValueError, match="Turn Order Object is None: No Players in Turn Order"
     ):
         suggestion.makeSuggestion(
-            ValidSuspect.GREEN, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN
+            ValidSuspect.GREEN,
+            ValidWeapons.CANDLESTICK,
+            ValidRooms.KITCHEN,
+            kitchenSpace,
         )
     suggestion = setup_suggestion[0]
     with pytest.raises(ValueError, match=f"{name} is not a valid suspect."):
-        suggestion.makeSuggestion(name, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN)
+        suggestion.makeSuggestion(
+            name, ValidWeapons.CANDLESTICK, ValidRooms.KITCHEN, kitchenSpace
+        )
     with pytest.raises(
         ValueError, match=f"{ValidWeapons.CANDLESTICK} is not a valid suspect."
     ):
         suggestion.makeSuggestion(
-            ValidWeapons.CANDLESTICK, ValidSuspect.GREEN, ValidRooms.KITCHEN
+            ValidWeapons.CANDLESTICK,
+            ValidSuspect.GREEN,
+            ValidRooms.KITCHEN,
+            kitchenSpace,
         )
 
 
