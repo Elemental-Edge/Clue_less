@@ -5,10 +5,17 @@ from ..GameManagement.models import GameRoom
 from asgiref.sync import sync_to_async
 import string
 from django.apps import apps
+from django.core.cache import cache
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
-    gamerooms = []
+    game_in_progress = False
+    number_players = 0
+    MAX_PLAYERS = 6
+    number_choosing_character = 0
+    char_to_channel = {}
+    channel_to_char = {}
+    VALID_CHARS = {"green", "scarlet", "plum", "mustard", "peacock", "white"}
 
     def __init__(self):
         self.my_app_config = apps.get_app_config("GameManagement")
@@ -40,6 +47,14 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 "notifications", self.channel_name
             )  # Join the notifications group
             await self.accept()  # Accept the WebSocket connection
+            await self.send(
+                json.dumps(
+                    {
+                        "command": "set-channel-name",
+                        "channel": self.channel_name
+                    }
+                )
+            )
         except Exception as e:
             # Log the error or handle it appropriately
             print(f"Error while connecting to notifications group: {e}")
@@ -54,6 +69,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         Args:
             close_code (int): The code indicating why the WebSocket connection was closed.
         """
+
+        # remove from notifications channel
         try:
             await self.channel_layer.group_discard(
                 "notifications", self.channel_name
@@ -62,6 +79,26 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             # Log the error or handle it appropriately
             print(f"Error while disconnecting from notifications group: {e}")
 
+        # remove from active game channel
+        try:
+            await self.channel_layer.group_discard(
+                "activegame", self.channel_name
+            )  # Leave the notifications group
+        except Exception as e:
+            # Log the error or handle it appropriately
+            # Do nothing if this fails (will fail if not to char select yet)
+            pass
+
+        # unset character
+        try:
+            c = self.channel_to_char[self.channel_to_chair]
+            del self.char_to_channel[c]
+            del self.channel_to_char[self.channel_to_chair]
+        except:
+            pass        # silence this if someone disconnects before selecting a char
+
+        # TODO: Add logic to update gameProcessor so one less player if someone leaves in a game
+
     async def receive(self, text_data):
         try:
             # Parse the incoming WebSocket message
@@ -69,82 +106,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             print(text_data) # TEST STATEMENT
             c = command[0]
             match c:
-
-                # CREATE GAME
-                case "create-game":
-
-                    try:
-                        if self.scope["session"].get("_auth_user_id", None) == None:
-                            await self.send(
-                                json.dumps(
-                                    {
-                                        "error": "You are not logged in and therefore cannot create a game."
-                                    }
-                                )
-                            )
-
-                        # get session
-                        session = self.scope["session"]
-
-                        await self.send(json.dumps({"c": 0}))
-
-                        # create game room
-                        name = f"{session['_auth_username']}'s Game"
-                        game = GameRoom(name=name, player_count=1, max_players=6)
-
-                        await self.send(json.dumps({"c": 1}))
-
-                        # update session
-                        session["_game_id"] = game.generate_game_id()
-                        gamechannel = f"game-{session['_game_id']}"
-                        session["_game_channel"] = gamechannel
-
-                        await self.send(json.dumps({"c": 2}))
-
-                        # add this user to game channel
-                        await self.channel_layer.group_add(
-                            gamechannel,  # Group name
-                            self.channel_name,  # The user's unique channel
-                        )
-
-                        await self.send(json.dumps({"c": 3}))
-
-                        # remove user from game selection
-                        await self.channel_layer.group_discard(
-                            "gameslobby",  # Group name
-                            self.channel_name,  # The user's unique channel
-                        )
-
-                        # save game then session
-                        await sync_to_async(game.save)()
-                        await sync_to_async(session.save)()
-
-                        await self.channel_layer.group_send(
-                            "gameslobby",
-                            json.dumps(
-                                {
-                                    "command": "add-game-to-list",
-                                    "name": name,
-                                    "id": session["_game_id"],
-                                }
-                            ),
-                        )
-
-                        return await self.send(
-                            json.dumps(
-                                {
-                                    "command": "successful-create-game",
-                                    "name": name,
-                                    "id": session["_game_id"],
-                                }
-                            )
-                        )
-
-                    except Exception as e:
-                        print(f"Unknown login error with command: {e}")
-                        return await self.send(
-                            json.dumps({"error": "Unknown create game error."})
-                        )
 
                 # LOGIN
                 case "login":
@@ -162,26 +123,66 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                         if user is not None:
 
+                            # check max players
+                            if self.number_players >= self.MAX_PLAYERS:
+                                # too many players
+                                return await self.send(
+                                    json.dumps(
+                                        {
+                                            "command": "set-text-and-unhide",
+                                            "selector": "#login-popup-error",
+                                            "text": "Too many players logged in.",
+                                        }
+                                    )
+                                )
+                            
                             session = self.scope["session"]
                             session["_auth_user_id"] = user.id
                             session["_auth_username"] = user.username
                             user.backend = "django.contrib.auth.backends.ModelBackend"
                             session["_auth_user_backend"] = user.backend
 
+                            print("Session ID before save:", session.session_key)
+
                             # Save the session (wrapped in sync_to_async)
                             await sync_to_async(session.save)()
+                            
+                            print("Session ID after save:", session.session_key)
+
+                            # check for game in session
+                            if self.game_in_progress:
+                                # too many players
+                                return await self.send(
+                                    json.dumps(
+                                        {
+                                            "command": "set-text-and-unhide",
+                                            "selector": "#login-popup-error",
+                                            "text": "Game currently in process.",
+                                        }
+                                    )
+                                )
+
+                            self.number_choosing_character = self.number_choosing_character + 1
+
+                            # Broadcast player joining to others
+                            await self.sendToGame({
+                                "command": "player-joined-game",
+                                "number_players_choosing_char": self.number_choosing_character,
+                            })
 
                             # Add user to gameslobby channel
                             await self.channel_layer.group_add(
-                                "gameslobby",  # Group name
+                                "activegame",  # Group name
                                 self.channel_name,  # The user's unique channel
                             )
-
+                            
                             await self.send(
                                 json.dumps(
                                     {
                                         "command": "successful-login",
                                         "username": session["_auth_username"],
+                                        "number_players_choosing_char": self.number_choosing_character,
+                                        "characters_chosen": list(self.char_to_channel.keys())
                                     }
                                 )
                             )
@@ -319,9 +320,17 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         # Save the session (wrapped in sync_to_async)
                         await sync_to_async(session.save)()
 
+                        self.number_choosing_character = self.number_choosing_character + 1
+
+                        # Broadcast player joining to others
+                        await self.sendToGame({
+                            "command": "player-joined-game",
+                            "number_players_choosing_char": self.number_choosing_character,
+                        })
+
                         # Add user to gameslobby channel
                         await self.channel_layer.group_add(
-                            "gameslobby",  # Group name
+                            "activegame",  # Group name
                             self.channel_name,  # The user's unique channel
                         )
 
@@ -330,6 +339,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                 {
                                     "command": "successful-register",
                                     "username": session["_auth_username"],
+                                    "number_players_choosing_char": self.number_choosing_character,
+                                    "characters_chosen": list(self.char_to_channel.keys())
                                 }
                             )
                         )
@@ -360,6 +371,56 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             )
 
                     return
+                
+                # selectCharacter
+                case "selectCharacter":
+                    # first, validate game has not started
+                    if (self.game_in_progress):
+                        # TODO: force logout
+                        return await self.send(
+                            json.dumps(
+                                {
+                                    "command": "unrecoverable-error",
+                                    "error": "Tried to select character after game was in progress!"
+                                }
+                            )
+                        )
+                    
+                    # next, validate char is a real character
+                    if command[1] not in self.VALID_CHARS:
+                        return await self.send(
+                            json.dumps(
+                                {
+                                    "error": f"Invalid character selection: {command[1]}"
+                                }
+                            )
+                        )    
+                    
+                    self.char_to_channel[command[1]] = self.channel_name
+                    self.channel_to_char[self.channel_name] = command[1]
+                    self.number_choosing_character = self.number_choosing_character - 1
+
+                    # added this part - Jon
+                    playerToAdd = command[1]
+                    try:
+                        self.game_processor_instance.add_player(playerToAdd, self.scope["session"].get("_auth_user_id", None))
+                        # TODO: need to add character info to add_player()
+                    except ValueError as e:
+                        print(f"Value error message: {e}")
+                        await self.send(
+                            json.dumps({"status": "error", "message": "Value error."})
+                        )
+                    # end added this part - Jon
+
+                    # Now we can assume the character is good!  Sweeet!
+                    return await self.sendToGame({
+                        "command": "character-selected",
+                        "selected_by": self.channel_name,
+                        "character": command[1],
+                        "number_players_choosing_char": self.number_choosing_character,
+                        "characters_chosen": list(self.char_to_channel.keys())
+                    })
+                
 
                 # show/update dealt cards
                 case "showDealtCards":
@@ -380,7 +441,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         "command": "show-valid-actions",
                         "actions": actions_list.__str__()  # TODO: need to implement toString for Actions
                     }))
-
 
                 case "accusation":
                     suspect = command[1]
@@ -436,18 +496,43 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                 case "validMoves":    # show valid moves
                     possibleSpaces = self.game_processor_instance.get_current_player().get_valid_moves()
-                    stringPossibleSpaces = []
+                    stringsPossibleSpaces = []
                     for sp in possibleSpaces:
-                        stringPossibleSpaces.append(sp.__str__())
+                        stringsPossibleSpaces.append(sp.__str__())
 
                     return await self.send(json.dumps({
                         "command": "show-valid-moves",
-                        "possibleDestinations": stringPossibleSpaces
+                        "possibleDestinations": stringsPossibleSpaces
                     }))
 
                 case "actualMove":  # actual movement
                     dest = command[1]
                     self.game_processor_instance.move_player(self.game_processor_instance.get_current_player(), self.game_processor_instance.get_space_by_name(dest))
+
+                    # now get valid actions
+                    actions_list = self.game_processor_instance.get_valid_actions()
+
+                    return await self.send(json.dumps({
+                        "command": "show-valid-actions",
+                        "actions": actions_list.__str__()  # TODO: need to implement toString for Actions
+                    }))
+                
+                case "joinGame":
+                    playerToAdd = command[1]
+                    try:
+                        self.game_processor_instance.add_player(playerToAdd, self.scope["session"].get("_auth_user_id", None))
+                    except ValueError as e:
+                        print(f"Value error message: {e}")
+                        await self.send(
+                            json.dumps({"status": "error", "message": "Value error."})
+                        )
+                
+                case "startGame":
+                    self.game_processor_instance.start_game()
+                    return await self.send(json.dumps({
+                        "command": "successful-create-game"
+                    }))
+
              
                 # unknown case
                 case _:
@@ -483,3 +568,16 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             # Log the error or handle it appropriately
             print(f"Error while sending notification: {e}")
+
+    async def sendToGame(self, dict):
+        dict["type"] = "sendToGameHelper"
+        await self.channel_layer.group_send(
+            "activegame",
+            dict
+        )
+
+    async def sendToGameHelper(self, d):
+        # Send the event data to the WebSocket
+        del d["type"]
+        await self.send(text_data=json.dumps(d))
+        

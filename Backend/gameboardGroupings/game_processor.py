@@ -3,7 +3,11 @@ from typing import List, Optional, Dict, Set
 from Backend.cardGroupings.Deck import Deck
 from Backend.cardGroupings.Hand import Hand
 from Backend.cardGroupings.Card import Card, CardType
-from Backend.GameManagement.playerGroupings.Actions import Accusation, Suggestion, Actions
+from Backend.GameManagement.playerGroupings.Actions import (
+    Accusation,
+    Suggestion,
+    Actions,
+)
 from Backend.gameboardGroupings.turn_order import TurnOrder
 from Backend.GameManagement.playerGroupings.player import Player
 from Backend.gameboardGroupings.space import Space
@@ -70,7 +74,7 @@ class GameProcessor:
         player = Player(player_name, player_id)
         # TODO: review this function to determine if it can be simplified
         available_characters = set(Card.VALID_SUSPECTS)
-        - {p.get_character_name() for p in self.players}
+        -{p.get_character_name() for p in self.players}
         # {Mustard, Plum} - {Mustard} = {Plum} rand = {Plum}
         player._character = random.choice(list(available_characters))
 
@@ -85,7 +89,9 @@ class GameProcessor:
         if self.turnOrder.get_player_count() < self.MIN_PLAYERS:
             raise ValueError(f"Need at least {self.MIN_PLAYERS} players to start")
         if self.turnOrder.get_player_count() % self.MIN_PLAYERS != 0:
-            raise ValueError(f"{self.turnOrder.get_player_count()} players, must have a multiple of {self.MIN_PLAYERS} players to start.")
+            raise ValueError(
+                f"{self.turnOrder.get_player_count()} players, must have a multiple of {self.MIN_PLAYERS} players to start."
+            )
 
         self.state = GameState.INITIALIZING
 
@@ -106,12 +112,21 @@ class GameProcessor:
         self.main_deck.shuffle()
 
         # Get one of each type
-        suspect = next(card for card in self.main_deck.get_deck()
-                      if card.get_card_type() == CardType.SUSPECT)
-        weapon = next(card for card in self.main_deck.get_deck()
-                     if card.get_card_type() == CardType.WEAPON)
-        room = next(card for card in self.main_deck.get_deck()
-                   if card.get_card_type() == CardType.ROOM)
+        suspect = next(
+            card
+            for card in self.main_deck.get_deck()
+            if card.get_card_type() == CardType.SUSPECT
+        )
+        weapon = next(
+            card
+            for card in self.main_deck.get_deck()
+            if card.get_card_type() == CardType.WEAPON
+        )
+        room = next(
+            card
+            for card in self.main_deck.get_deck()
+            if card.get_card_type() == CardType.ROOM
+        )
 
         # Remove from main deck and add to case file
         for card in [suspect, weapon, room]:
@@ -130,7 +145,9 @@ class GameProcessor:
             if current_turn:
                 current_turn.receive_card_dealt(card)
 
-    def handle_suggestion(self, player: Player, aSuspect: str, aWeapon: str, aRoom: str) -> Optional[tuple[Player, Hand]]:
+    def handle_suggestion(
+        self, player: Player, aSuspect: str, aWeapon: str, aRoom: str
+    ) -> Optional[tuple[Player, Hand]]:
         """Handle a suggestion from a player."""
         if not self.current_turn or not self.current_turn.isActive:
             raise ValueError("Not currently this player's turn")
@@ -139,7 +156,9 @@ class GameProcessor:
             raise ValueError("Not this player's turn")
 
         suggestion = Suggestion(self.turnOrder)
-        disprovePlayer, disproveHand = suggestion.makeSuggestion(aSuspect, aWeapon, aRoom)
+        disprovePlayer, disproveHand = suggestion.makeSuggestion(
+            aSuspect, aWeapon, aRoom
+        )
 
         return disprovePlayer, disproveHand
 
@@ -201,6 +220,7 @@ class GameProcessor:
         # TODO: let the current_player see the disprove card
         # TODO: broadcast the event (not the card) to all players
         pass
+
     def get_case_file(self) -> Hand:
         return self.case_file
 
