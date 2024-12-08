@@ -1,12 +1,12 @@
-
 from __future__ import annotations
 from typing import List
 
-class Player_Turn():
+
+class Player_Turn:
 
     def __init__(self):
         self.reset()
-        pass
+
     def reset(self):
         self._isActive: bool = False
         self._hasMadeAccusation: bool = False
@@ -37,6 +37,7 @@ class Player_Turn():
 
     def set_hasEnteredRoom(self, val: bool = True):
         self._hasEnteredRoom = True
+
     # isActive becomes True only when get_valid_actions() is called
 
     def get_valid_actions(self) -> List[str]:

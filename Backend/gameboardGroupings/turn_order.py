@@ -43,7 +43,7 @@ class TurnOrder:
             self._tail = new_node
             self._player_count += 1
 
-    def remove_player(self, player: Player) -> None | Player:
+    def remove_player(self, player_id: int) -> None | Player:
         """
         Remove a player from the turn order.
         Traverses the list to find the player and removes their node.
@@ -58,7 +58,7 @@ class TurnOrder:
         first_run: bool = True
         while first_run or current != self._head:  # Traverse until full cycle
             first_run = False
-            if current.player == player:
+            if current.player.get_playerID() == player_id:
                 if current == self._head and current == self._tail:
                     # Only one player in the list
                     self._head = None
@@ -97,6 +97,7 @@ class TurnOrder:
         """
         if self._current:
             self._current = self._current.next
+            self.reset_player_turn()
 
     def reverse_order(self):
         """
@@ -202,3 +203,18 @@ class TurnOrder:
             yield current.player  # Yield the player at the current node
             current = current.next
             first_iteration = False  # After the first iteration, we set this to False
+
+    def make_player_head(self) -> bool:
+        """resets the current player turn to head"""
+        is_success = False
+        if self._head:
+            self._current = self._head
+            is_success = True
+        return is_success
+
+    def reset_player_turn(self) -> bool:
+        is_success = False
+        if self._current != None:
+            self._current.player.get_player_turn().reset()
+            is_success = True
+        return is_success

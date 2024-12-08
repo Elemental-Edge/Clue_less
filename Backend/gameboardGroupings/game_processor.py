@@ -17,18 +17,14 @@ from Backend.commons import ValidRooms, ValidSuspect, ValidWeapons
 
 
 MIN_PLAYERS = 3
-MAX_PLAYERS = 6
 MIN_ACTIVATE_PLAYERS = 2
+MAX_PLAYERS = 6
 
 
 class GameStatus(Enum):
     """Enum that represents the game status"""
 
     OPEN = auto()
-
-
-class GameState(Enum):
-    WAITING_FOR_PLAYERS = auto()
     INITIALIZING = auto()
     IN_PROGRESS = auto()
     GAME_OVER = auto()
@@ -57,40 +53,80 @@ class GameProcessor:
 
         # Game settings
         self._min_players: int = min_players
+        # min players required to start the game
         self._max_players: int = max_players
+        # max player a gam can have
         self._min_activate_players: int = min_activate_players
-        self._available_characters: List[str] = Card.VALID_SUSPECTS
+        self._available_characters: List[str] = [character.value for character in ValidSuspect]
+        # gets a list of available characters as str
         self._player_lobby_count: int = 0
+        # tracks number of players in the game lobby
+
+        
         # Game components
         self._game_board: GameBoard = GameBoard()
+        # creates gameboard, which builds the gameboard for the game
+        # and provides functionality to select spaces and sets default game_spaces
         self._main_deck: Deck = Deck()
+        # creates a deck to store all the cards in the game
         self._case_file: Hand = Hand()
+        # creates a hand that stores the case file
 
         # Game state
         self.game_status: GameStatus = GameStatus.OPEN
+        # sets the game to open
         self._winner: Player = None
 
         self._turn_order: TurnOrder = TurnOrder()
+        # initializes the turn order
         self._initialize_deck()
+        # initializes the deck
 
     def __str__(self):
-        return self.game_status
+        """Returns the game status as a string"""
+        return str(self.game_status)
 
     def _initialize_deck(self) -> None:
         """Initialize the main deck with all cards."""
         # Add all suspect cards
         for suspect in ValidSuspect:
-            self.main_deck.add_card(Card(suspect, CardType.SUSPECT))
+            self._main_deck.add_card(Card(suspect.value, CardType.SUSPECT))
 
         # Add all weapon cards
         for weapon in ValidWeapons:
-            self.main_deck.add_card(Card(weapon, CardType.WEAPON))
+            self._main_deck.add_card(Card(weapon.value, CardType.WEAPON))
 
         # Add all room cards
         for room in ValidRooms:
-            self.main_deck.add_card(Card(room, CardType.ROOM))
+            self._main_deck.add_card(Card(room.value, CardType.ROOM))
+    
+    def _create_case_file(self):
+        """Create the case file by selecting one of each card type."""
+        self._main_deck.shuffle()
 
-    def add_player(self, player_name: str, player_id: int) -> bool:
+        # Get one of each type
+        suspect = choice(card for card in self._main_deck.get_deck()
+                         if card.get_card_type() == CardType.SUSPECT)
+        weapon = choice(card for card in self._main_deck.get_deck()
+                        if card.get_card_type() == CardType.WEAPON)
+        room = choice(card for card in self._main_deck.get_deck()
+                      if card.get_card_type() == CardType.ROOM)
+        # Remove from main deck and add to case file
+        for card in [suspect, weapon, room]:
+            self._main_deck.remove_card(card)
+            self._case_file.add_card(card)
+    
+    def _deal_cards(self):
+        """Deal remaining cards to players."""
+        self._main_deck.shuffle()
+        while not self._main_deck.is_empty():
+            for player in self._turn_order:
+                card = self._main_deck.deal()
+                if card is None:
+                    break
+                player.receive_card_dealt(card)
+
+    def add_player(self, player_name: str, player_id: int):
         """Add a new player to the game."""
         if self.game_status != GameStatus.OPEN:
             raise ValueError("Cannot add players after game has started")
@@ -103,6 +139,48 @@ class GameProcessor:
         # Create new player
         player = Player(player_name, player_id)
         self._turn_order.add_player(player)
+        self._player_lobby_count += 1
+
+    def remove_player(self, player_id: int):
+        player = self._turn_order.get_player(player_id)
+        if not player:
+            raise ValueError(f"Player with ID {player_id} not found.")
+        self._turn_order.remove_player(player_id)
+    
+    def set_character_for_player(self, player_id: int, character_name: str):
+        player = self._turn_order.get_player(player_id)
+        if player is None:
+            raise ValueError(f"Player with ID {player_id} not found.")
+
+        if player.character_name is not None and player.get_character() != character_name:
+
+            if not character_name in self._available_characters:
+                raise ValueError(f"Character {character_name} is not available.")
+            else:
+                self._available_characters.append(player.get_character())
+
+
+        if character_name not in self._available_characters:
+            raise ValueError(f"Character {character_name} is not available.")
+        player.set_character()
+
+    def set_character(self, player_id: int, character_name: str) -> bool:
+        is_success = False
+        # POTENTIAL BUG: if the character_name attempting to be set is the
+        # same as current players character the function will return false
+        player = self._turn_order.get_player(player_id)
+        if player is not None:
+            # assumes that a plyaers character is valid
+            if player.character is not None and player.character != character_name:
+                self._available_characters.append(player.character)
+                if character_name in self._available_characters:
+                    player.set_character(character_name)
+                    # TODO: modify the function to be agnostic of type
+                    # may be a bad idea to try and remove via string
+                    self._available_characters.remove(character_name)
+                    is_success = True
+        return is_success
+
 
     def start_game(self):
         """Initialize and start the game."""
@@ -131,43 +209,6 @@ class GameProcessor:
         player.set_current_location()
         player._currLocation = starting_positions[player._character]
 
-    def _create_case_file(self) -> None:
-        """Create the case file by selecting one of each card type."""
-        self._main_deck.shuffle()
-
-        # Get one of each type
-        suspect = next(
-            card
-            for card in self._main_deck.get_deck()
-            if card.get_card_type() == CardType.SUSPECT
-        )
-        weapon = next(
-            card
-            for card in self._main_deck.get_deck()
-            if card.get_card_type() == CardType.WEAPON
-        )
-        room = next(
-            card
-            for card in self._main_deck.get_deck()
-            if card.get_card_type() == CardType.ROOM
-        )
-
-        # Remove from main deck and add to case file
-        for card in [suspect, weapon, room]:
-            self._main_deck.remove_card(card)
-            self._case_file.add_card(card)
-
-    def _deal_cards(self) -> None:
-        """Deal remaining cards to players."""
-        self._main_deck.shuffle()
-
-        # Deal all remaining cards
-        for card in self._main_deck.get_deck():
-            self._turn_order.advance_turn()
-            current_turn = self._turn_order.get_current_turn()
-            # sets current players turn
-            if current_turn:
-                current_turn.receive_card_dealt(card)
 
     def handle_suggestion(
         self, player: Player, aSuspect: str, aWeapon: str, aRoom: str
