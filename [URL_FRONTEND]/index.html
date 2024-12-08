@@ -18,6 +18,7 @@
 				<h1>Accusation</h3>
 				<hr />
 				<p>So, detective, you're ready to make arrests??</p>
+				<form type="submit" id="accusation-form">
 				<table>
 					<tr>
 						<td>
@@ -50,6 +51,7 @@
 					<tr>
 				</table>
 				<input type="submit" id="make_accusation" class="popup-submit" name="make_accusation" value="Make Accusation">
+				</form>
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
@@ -209,18 +211,37 @@
 				<hr />
 				<p>So what evidence would you like to show to prove him wrong?</p>
 				<form id="disprove-form">
-				<table>
-					<tr>
-						<td>
-							<input type="radio" id="evidence" name="evidence" value="billiards"><label for="evidence">Billard's Room</label><br />
-							<input type="radio" id="evidence" name="evidence" value="mustard"><label for="evidence">Col. Mustard</label><br />
-							<input type="radio" id="evidence" name="evidence" value="kitchen"><label for="evidence">Kitchen</label><br />
-							<input type="radio" id="evidence" name="evidence" value="knife"><label for="evidence">Knife</label><br />
-							<input type="radio" id="evidence" name="evidence" value="plum"><label for="evidence">Prof. Plum</label><br />
-							<input type="radio" id="evidence" name="evidence" value="study"><label for="evidence">Study</label><br />
-						</td>
-					<tr>
-				</table>
+					<table>
+						<tr>
+							<td>
+								<input type="radio" id="disprove_mustard" name="evidence" value="mustard"><label for="disprove_who">Col. Mustard</label><br />
+								<input type="radio" id="disprove_green" name="evidence" value="green"><label for="disprove_who">Mr. Green</label><br />
+								<input type="radio" id="disprove_peacock" name="evidence" value="peacock"><label for="disprove_who">Mrs. Peacock</label><br />
+								<input type="radio" id="disprove_scarlet" name="evidence" value="scarlet"><label for="disprove_who">Mrs. Scarlet</label><br />
+								<input type="radio" id="disprove_white" name="evidence" value="white"><label for="disprove_who">Mrs. White</label><br />
+								<input type="radio" id="disprove_plum" name="evidence" value="plum"><label for="disprove_who">Prof. Plum</label><br />
+							</td>
+							<td>
+								<input type="radio" id="disprove_candlestick" name="evidence" value="candlestick"><label for="disprove_with">Candlestick</label><br />
+								<input type="radio" id="disprove_knife" name="evidence" value="knife"><label for="disprove_with">Knife</label><br />
+								<input type="radio" id="disprove_pipe" name="evidence" value="pipe"><label for="disprove_with">Lead Pipe</label><br />
+								<input type="radio" id="disprove_revolver" name="evidence" value="revolver"><label for="disprove_with">Revolver</label><br />
+								<input type="radio" id="disprove_rope" name="evidence" value="rope"><label for="disprove_with">Rope</label><br />
+								<input type="radio" id="disprove_wrench" name="evidence" value="wrench"><label for="disprove_with">Wrench</label><br />
+							</td>
+							<td>
+								<input type="radio" id="disprove_ballroom" name="evidence" value="ballroom"><label for="disprove_where">Ballroom</label><br />
+								<input type="radio" id="disprove_billiards" name="evidence" value="billiards"><label for="disprove_where">Billard's Room</label><br />
+								<input type="radio" id="disprove_Conservatory" name="evidence" value="Conservatory"><label for="disprove_where">Conservatory</label><br />							
+								<input type="radio" id="disprove_dining" name="evidence" value="dining"><label for="disprove_where">Dining Room</label><br />
+								<input type="radio" id="disprove_hall" name="evidence" value="hall"><label for="disprove_where">Hall</label><br />
+								<input type="radio" id="disprove_kitchen" name="evidence" value="kitchen"><label for="disprove_where">Kitchen</label><br />
+								<input type="radio" id="disprove_library" name="evidence" value="library"><label for="disprove_where">Library</label><br />
+								<input type="radio" id="disprove_lounge" name="evidence" value="lounge"><label for="disprove_where">Lounge</label><br />
+								<input type="radio" id="disprove_study" name="evidence" value="study"><label for="disprove_where">Study</label><br />
+							</td>
+						<tr>
+					</table>
 				</form>
 				<input type="submit" id="disprove_submit" class="popup-submit" name="disprove_submit" value="Disprove">
 				</form>
@@ -279,7 +300,7 @@
 		</div>
 
 		<!-- LOADING POPUP -->
-		<div id="loading" class="cl-loading-wrapper popup-wrapper">
+		<div id="loading" class="cl-loading-wrapper popup-wrapper hide">
 			<div class="loader-mid">
 				<img class="title-image" src="assets/title.png">
 				<div class="title-text no-select">Cl<span class="red">u</span>e-Le<span class="red">s</span>s</div>
@@ -584,9 +605,10 @@
 						</td>
 					<tr>
 				</table>
-				</form>
 				<p>in ##ROOM##.</p>
 				<input type="submit" id="chosen_action" class="popup-submit" name="chosen_action" value="Chosen Action">
+				<input type="submit" id="end_turn_action" class="popup-submit" name="end_turn_action" value="End Turn">
+				</form>
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
@@ -608,7 +630,40 @@
 				<div class="popup-control popup-close" closes="#cl-cannot-disprove-wrapper"><img src="assets/control/close.png"></div>
 				<h1>Cannot Disprove</h3>
 				<hr />
-				<p>Looks like we're still missing needed evidence, detective. We can't disprove the suggestion.</p>
+				<p>Looks like we're still missing needed evidence, detective. We can't disprove the suggestion as it currently stands.</p>
+			</div>
+			<div class="fog-overlay">&nbsp;</div>
+		</div>
+
+		<!-- CROSSOUT ITEMS POPUP -->
+		<div id="cl-crossout-items-wrapper" class="cl-crossout-items-wrapper popup-wrapper hide">
+			<div class="cl-crossout-items-wrapper popup-inner">
+				<div class="popup-control popup-close" closes="#cl-crossout-items-wrapper"><img src="assets/control/close.png"></div>
+				<h1>Crossout Items (Admin Function)</h3>
+				<hr />
+				<button onclick="cross_out('mustard')">Cross out Mustard</button><br />
+				<button onclick="cross_out('plum')">Cross out Plum</button><br />
+				<button onclick="cross_out('green')">Cross out Green</button><br />
+				<button onclick="cross_out('peacock')">Cross out Peacock</button><br />
+				<button onclick="cross_out('scarlet')">Cross out Scarlet</button><br />
+				<button onclick="cross_out('white')">Cross out White</button><br />
+				<br />
+				<button onclick="cross_out('knife')">Cross out Knife</button><br />
+				<button onclick="cross_out('candlestick')">Cross out Candlestick</button><br />
+				<button onclick="cross_out('revolver')">Cross out Revolver</button><br />
+				<button onclick="cross_out('rope')">Cross out Rope</button><br />
+				<button onclick="cross_out('pipe')">Cross out Lead Pipe</button><br />
+				<button onclick="cross_out('wrench')">Cross out Wrench</button><br />
+				<br />
+				<button onclick="cross_out('hall')">Cross out Hall</button><br />
+				<button onclick="cross_out('lounge')">Cross out Lounge</button><br />
+				<button onclick="cross_out('dining')">Cross out Dining Room</button><br />
+				<button onclick="cross_out('kitchen')">Cross out Kitchen</button><br />
+				<button onclick="cross_out('ballroom')">Cross out Ballroom</button><br />
+				<button onclick="cross_out('conservatory')">Cross out Conservatory</button><br />
+				<button onclick="cross_out('billiards')">Cross out Billiard Room</button><br />
+				<button onclick="cross_out('library')">Cross out Library</button><br />
+				<button onclick="cross_out('study')">Cross out Study</button><br />
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
@@ -654,7 +709,7 @@
 			<button onclick="$('#cl-move-player-wrapper').removeClass('hide');">Move Player to Space</button><br />
 			<button onclick="hide_half_players(); $('#spiral_notepad').removeClass('spiral_notepad'); $('#spiral_notepad').addClass('spiral_notepad_half');">Hide half of players</button><br />
 			<button onclick="show_full_players(); $('#spiral_notepad').removeClass('spiral_notepad_half'); $('#spiral_notepad').addClass('spiral_notepad');">Show full players</button><br />
-			<button onclick="cross_out('mustard')">Cross out Mustard</button><br />
+			<button onclick="$('#cl-crossout-items-wrapper').removeClass('hide');">Cross out Items</button><br />
 			<div>---</div>
 			<button id="allow-map-interact" onclick="$('#disallow-map-interact').removeClass('hide'); $('#allow-map-interact').addClass('hide'); your_turn = true;">Set "Your Turn"</button>
 			<button id="disallow-map-interact" class="hide" onclick="$('#allow-map-interact').removeClass('hide'); $('#disallow-map-interact').addClass('hide'); your_turn = false;">Set "Not Your Turn"</button><br />
@@ -695,13 +750,7 @@
 		$('.p4').removeClass('hide');
 		$('.p4-td').removeClass('hide-with-bg');
 	}
-	function cross_out(itemStr) {
-		const elements = document.getElementsByClassName(itemStr)
-		console.log(elements)
-		for (let i = 0; i < elements.length; i++) {
-			elements[i].value = '\u274c'
-		}
-	}
+
 	</script>
 	<div id="cl-notebook" class="cl-notebook" style="height: 100vh">
 		<div id="notebook">
@@ -1269,46 +1318,6 @@
 			  text-decoration: line-through;
 			}
 		</style>
-		<!-- this script's source for the detective's notebook checkboxes is https://github.com/lowlydba/clue-sheet/tree/main/assets/css -->
-		<script>
-			function statusButtonChanger (control) {
-				const Data = [
-				  { status: 'unchecked', value: '\u2B1C' },
-				  { status: 'x', value: '\u274c' },
-				  { status: 'question', value: '\u2753' },
-				  { status: '!', value: '\u2757' },
-				  { status: 'checked', value: '\u2705' }
-				]
-			  
-				let index = Data.map(function (e) { return e.value }).indexOf(control.value)
-				index++
-				if ((index) >= Data.length) {
-				  index = 0
-				}
-				control.value = Data[index].value
-				const clue = $(control).closest('td').siblings('.guess-component') // eslint-disable-line no-undef
-				switch (Data[index].status) {
-				  case 'x':
-					clue.toggleClass('x').siblings().removeClass('checked')
-					break
-				  case 'checked':
-					clue.toggleClass('checked').siblings().removeClass('x')
-					break
-				  default:
-					clue.removeClass('x checked')
-				}
-			}
-			  
-			// Attach function to all checkboxes
-			window.onload = function () {
-				const elements = document.getElementsByClassName('multi-checkbox')
-				for (let i = 0; i < elements.length; i++) {
-					elements[i].onclick = function () {
-						statusButtonChanger(this)
-					}
-				}
-			}
-		</script>
 	</div>
 </body>
 </html>

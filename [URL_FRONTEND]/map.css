@@ -18,6 +18,17 @@ canvas {
     display: block; /* Remove any extra space below the canvas */
 }
 
+button:active {
+	border: none;
+	background-color: green;
+	color: #fff;
+	border-radius: 5px;
+	box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
+	cursor: pointer;
+	outline: none;
+	transition: 0.2s all;
+}
+
 .spiral_notepad {
     background-image:url('assets/notepad_spirals.jpg');
     background-size:contain;
@@ -104,7 +115,7 @@ canvas {
 .popup-inner td,
 .popup-inner th,
 .popup-inner td.label {
-	font-size: 20px;
+	font-size: 30px;
 	color: #eeeeee;
 	line-height: 1.1;
 	margin: 0;
@@ -123,6 +134,17 @@ canvas {
 	background-color: #5db567;
 	color: #2f5b34;
 	border: 1px solid #2f5b34;
+}
+
+.popup-submit:active {
+	border: none;
+	background-color: green;
+	color: #fff;
+	border-radius: 5px;
+	box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
+	cursor: pointer;
+	outline: none;
+	transition: 0.2s all;
 }
 
 /* Fog overlay for dimming the background */
