@@ -631,8 +631,10 @@
 			var game_started;
 			var your_username;
 			var your_turn = false;
+			var starting_place = null;
+			var suggestion_this_turn = false;
+			var pulled_by_suggestion = false;
 			var your_character = false;
-			var enforce_valid_character_move = false;
 			var unavailable_characters = [];
 			var selected_character;
             var current_location;
@@ -651,7 +653,7 @@
 				<input type="button" onclick="sendMessageToBackend(socket, `showDealtCards ${your_character}`);" class="popup-submit" name="chosen_action" value="Show Cards">
 				<input type="button" id="selected_suggestion" onclick="$('#cl-suggestion-wrapper').removeClass('hide');" class="popup-submit hide" name="chosen_action" value="Suggestion">
 				<input type="button" id="selected_accusation" onclick="$('#cl-accusation-wrapper').removeClass('hide');" class="popup-submit hide" name="chosen_action" value="Accusation">
-				<input type="button" id="end_turn_action" onclick="sendMessageToBackend(socket, `endTurn`);" class="popup-submit" name="chosen_action" value="End Turn">
+				<input type="button" id="end_turn_action" onclick="endTurn()" class="popup-submit" name="chosen_action" value="End Turn">
 			</div>
 			<div>---</div>
 			<button onclick="$('#cl-accusation-wrapper').removeClass('hide');">Accusation Popup</button><br />

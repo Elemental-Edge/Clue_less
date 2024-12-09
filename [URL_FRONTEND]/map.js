@@ -298,6 +298,14 @@ canvas.addEventListener('mouseup', (e) => {
 				if (y-circles[draggingCircle].radius < r.b) { yy = r.b + circles[draggingCircle].radius; } // bottom
 				if (x-circles[draggingCircle].radius < r.l) { xx = r.l + circles[draggingCircle].radius * board_aspect_ratio; } // left
 				circles[draggingCircle].center = [xx, yy];
+				circles[draggingCircle].current_place = r.name;
+			}
+			
+			if (canMakeSuggestion() && your_turn) {
+				$('#selected_suggestion').removeClass('hide')
+			}
+			else {
+				$('#selected_suggestion').addClass('hide')
 			}
 
 			// end
@@ -318,8 +326,8 @@ canvas.addEventListener('mouseup', (e) => {
 			else {
 				// valid move; center token
 				circles[draggingCircle].center = [r.x, r.y];
+				circles[draggingCircle].current_place = r.name;
 			}
-
 
 			// end
 			draggingCircle = null;
@@ -457,6 +465,7 @@ const initializeDjangoChannels = (ws_url) => {
 						$("#your-turn-menu").removeClass("hide");
 						processActions(data.actions);
 						notify(`${c} eliminated!`, `Detective!  ${c}'s theory is clearly wrong!  You must continue to solve the murder!  It's your turn!`);
+						starting_place = circles[getYourCharacterId()].current_place;
 					}
 					else {
 						// not your turn
@@ -465,6 +474,26 @@ const initializeDjangoChannels = (ws_url) => {
 						$("#your-turn-menu").addClass("hide");
 						notify(`${c} eliminated!`, `Detective!  ${c}'s theory is clearly wrong!  You must continue to solve the murder!`);
 					}
+				}
+				return;
+
+			case "end-turn":
+				your_turn = your_character == data.current_char_turn;
+				// someone else was wrong
+
+				if (your_turn) {
+					// it's your turn
+					$("#someone-elses-turn").addClass("hide");
+					$("#your-turn-menu").removeClass("hide");
+					processActions(data.actions);
+					notify(`Your Turn`, `Detective, take your turn.`);
+					starting_place = circles[getYourCharacterId()].current_place;
+				}
+				else {
+					// not your turn
+					$(".players-turn-inner").text(getCircleByKey(data.current_char_turn).name);
+					$("#someone-elses-turn").removeClass("hide");
+					$("#your-turn-menu").addClass("hide");
 				}
 				return;
 
@@ -505,6 +534,7 @@ const initializeDjangoChannels = (ws_url) => {
 					$("#someone-elses-turn").addClass("hide");
 					$("#your-turn-menu").removeClass("hide");
 					processActions(data.actions);
+					starting_place = circles[getYourCharacterId()].current_place;
 				}
 				return;
 
@@ -544,6 +574,8 @@ const initializeDjangoChannels = (ws_url) => {
                 return;
 
             case "makeSuggestion":
+				suggestion_this_turn = true;
+
                 $('#cl-actions-wrapper').addClass('hide');
                 // unhide suggestion popup
                 $("#cl-suggestion-wrapper").removeClass('hide');
@@ -754,24 +786,38 @@ $(".select-character").on("click", function() {
 // OTHER FUNCTIONS
 // OTHER FUNCTIONS
 
+function canMakeSuggestion() {
+	return (!suggestion_this_turn && (pulled_by_suggestion || (inDifferentPlace() && !circles[getYourCharacterId()].current_place.includes("-"))));
+}
+
 // returns true if the character move is to a valid room
 // returns false if the character move is not to a valid room
 function checkValidCharacterMove(circle, newKey) {
-	// return valid move if we aren't enforce valid moves
-	// or if the circle being moved is not a character (e.g., is a weapon)
-	if (!enforce_valid_character_move || circle.type != "character") {
+	
+	// always move any token in the same room to rearrange them
+	if (circles[circle].current_place == newKey) {
 		return true;
 	}
 
-	let oldKey = circle.current_place;
+	// can never move tokens other than your character outside of
+	// their current rooms
+	if (circles[circle].key != your_character) {
+		return false;
+	}
+
+	if (newKey == starting_place) {
+		return true;
+	}
+
+	let oldKey = starting_place;
 
 	// check if oldkey is a hallway
-	if (oldKey.include("-")) {
+	if (oldKey.includes("-")) {
 		// oldKey is a hallway key
 		// ensure room is sufficiently conencted to old hallway
 		let i = oldKey.indexOf("-");
-		let room1 = str.substring(0, i);
-		let room2 = str.substring(i + 1);
+		let room1 = oldKey.substring(0, i);
+		let room2 = oldKey.substring(i + 1);
 		if (newKey == room1) {
 			return true;
 		}
@@ -788,7 +834,7 @@ function checkValidCharacterMove(circle, newKey) {
 
 		// test if this is room to room or room to hallway
 		// check for room to room
-		if (!newKey.include("-")) {
+		if (!newKey.includes("-")) {
 			// both are rooms; get second room
 			// to check for secret passageway, which
 			// is the only valid move
@@ -818,8 +864,8 @@ function checkValidCharacterMove(circle, newKey) {
 
 			// second, ensure it is sufficiently connected to old room
 			let i = newKey.indexOf("-");
-			let room1 = str.substring(0, i);
-			let room2 = str.substring(i + 1);
+			let room1 = newKey.substring(0, i);
+			let room2 = newKey.substring(i + 1);
 			if (oldKey == room1) {
 				return true;
 			}
@@ -836,6 +882,16 @@ function checkValidCharacterMove(circle, newKey) {
 
 function distance(x1, y1, x2, y2) {
     return Math.sqrt(((x1 - x2) * 1.7 * board_aspect_ratio) ** 2 + (y1 - y2) ** 2);
+}
+
+function endTurn() {
+	pulled_by_suggestion = false;
+	suggestion_this_turn = false;
+	s = 0;
+	if (suggestion_this_turn) {
+		s = 1;
+	}
+	sendMessageToBackend(socket, `endTurn ${circles[getYourCharacterId()].current_place} ${s}`);
 }
 
 function getCircleByKey(key) {
@@ -898,6 +954,19 @@ function getRoomByKey(key) {
 	return null;
 }
 
+function getYourCharacterId() {
+	for(let i = 0; i < circles.length; i++) {
+		if (circles[i].key == your_character && circles[i].type == "character") {
+			return i;
+		}
+	}
+	return false;
+}
+
+function inDifferentPlace() {
+	return circles[getYourCharacterId()].current_place != starting_place;
+}
+
 function moveCircleToHallway(circle, hallway) {
 	circle.center = [hallway.x, hallway.y];
 }
@@ -917,7 +986,7 @@ function processActions(actions) {
 		if (actions[i] == "move") {
 			$('#selected_move').removeClass('hide');
 		}
-		if (actions[i] == "suggestion") {
+		if (canMakeSuggestion()) {
 			$('#selected_suggestion').removeClass('hide');
 		}
 		if (actions[i] == "accusation") {
@@ -929,6 +998,7 @@ function processActions(actions) {
 function resetGame() {
 	// TODO RESET GAME
 }
+
 
 
 // START
