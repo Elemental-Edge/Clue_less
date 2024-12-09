@@ -30,7 +30,7 @@ class ValidWeapons(Enum):
     """Enum representation of Valid Weapons"""
 
     CANDLESTICK = "candlestick"
-    DAGGER = "dagger"
+    KNIFE = "knife"
     PIPE = "pipe"
     REVOLVER = "revolver"
     ROPE = "rope"

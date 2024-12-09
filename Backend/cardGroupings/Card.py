@@ -31,11 +31,11 @@ class Card:
     """
 
     def __init__(self, name: str, card_type: CardType):
-        if card_type == CardType.SUSPECT and name not in ValidSuspect:
+        if card_type == CardType.SUSPECT and name not in [character.value for character in ValidSuspect]:
             raise ValueError(f"{name} is not a valid suspect.")
-        elif card_type == CardType.WEAPON and name not in ValidWeapons:
+        elif card_type == CardType.WEAPON and name not in [weapon.value for weapon in ValidWeapons]:
             raise ValueError(f"{name} is not a valid weapon.")
-        elif card_type == CardType.ROOM and name not in ValidRooms:
+        elif card_type == CardType.ROOM and name not in [room.value for room in ValidRooms]:
             raise ValueError(f"{name} is not a valid room.")
 
         self._name = name
@@ -67,7 +67,7 @@ class Card:
         return f"Card(name='{self._name}', card_type={self._card_type})"
 
     def __str__(self) -> str:
-        return f"name='{self._name}'"
+        return self._name
 
 
 if __name__ == "__main__":

@@ -46,6 +46,7 @@ class Accusation(Actions):
         room = Card(aRoom, card_type=CardType.ROOM)
 
         self.get_player().get_player_turn().set_hasMadeAccusation()
+
         # Check if accusation hands matches the case file
         return (
             self._case_file.has_card(suspect)

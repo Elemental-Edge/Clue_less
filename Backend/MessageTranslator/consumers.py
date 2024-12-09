@@ -10,6 +10,7 @@ from django.contrib.auth import logout
 class NotificationConsumer(AsyncWebsocketConsumer):
     char_to_channel = {}
     channel_to_char = {}
+    your_character = ""
     VALID_CHARS = {"green", "scarlet", "plum", "mustard", "peacock", "white"}
 
     def __init__(self):
@@ -410,6 +411,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         )
                     # end added this part - Jon
 
+                    self.your_character = command[1]
+
                     # Now we can assume the character is good!  Sweeet!
                     return await self.sendToGame(
                         {
@@ -426,9 +429,9 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     cardsStr = []
                     for (
                         card
-                    ) in self.game_processor_instance.get_current_player().get_hand():
+                    ) in self.game_processor_instance._turn_order.get_player_object(self.your_character).get_hand().get_hand():
                         cardsStr.append(card.__str__())
-
+                    
                     return await self.send(
                         json.dumps({"command": "show-dealt-cards", "cards": cardsStr})
                     )
@@ -480,6 +483,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     else:
                         # TODO: Add a check to ensure that requesting user is the current player
                         # i.e. selected_character == self.game_processor_instance.get_current_player()
+
                         result = self.game_processor_instance.handle_accusation(
                             suspect, weapon, room
                         )
@@ -488,28 +492,26 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         if result:
                             # also need to enter win game state on back-end in addition to win popup
                             winCards = [suspect, weapon, room]
-                            await self.send(
-                                json.dumps(
-                                    {
-                                        "command": "win",
-                                        "winner": self.game_processor_instance.get_current_player().__str__(),
-                                        "winningCards": winCards,
-                                    }
-                                )
+                            return await self.sendToGame(
+                                {
+                                    "command": "win",
+                                    "winner": self.game_processor_instance.get_current_player().__str__(),
+                                    "winningCards": winCards,
+                                }
                             )
-
-                            # TODO: need to send this to all non-winning players
-                            return await self.send(json.dumps({"command": "lose"}))
                         else:
                             # also need to eliminate player on backend in addition to lose popup
                             # send eliminated player information
-                            return await self.send(
-                                json.dumps(
-                                    {
-                                        "command": "eliminate",
-                                        "eliminated": self.game_processor_instance.get_current_player().__str__(),
-                                    }
-                                )
+                            eliminated_player = self.game_processor_instance.get_current_player().__str__()
+                            self.game_processor_instance.end_turn()
+                            
+                            return await self.sendToGame(
+                                {
+                                    "command": "eliminate",
+                                    "eliminated": eliminated_player,
+                                    "current_char_turn": self.game_processor_instance.get_current_player().__str__(),
+                                    "actions": self.game_processor_instance.get_valid_actions()
+                                }
                             )
 
                     return

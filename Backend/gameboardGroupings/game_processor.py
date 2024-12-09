@@ -112,6 +112,8 @@ class GameProcessor:
                         if card.get_card_type() == CardType.WEAPON])
         room = choice([card for card in self._main_deck.get_deck()
                       if card.get_card_type() == CardType.ROOM])
+        print(f"{suspect.__str__()} {weapon.__str__()} {room.__str__()}")
+
         # Remove from main deck and add to case file
         for card in [suspect, weapon, room]:
             self._main_deck.remove_card(card)
@@ -259,6 +261,9 @@ class GameProcessor:
         active_players = self._turn_order.get_active_player_count()
         if active_players < self._min_activate_players:
             self._game_status = GameState.GAME_OVER
+            return True
+        return False
+        
 
     def end_turn(self):
         """End current turn and start next player's turn."""
@@ -295,7 +300,7 @@ class GameProcessor:
     def get_case_file(self) -> Hand:
         return self._case_file
 
-    def get_valid_actions(self) -> List[Actions]:
+    def get_valid_actions(self) -> List[str]:
         return self._turn_order.get_current_turn().get_player_turn().get_valid_actions()
 
     def get_turn_order(self) -> list[str]:

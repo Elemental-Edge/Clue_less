@@ -171,14 +171,7 @@ class TurnOrder:
         return activate_players
 
     def get_active_player_count(self) -> int:
-        count = 0
-        if self._head:
-            current = self._head
-            while current != self._tail:  # Ensure full cycle
-                if not current.player.is_eliminated:
-                    current = current.next
-                    count += 1
-        return count
+        return len(self.get_active_players())
 
     def get_player_count(self) -> int:
         return self._player_count
@@ -229,3 +222,12 @@ class TurnOrder:
                 player.set_current_location(aSpace)
                 player.get_player_turn().set_hasEnteredRoom()
                 break
+
+    def get_player_object(self, aCharacter: str):
+        playerObj : Player = None
+        turn_order = self.get_turn_order()
+        for player in turn_order:
+            if player.get_character() == aCharacter:
+                playerObj = player
+                break
+        return playerObj

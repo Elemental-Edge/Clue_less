@@ -439,8 +439,35 @@ const initializeDjangoChannels = (ws_url) => {
 				return;
 
 			case "eliminate":
-				$('#cl-bad-accusation-wrapper').removeClass('hide');
+				your_turn = your_character == data.current_char_turn;
+				if (data.eliminated == your_character) {
+					// you were the one that submitted the accusation
+					notify("Bad accusation!", "Detective!  You're wrong and retired from the case!");
+					$('#cl-accusation-wrapper').addClass('hide');
+					$(".players-turn-inner").text(getCircleByKey(data.current_char_turn).name);
+					$("#someone-elses-turn").removeClass("hide");
+					$("#your-turn-menu").addClass("hide");
+				}
+				else {
+					// someone else was wrong
+					let c = getCircleByKey(data.eliminated).name;
+					if (your_turn) {
+						// it's your turn
+						$("#someone-elses-turn").addClass("hide");
+						$("#your-turn-menu").removeClass("hide");
+						processActions(data.actions);
+						notify(`${c} eliminated!`, `Detective!  ${c}'s theory is clearly wrong!  You must continue to solve the murder!  It's your turn!`);
+					}
+					else {
+						// not your turn
+						$(".players-turn-inner").text(getCircleByKey(data.current_char_turn).name);
+						$("#someone-elses-turn").removeClass("hide");
+						$("#your-turn-menu").addClass("hide");
+						notify(`${c} eliminated!`, `Detective!  ${c}'s theory is clearly wrong!  You must continue to solve the murder!`);
+					}
+				}
 				return;
+
 
 			case "game-in-progress":
 				$('.popup-wrapper').addClass('hide');
@@ -468,24 +495,22 @@ const initializeDjangoChannels = (ws_url) => {
 			case "successful-create-game":
 				$('#waiting-to-start').addClass("hide");
 				your_turn = your_character == data.first_char_turn;
-				if (!your_turn) { return; }
-				// CONNECT TO: SHOW-VALID-ACTIONS
-				// NO RETURN!! WE WANT THIS BEHAVIOR
-				// BECAUSE IF IT IS YOUR TURN, WE
-				// WANT TO SHOW VALID ACTIONS!!!!
+				if (!your_turn) {
+					// not your turn
+					$(".players-turn-inner").text(getCircleByKey(data.first_char_turn).name);
+					$("#someone-elses-turn").removeClass("hide");
+					$("#your-turn-menu").addClass("hide");
+				}
+				else {
+					$("#someone-elses-turn").addClass("hide");
+					$("#your-turn-menu").removeClass("hide");
+					processActions(data.actions);
+				}
+				return;
+
 			case "show-valid-actions":
 				// need to check which valid actions and adjust/hide appropriately
-				for (element in data.actions) {
-					if (element == "move") {
-						$('#selected_move').removeClass('hide');
-					}
-					if (element == "suggestion") {
-						$('#selected_suggestion').removeClass('hide');
-					}
-					if (element == "accusation") {
-						$('#selected_accusation').removeClass('hide');
-					}
-				}
+				processActions(data.actions)
 				$('#cl-actions-wrapper').removeClass('hide');
 				return;
 
@@ -512,9 +537,6 @@ const initializeDjangoChannels = (ws_url) => {
 				return;
 
 
-
-
-
             case "makeAccusation":
                 $('#cl-actions-wrapper').addClass('hide');
                 // unhide accusation popup
@@ -531,27 +553,32 @@ const initializeDjangoChannels = (ws_url) => {
                 // $(".cl-move-token-to-room-wrapper").addClass("hide");
                 return;
 
-            case "show-valid-moves":
-                $('#cl-actions-wrapper').addClass('hide');
-                for (elem in data.possibleDestinations) {
-                    $('#move_' + elem).removeClass('hide');
-                }
-				$('#cl-move-player-wrapper').removeClass('hide');
+            // case "show-valid-moves":
+            //     $('#cl-actions-wrapper').addClass('hide');
+            //     for (elem in data.possibleDestinations) {
+            //         $('#move_' + elem).removeClass('hide');
+            //     }
+			// 	$('#cl-move-player-wrapper').removeClass('hide');
 
-                $("#cl-move-token-wrapper").removeClass('hide');
-				$('#disallow-map-interact').removeClass('hide');
-				$('#allow-map-interact').addClass('hide');
-				your_turn = true;
+            //     $("#cl-move-token-wrapper").removeClass('hide');
+			// 	$('#disallow-map-interact').removeClass('hide');
+			// 	$('#allow-map-interact').addClass('hide');
+			// 	your_turn = true;
+			// 	return;
 
             case "win":
-                // unhide win popup
-                $("#cl-win-wrapper").removeClass('hide');
-                return;
+				$(".popup-wrapper").addClass("hide");
+				if (data.winner == your_character) {
+					// you were the one that submitted the accusation
+					notify("You win!!!", `By jove, detective!  You've cracked the case and proven that it was indeed the ${getCircleByKey(data.winningCards[0]).name} in the ${getRoomByKey(data.winningCards[2].name)} with the ${getCircleByKey(data.winningCards[1]).name}!`);
+				}
+				else {
+					notify(`${getCircleByKey(data.winner).name} has cracked it!`, `By jove, ${getCircleByKey(data.winner).name} has cracked the case!  It was indeed the ${getCircleByKey(data.winningCards[0]).name} in the ${getRoomByKey(data.winningCards[2].name)} with the ${getCircleByKey(data.winningCards[1]).name}!`);
+				}
+				resetGame();
+				$("#cl-character-selection-wrapper").removeClass("hide");
+				return;
 
-			case "lose":
-				// unhide lose popup
-				$("#cl-lose-wrapper").removeClass('hide');
-                return;
 
             case "selected-action-invalid":
                 $('#cl-actions-wrapper').addClass('hide');
@@ -559,11 +586,12 @@ const initializeDjangoChannels = (ws_url) => {
                 return;
 
             case "show-dealt-cards":
-                for (c in cards) {
-                    $('#dealt_' + c).removeClass('hide');
-					cross_out(c);
+                for (let i = 0; i < data.cards.length; i++) {
+                    $('.dealt_' + data.cards[i]).removeClass('hide');
+					cross_out(data.cards[i]);
                 }
                 $('#cl-cards-wrapper').removeClass('hide');
+				return;
 
 			case "invalid-action":
                 $('#cl-action-invalid-wrapper').removeClass('hide');
@@ -655,27 +683,6 @@ $("form").on("submit", function(e) {
         return;
     }
 
-    // action chosen
-    if ($(this).attr("id") == "valid-actions-form") {
-        console.log("map.js line 660: " + $(".selected_action:checked").attr("id"));
-		// make a check to see if suggestion is valid
-        if ($(".selected_action:checked").attr("id", "selected_move")) {
-            $('#cl-actions-wrapper').addClass('hide');
-            sendMessageToBackend(socket, `validMoves`);
-        }
-        elif ($(".selected_action:checked").attr("id", "selected_suggestion"))
-        {
-            $('#cl-actions-wrapper').addClass('hide');
-            sendMessageToBackend(socket, `suggestion`);
-        }
-            elif ($(".selected_action:checked").attr("id", "selected_accusation"))
-        {
-            $('#cl-actions-wrapper').addClass('hide');
-            sendMessageToBackend(socket, `accusation`);
-        }
-		return;
-    }
-
 	// select character form
     if ($(this).attr("id") == "start-game-form") {
         // submit to backend
@@ -692,15 +699,6 @@ $("form").on("submit", function(e) {
 
 });
 
-$("input").on("submit", function(e) {
-	e.preventDefault()
-
-	// end turn chosen
-	if ($(this).attr("id") == "end_turn_action") {
-		sendMessageToBackend(socket, `endTurn`);
-		return;
-	}
-})
 
 $("#move_to_hallway").on("click", function() {
 	const tokenToMove = $('input[name="token_to_move"]:checked').val(); // jQuery selector for checked radio button
@@ -908,6 +906,30 @@ function moveCircleToRoom(circle, room) {
 	circle.center = [getRandomFloat(room.l + wall_thickness, room.r - wall_thickness), getRandomFloat(room.b + wall_thickness, room.t - wall_thickness)];
 }
 
+function notify(title, message) {
+	$('#notification-title').text(title);
+	$('#notification-message').text(message);
+	$('#cl-notification-wrapper').removeClass('hide');
+}
+
+function processActions(actions) {
+	for (i=0; i < actions.length; i++) {
+		if (actions[i] == "move") {
+			$('#selected_move').removeClass('hide');
+		}
+		if (actions[i] == "suggestion") {
+			$('#selected_suggestion').removeClass('hide');
+		}
+		if (actions[i] == "accusation") {
+			$('#selected_accusation').removeClass('hide');
+		}
+	}
+}
+
+function resetGame() {
+	// TODO RESET GAME
+}
+
 
 // START
 // START
@@ -922,7 +944,7 @@ render();
 setTimeout(() => {
 	$("#login-popup-button").removeClass("hide");
 	$(".loader-stripe").addClass("hide");
-}, 3000);
+}, 1);
 
 function cross_out(itemStr) {
 	const elements = document.getElementsByClassName(itemStr)
@@ -932,7 +954,7 @@ function cross_out(itemStr) {
 	}
 }
 
-<!-- this script's source for the detective's notebook checkboxes is https://github.com/lowlydba/clue-sheet/tree/main/assets/css -->
+// this script's source for the detective's notebook checkboxes is https://github.com/lowlydba/clue-sheet/tree/main/assets/css
 function statusButtonChanger (control) {
 	const Data = [
 	  { status: 'unchecked', value: '\u2B1C' },

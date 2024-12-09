@@ -40,7 +40,7 @@
 							<td>
 								<input type="radio" id="accusation_where" name="accusation_where" value="ballroom"><label for="accusation_where">Ballroom</label><br />
 								<input type="radio" id="accusation_where" name="accusation_where" value="billiards"><label for="accusation_where">Billard's Room</label><br />
-								<input type="radio" id="accusation_where" name="accusation_where" value="Conservatory"><label for="accusation_where">Conservatory</label><br />
+								<input type="radio" id="accusation_where" name="accusation_where" value="conservatory"><label for="accusation_where">Conservatory</label><br />
 								<input type="radio" id="accusation_where" name="accusation_where" value="dining"><label for="accusation_where">Dining Room</label><br />
 								<input type="radio" id="accusation_where" name="accusation_where" value="hall"><label for="accusation_where">Hall</label><br />
 								<input type="radio" id="accusation_where" name="accusation_where" value="kitchen"><label for="accusation_where">Kitchen</label><br />
@@ -56,18 +56,6 @@
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
 
-		<!-- BAD-ACCUSATION POPUP -->
-		<div id="cl-bad-accusation-wrapper" class="cl-bad-accusation-wrapper popup-wrapper hide">
-			<div class="cl-disprove-inner popup-inner">
-				<div class="popup-control popup-close" closes="#cl-bad-accusation-wrapper"><img src="assets/control/close.png"></div>
-				<h1>Bad Accusation!</h3>
-				<hr />
-				<p>Detective!  You've missed critical evidence that can clearly be proven wrong.</p>
-				<p>You may close this window to watch other detectives crack the case, but you are suspended!</p>
-			</div>
-			<div class="fog-overlay">&nbsp;</div>
-		</div>
-
 		<!-- CARDS POPUP -->
 		<div id="cl-cards-wrapper" class="cl-cards-wrapper popup-wrapper hide">
 			<div class="cl-disprove-inner popup-inner">
@@ -76,37 +64,34 @@
 				<hr />
 				<p>Here is the evidence you've collected, Detective.  You know these people, items, and places were not involved in the murder.</p>
 
-				<table>
+				<table class="tbl-center">
 					<tr>
 						<td>
-							<span class="dealt_mustard hide"><input type="radio" id="dealt_card" name="dealt_card" value="mustard"><label for="dealt_card">Col. Mustard</label></span><br />
-							<span class="dealt_green hide"><input type="radio" id="dealt_card" name="dealt_card" value="green"><label for="dealt_card">Mr. Green</label></span><br />
-							<span class="dealt_peacock hide"><input type="radio" id="dealt_card" name="dealt_card" value="peacock"><label for="dealt_card">Mrs. Peacock</label></span><br />
-							<span class="dealt_scarlet hide"><input type="radio" id="dealt_card" name="dealt_card" value="scarlet"><label for="dealt_card">Mrs. Scarlet</label></span><br />
-							<span class="dealt_white hide"><input type="radio" id="dealt_card" name="dealt_card" value="white"><label for="dealt_card">Mrs. White</label></span><br />
-							<span class="dealt_plum hide"><input type="radio" id="dealt_card" name="dealt_card" value="plum"><label for="dealt_card">Prof. Plum</label></span><br />
-						</td>
-						<td>
-							<span class="dealt_candlestick hide"><input type="radio" id="dealt_card" name="dealt_card" value="candlestick"><label for="dealt_card">Candlestick</label></span><br />
-							<span class="dealt_knife hide"><input type="radio" id="dealt_card" name="dealt_card" value="knife"><label for="dealt_card">Knife</label></span><br />
-							<span class="dealt_pipe hide"><input type="radio" id="dealt_card" name="dealt_card" value="pipe"><label for="dealt_card">Lead Pipe</label></span><br />
-							<span class="dealt_revolver hide"><input type="radio" id="dealt_card" name="dealt_card" value="revolver"><label for="dealt_card">Revolver</label></span><br />
-							<span class="dealt_rope hide"><input type="radio" id="dealt_card" name="dealt_card" value="rope"><label for="dealt_card">Rope</label></span><br />
-							<span class="dealt_wrench hide"><input type="radio" id="dealt_card" name="dealt_card" value="wrench"><label for="dealt_card">Wrench</label></span><br />
-						</td>
-						<td>
-							<span class="dealt_ballroom hide"><input type="radio" id="dealt_card" name="dealt_card" value="ballroom"><label for="dealt_card">Ballroom</label></span><br />
-							<span class="dealt_billiards hide"><input type="radio" id="dealt_card" name="dealt_card" value="billiards"><label for="dealt_card">Billiards Room</label></span><br />
-							<span class="dealt_conservatory hide"><input type="radio" id="dealt_card" name="dealt_card" value="Conservatory"><label for="dealt_card">Conservatory</label></span><br />
-							<span class="dealt_dining hide"><input type="radio" id="dealt_card" name="dealt_card" value="dining"><label for="dealt_card">Dining Room</label></span><br />
-							<span class="dealt_hall hide"><input type="radio" id="dealt_card" name="dealt_card" value="hall"><label for="dealt_card">Hall</label></span><br />
-							<span class="dealt_kitchen hide"><input type="radio" id="dealt_card" name="dealt_card" value="kitchen"><label for="dealt_card">Kitchen</label></span><br />
-							<span class="dealt_library hide"><input type="radio" id="dealt_card" name="dealt_card" value="library"><label for="dealt_card">Library</label></span><br />
-							<span class="dealt_lounge hide"><input type="radio" id="dealt_card" name="dealt_card" value="lounge"><label for="dealt_card">Lounge</label></span><br />
-							<span class="dealt_study hide"><input type="radio" id="dealt_card" name="dealt_card" value="study"><label for="dealt_card">Study</label></span><br />
+							<span class="dealt_mustard hide">Col. Mustard<br /></span>
+							<span class="dealt_green hide">Mr. Green<br /></span>
+							<span class="dealt_peacock hide">Mrs. Peacock<br /></span>
+							<span class="dealt_scarlet hide">Mrs. Scarlet<br /></span>
+							<span class="dealt_white hide">Mrs. White<br /></span>
+							<span class="dealt_plum hide">Prof. Plum<br /></span>
+							<span class="dealt_candlestick hide">Candlestick<br /></span>
+							<span class="dealt_knife hide">Knife<br /></span>
+							<span class="dealt_pipe hide">Lead Pipe<br /></span>
+							<span class="dealt_revolver hide">Revolver<br /></span>
+							<span class="dealt_rope hide">Rope<br /></span>
+							<span class="dealt_wrench hide">Wrench<br /></span>
+							<span class="dealt_ballroom hide">Ballroom<br /></span>
+							<span class="dealt_billiards hide">Billiards Room<br /></span>
+							<span class="dealt_conservatory hide">Conservatory<br /></span>
+							<span class="dealt_dining hide">Dining Room<br /></span>
+							<span class="dealt_hall hide">Hall<br /></span>
+							<span class="dealt_kitchen hide">Kitchen<br /></span>
+							<span class="dealt_library hide">Library<br /></span>
+							<span class="dealt_lounge hide">Lounge<br /></span>
+							<span class="dealt_study hide">Study<br /></span>
 						</td>
 					<tr>
 				</table>
+				<input type="button" onclick="$('#cl-cards-wrapper').addClass('hide');" class="popup-submit" name="play_again" value="Hide Cards">
 			</div>
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
@@ -322,26 +307,14 @@
 				<div id="login-popup-error" class="error hide"></div>
 				<form id="login-form">
 					<table class="formless mt-10 block-center">
-						<tr><td class="label">Username:</td><td><input type="text" class="text-input" id="login-username"></td></tr>
-						<tr><td class="label">Password:</td><td><input type="password" class="text-input" id="login-password"></td></tr>
+						<tr><td class="label">Username:</td><td><input type="text" class="text-input" id="login-username" value="test"></td></tr>
+						<tr><td class="label">Password:</td><td><input type="password" class="text-input" id="login-password" value="elemental"></td></tr>
 					</table>
 					<input type="submit" class="input-submit" id="login-button" value="Login">
 				</form>
 				<p>[<a onclick="$('#login-form-wrapper').addClass('hide'); $('#register-form-wrapper').removeClass('hide');">Register</a>]</p>
 			</div>
 			<div class="fog-overlay dark-overlay">&nbsp;</div>
-		</div>
-
-		<!-- LOSE POPUP -->
-		<div id="cl-lose-wrapper" class="cl-lose-wrapper popup-wrapper hide">
-			<div class="cl-lose-inner popup-inner">
-				<div class="popup-control popup-close" closes="#cl-lose-wrapper"><img src="assets/control/close.png"></div>
-				<h1>Lose</h3>
-				<hr />
-				<p>By jove, ##PLAYER## has cracked the case!</p>
-				<input type="submit" id="play_again" class="popup-submit" name="play_again" value="Play Again">
-			</div>
-			<div class="fog-overlay">&nbsp;</div>
 		</div>
 
         <!-- MOVE PLAYER TO SPACE -->
@@ -466,6 +439,18 @@
 			<div class="fog-overlay">&nbsp;</div>
 		</div>
 
+		<!-- NOTIFICATION POPUP -->
+		<div id="cl-notification-wrapper" class="cl-notification-wrapper popup-wrapper hide">
+			<div class="cl-notification-inner popup-inner">
+				<div class="popup-control popup-close" closes="#cl-notification-wrapper"><img src="assets/control/close.png"></div>
+				<h1 id="notification-title">Notification</h3>
+				<hr />
+				<p id="notification-message"></p>
+				<input type="button" onclick="$('#cl-notification-wrapper').addClass('hide');" class="popup-submit" name="play_again" value="Close">
+			</div>
+			<div class="fog-overlay dark-overlay">&nbsp;</div>
+		</div>
+
 		<!-- REGISTER -->
 		<div id="register-form-wrapper" class="cl-register-wrapper popup-wrapper hide">
 			<div class="cl-good-suggestion-inner popup-inner">
@@ -585,44 +570,6 @@
 			<div class="fog-overlay dark-overlay">&nbsp;</div>
 		</div>
 
-		<!-- WIN POPUP -->
-		<div id="cl-win-wrapper" class="cl-win-wrapper popup-wrapper hide">
-			<div class="cl-win-inner popup-inner">
-				<div class="popup-control popup-close" closes="#cl-win-wrapper"><img src="assets/control/close.png"></div>
-				<h1>Win</h3>
-				<hr />
-				<p>By jove, you've done it!  You've cracked the case!</p>
-				<input type="submit" id="play_again" class="popup-submit" name="play_again" value="Play Again">
-			</div>
-			<div class="fog-overlay">&nbsp;</div>
-		</div>
-
-		<!-- SHOW VALID ACTIONS POPUP -->
-		<div id="cl-actions-wrapper" class="cl-actions-wrapper popup-wrapper hide">
-			<div class="cl-actions-inner popup-inner">
-				<div class="popup-control popup-close" closes="#cl-actions-wrapper"><img src="assets/control/close.png"></div>
-				<h1>Pick an action</h3>
-				<hr />
-				<p>So what's the plan, detective?</p>
-				<form id="valid-actions-form"></form>
-				<table>
-					<tr>
-						<td>
-                            <span class="list-of-actions"></span>
-							<span class="selected_move hide"><input type="radio" id="selected_action" name="selected_action" value="move"><label for="selected_action">Move</label></span><br />
-							<span class="selected_suggestion hide"><input type="radio" id="selected_action" name="selected_action" value="suggestion"><label for="selected_action">Make a suggestion</label></span><br />
-							<span class="selected_accusation hide"><input type="radio" id="selected_action" name="selected_action" value="accusation"><label for="selected_action">Make an accusation</label></span><br />
-						</td>
-					<tr>
-				</table>
-				<p>in ##ROOM##.</p>
-				<input type="submit" id="chosen_action" class="popup-submit" name="chosen_action" value="Chosen Action">
-				<input type="submit" id="end_turn_action" class="popup-submit" name="end_turn_action" value="End Turn">
-				</form>
-			</div>
-			<div class="fog-overlay">&nbsp;</div>
-		</div>
-
 		<!-- ACTION INVALID POPUP -->
 		<div id="cl-action-invalid-wrapper" class="cl-action-invalid-wrapper popup-wrapper hide">
 			<div class="cl-actions-invalid-inner popup-inner">
@@ -684,7 +631,6 @@
 			var game_started;
 			var your_username;
 			var your_turn = false;
-			var current_characters_turn;
 			var your_character = false;
 			var enforce_valid_character_move = false;
 			var unavailable_characters = [];
@@ -698,6 +644,16 @@
 	<div class="cl-panel">
 		<!-- <div id="chat-window"></div> -->
 		<div id="admin-buttons" class="">
+			<div id="someone-elses-turn" class="hide"><span class="players-turn-inner"></span>'s Turn<br />
+				<input type="button" onclick="sendMessageToBackend(socket, `showDealtCards ${your_character}`);" class="popup-submit" name="chosen_action" value="Show Cards">
+			</div>
+			<div id="your-turn-menu">Your Turn<br />
+				<input type="button" onclick="sendMessageToBackend(socket, `showDealtCards ${your_character}`);" class="popup-submit" name="chosen_action" value="Show Cards">
+				<input type="button" id="selected_suggestion" onclick="$('#cl-suggestion-wrapper').removeClass('hide');" class="popup-submit hide" name="chosen_action" value="Suggestion">
+				<input type="button" id="selected_accusation" onclick="$('#cl-accusation-wrapper').removeClass('hide');" class="popup-submit hide" name="chosen_action" value="Accusation">
+				<input type="button" id="end_turn_action" onclick="sendMessageToBackend(socket, `endTurn`);" class="popup-submit" name="chosen_action" value="End Turn">
+			</div>
+			<div>---</div>
 			<button onclick="$('#cl-accusation-wrapper').removeClass('hide');">Accusation Popup</button><br />
 			<button onclick="$('#cl-bad-accusation-wrapper').removeClass('hide');">Bad Accusation Popup</button><br />
 			<button onclick="$('#cl-cards-wrapper').removeClass('hide');">Cards Popup</button><br />
