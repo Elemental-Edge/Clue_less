@@ -34,6 +34,9 @@ class Deck():
             return self._cards.pop()
         return None
 
+    def is_empty(self) -> bool:
+        return len(self._cards) == 0
+
     def add_card(self, card: Card):
         """Add a card to the deck."""
         if isinstance(card, Card):

@@ -39,31 +39,31 @@ def test_setters(setup_player_turn):
 
 def test_get_valid_actions_no_actions(setup_player_turn):
     actions = setup_player_turn.get_valid_actions()
-    assert actions == ["Accusation", "Move"]  # No suggestions since hasn't entered a room
+    assert actions == ["accusation", "move"]  # No suggestions since hasn't entered a room
 
 def test_get_valid_actions_with_room_entered(setup_player_turn):
     setup_player_turn.set_hasEnteredRoom(True)
     actions = setup_player_turn.get_valid_actions()
-    assert actions == ["Suggestion", "Accusation", "Move"]
+    assert actions == ["suggestion", "accusation", "move"]
 
 def test_get_valid_actions_with_suggestion_made(setup_player_turn):
     setup_player_turn.set_hasEnteredRoom(True)
     setup_player_turn.set_hasMadeSuggestion(True)
     actions = setup_player_turn.get_valid_actions()
-    assert actions == ["Accusation", "Move"]  # Suggestion already made
+    assert actions == ["accusation", "move"]  # suggestion already made
 
 def test_get_valid_actions_with_accusation_made(setup_player_turn):
     setup_player_turn.set_hasMadeAccusation(True)
     actions = setup_player_turn.get_valid_actions()
-    assert actions == []  # Accusation already made
+    assert actions == []  # accusation already made
 
 def test_get_valid_actions_with_movement(setup_player_turn):
     setup_player_turn.set_hasMoved(True)
     actions = setup_player_turn.get_valid_actions()
-    assert actions == ["Accusation"]  # Cannot move again
+    assert actions == ["accusation"]  # Cannot move again
 
 def test_get_valid_actions_w_eneted_and_moved(setup_player_turn):
     setup_player_turn.set_hasMoved(True)
     setup_player_turn.set_hasEnteredRoom(True)
     actions = setup_player_turn.get_valid_actions()
-    assert actions == ["Accusation"]  # Cannot move again
+    assert actions == ["accusation"]  # Cannot move again

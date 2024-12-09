@@ -44,9 +44,9 @@ class Player_Turn:
         return_list = []
         self._isActive = True
         if self._hasEnteredRoom and not self._hasMadeSuggestion and not self._hasMoved:
-            return_list.append("Suggestion")
+            return_list.append("suggestion")
         if not self._hasMadeAccusation:
-            return_list.append("Accusation")
+            return_list.append("accusation")
         if not self._hasMoved and not self._hasMadeAccusation:
-            return_list.append("Move")
+            return_list.append("move")
         return return_list

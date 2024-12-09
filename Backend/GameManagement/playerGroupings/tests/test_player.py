@@ -15,7 +15,7 @@ def setup_player():
 
 
 def test_initialization(setup_player):
-    assert setup_player.get_player_name() == "Aron"
+    assert setup_player.get_character() == "Aron"
     assert setup_player.get_playerID() == 1234
     assert not setup_player.is_eliminated()
 

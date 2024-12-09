@@ -116,7 +116,10 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         if user is not None:
 
                             # check max players
-                            if self.game_processor_instance.get_player_count() >= self.game_processor_instance.get_max_players():
+                            if (
+                                self.game_processor_instance.get_player_count()
+                                >= self.game_processor_instance.get_max_players()
+                            ):
                                 # too many players
                                 return await self.send(
                                     json.dumps(
@@ -171,7 +174,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                 json.dumps(
                                     {
                                         "command": "successful-login",
-                                        "username": self.scope.get('user').username,
+                                        "username": self.scope.get("user").username,
                                         "number_players_choosing_char": self.game_processor_instance.get_player_choosing_characters_count(),
                                         "characters_chosen": list(
                                             self.char_to_channel.keys()
@@ -334,7 +337,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             json.dumps(
                                 {
                                     "command": "successful-register",
-                                    "username": self.scope.get('user').username,
+                                    "username": self.scope.get("user").username,
                                     "number_players_choosing_char": self.game_processor_instance.get_player_choosing_characters_count(),
                                     "characters_chosen": list(
                                         self.char_to_channel.keys()
@@ -397,8 +400,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     # added this part - Jon
                     try:
                         self.game_processor_instance.add_player(
-                            command[1],
-                            self.scope.get('user').id
+                            command[1], self.scope.get("user").id
                         )
                         # TODO: need to add character info to add_player()
                     except ValueError as e:
@@ -430,8 +432,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     return await self.send(
                         json.dumps({"command": "show-dealt-cards", "cards": cardsStr})
                     )
-                
-
 
                 case "startGame":
                     if self.game_processor_instance.is_game_status_in_game():
@@ -439,28 +439,29 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                     # start game and get turn and valid actions of who goes first
                     self.game_processor_instance.start_game()
-                    first_char_turn = self.game_processor_instance.get_current_player().get_character()
+                    first_char_turn = (
+                        self.game_processor_instance.get_current_player().get_character()
+                    )
                     actions_list = self.game_processor_instance.get_valid_actions()
 
                     return await self.sendToGame(
                         {
                             "command": "successful-create-game",
                             "first_char_turn": first_char_turn,
-                            "actions": actions_list.__str__(),  # TODO: need to implement toString for Actions
+                            "actions": actions_list,  # TODO: need to implement toString for Actions
                         }
                     )
-      
-
 
                 # get valid actions list for current player
                 case "getValidActions":
                     actions_list = self.game_processor_instance.get_valid_actions()
 
+                    print(f"Actions list {actions_list}")
                     return await self.send(
                         json.dumps(
                             {
                                 "command": "show-valid-actions",
-                                "actions": actions_list.__str__(),  # TODO: need to implement toString for Actions
+                                "actions": actions_list,  # TODO: need to implement toString for Actions
                             }
                         )
                     )
@@ -614,17 +615,13 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     playerToAdd = command[1]
                     try:
                         self.game_processor_instance.add_player(
-                            playerToAdd,
-                            self.scope.get('user').id
+                            playerToAdd, self.scope.get("user").id
                         )
                     except ValueError as e:
                         print(f"Value error message: {e}")
                         await self.send(
                             json.dumps({"status": "error", "message": "Value error."})
                         )
-
-
-                        
 
                 case "endTurn":
                     self.game_processor_instance.end_turn()
@@ -650,7 +647,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     )
 
         except Exception as e:
-            print(f"Error processing message: {e}")
+            print(f"Error processing message: {e.with_traceback()}")
             await self.send(
                 json.dumps({"status": "error", "message": "Invalid request format."})
             )

@@ -75,7 +75,7 @@ class GameProcessor:
         # creates a hand that stores the case file
 
         # Game state
-        self._game_status: GameStatus = GameStatus.OPEN
+        self._game_status: GameState = GameState.OPEN
         self._winner: Player = None
         self._players_choosing_character = 0
 
@@ -106,12 +106,12 @@ class GameProcessor:
         self._main_deck.shuffle()
 
         # Get one of each type
-        suspect = choice(card for card in self._main_deck.get_deck()
-                         if card.get_card_type() == CardType.SUSPECT)
-        weapon = choice(card for card in self._main_deck.get_deck()
-                        if card.get_card_type() == CardType.WEAPON)
-        room = choice(card for card in self._main_deck.get_deck()
-                      if card.get_card_type() == CardType.ROOM)
+        suspect = choice([card for card in self._main_deck.get_deck()
+                         if card.get_card_type() == CardType.SUSPECT])
+        weapon = choice([card for card in self._main_deck.get_deck()
+                        if card.get_card_type() == CardType.WEAPON])
+        room = choice([card for card in self._main_deck.get_deck()
+                      if card.get_card_type() == CardType.ROOM])
         # Remove from main deck and add to case file
         for card in [suspect, weapon, room]:
             self._main_deck.remove_card(card)
@@ -129,7 +129,7 @@ class GameProcessor:
 
     def add_player(self, player_name: str, player_id: int):
         """Add a new player to the game."""
-        if self._game_status != GameStatus.OPEN:
+        if self._game_status != GameState.OPEN:
             raise ValueError("Cannot add players after game has started")
 
         if self._turn_order.get_player_count() + 1 > self._max_players:
@@ -138,8 +138,9 @@ class GameProcessor:
             )
 
         # Create new player
-        player = Player(char_name, player_id)
+        player = Player(player_name,self._player_lobby_count)
         self._turn_order.add_player(player)
+        print(f"player_lobby_count {self._player_lobby_count}")
         self._player_lobby_count += 1
 
     def remove_player(self, player_id: int):
@@ -192,7 +193,7 @@ class GameProcessor:
                 f"{self._turn_order.get_player_count()} players, must have a multiple of {self._min_players} players to start."
             )
 
-        self._game_status = GameStatus.INITIALIZING
+        self._game_status = GameState.INITIALIZING
 
         # Create case file
         self._create_case_file()
@@ -203,7 +204,7 @@ class GameProcessor:
         self._turn_order.randomize_order()
 
         # Start first turn
-        self._game_status = GameStatus.IN_PROGRESS
+        self._game_status = GameState.IN_PROGRESS
 
         # Set starting position
         self._game_board.set_starting_positions()
@@ -240,24 +241,24 @@ class GameProcessor:
             # Check if Accusation was correct
             if accusation.makeAccusation(suspect, weapon, room):
                 self._winner = current_turn
-                self._game_status = GameStatus.GAME_OVER
+                self._game_status = GameState.GAME_OVER
                 return True
             else:
                 # TODO: Consider moving is_game_over() function to the
                 # consumer.py and changing it name.
-                current_turn.set_player_eliminated(True)
+                current_turn.set_eliminated(True)
                 self.is_game_over()
                 return False
         return False
 
     def is_game_status_in_game(self) -> bool:
-        return GameStatus.IN_PROGRESS == self._game_status or GameStatus.INITIALIZING == self._game_status
+        return GameState.IN_PROGRESS == self._game_status or GameState.INITIALIZING == self._game_status
 
     def is_game_over(self) -> bool:
         # Check if game is over
         active_players = self._turn_order.get_active_player_count()
         if active_players < self._min_activate_players:
-            self._game_status = GameStatus.GAME_OVER
+            self._game_status = GameState.GAME_OVER
 
     def end_turn(self):
         """End current turn and start next player's turn."""
@@ -372,7 +373,7 @@ class GameProcessor:
                 is_success = True
         return is_success
 
-    def set_game_status(self, game_status: int | GameStatus) -> bool:
+    def set_game_status(self, game_status: int | GameState) -> bool:
         pass
 
     def is_space_to_join(self):

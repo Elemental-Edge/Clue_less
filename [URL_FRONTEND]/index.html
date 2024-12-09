@@ -560,7 +560,7 @@
 		<!-- WAITING TO START -->
 		<div id="waiting-to-start" class="cl-waiting-to-start-wrapper popup-wrapper hide">
 			<div class="waiting-to-start-mid">
-				<img id="teaser-image" url_pattern="/assets/teasers/teaser[[NUM]].png">
+				<img id="teaser-image" url_pattern="assets/teasers/teaser[[NUM]].png">
 				<div id="teaser-text" class="no-select">Cl<span class="red">u</span>e-Le<span class="red">s</span>s</div>
 				<div id="start-game-popup-button" class="hide">Start Game</div>
 				<div class="infopanel-stripe">
@@ -609,9 +609,9 @@
 					<tr>
 						<td>
                             <span class="list-of-actions"></span>
-							<span class="selected_move hide"><input type="radio" id="selected_action" name="selected_action" value="move"><label for="selected_action">Move</label></span><br />
-							<span class="selected_suggestion hide"><input type="radio" id="selected_action" name="selected_action" value="suggestion"><label for="selected_action">Make a suggestion</label></span><br />
-							<span class="selected_accusation hide"><input type="radio" id="selected_action" name="selected_action" value="accusation"><label for="selected_action">Make an accusation</label></span><br />
+							<span id="selected_move hide"><input class="selected_action" type="radio" id="selected_move" name="selected_action" value="move"><label for="selected_action">Move</label></span><br />
+							<span id="selected_suggestion hide"><input class="selected_action" type="radio" id="selected_suggestion" name="selected_action" value="suggestion"><label for="selected_action">Make a suggestion</label></span><br />
+							<span id="selected_accusation hide"><input class="selected_action" type="radio" id="selected_accusation" name="selected_action" value="accusation"><label for="selected_action">Make an accusation</label></span><br />
 						</td>
 					<tr>
 				</table>

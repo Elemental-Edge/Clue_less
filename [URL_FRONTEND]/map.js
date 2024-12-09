@@ -43,10 +43,10 @@ out vec4 fragColor;
 
 void main() {
     float dist = length(vTexCoord - vec2(0.5, 0.5));
-    
+
     float outerRadius = 0.5;
     float innerRadius = outerRadius - uBorderThickness;
-    
+
     // Apply border color if within the border thickness
     if (dist > innerRadius && dist <= outerRadius) {
         fragColor = uBorderColor;
@@ -199,7 +199,7 @@ function render() {
     for (const circle of circles) {
         gl.uniform2fv(uCircleCenter, circle.center);
         gl.uniform1f(uCircleRadius, circle.radius*2);
-        
+
         // Set each circle's unique border color
         gl.uniform4fv(uBorderColor, circle.borderColor);
 
@@ -281,7 +281,7 @@ canvas.addEventListener('mouseup', (e) => {
 		r = getRoomByCoords(x, y);
 		if (r !== null) {
 			console.log(circles[draggingCircle].name + " " + circles[draggingCircle].type + " dropped at x = " + x +", y = " + y + " in " + r.name + ".  Bounding character so they do not 'stick out of' room."); // DEVELOPMENT CONSOLE
-			
+
 			// check for valid move
 			if (!checkValidCharacterMove(draggingCircle, r.key)) {
 				// invalid move; reject it
@@ -289,7 +289,7 @@ canvas.addEventListener('mouseup', (e) => {
 			}
 			else {
 				// valid move; accept it
-				
+
 				// correct position
 				var xx = x;
 				var yy = y;
@@ -299,17 +299,17 @@ canvas.addEventListener('mouseup', (e) => {
 				if (x-circles[draggingCircle].radius < r.l) { xx = r.l + circles[draggingCircle].radius * board_aspect_ratio; } // left
 				circles[draggingCircle].center = [xx, yy];
 			}
-			
+
 			// end
 			draggingCircle = null;
 			return;
 		}
-		
+
 		// check hallways
 		r = getHallwayByCoords(x, y);
 		if (r !== null && circles[draggingCircle].type == "character") {
 			console.log(circles[draggingCircle].name + " " + circles[draggingCircle].type + " dropped at x = " + x +", y = " + y + " in hallway (" + r.key + ").  Centering in hallway."); // DEVELOPMENT CONSOLE
-			
+
 			// check for valid move
 			if (!checkValidCharacterMove(draggingCircle, r.key)) {
 				// invalid move; reject it
@@ -319,8 +319,8 @@ canvas.addEventListener('mouseup', (e) => {
 				// valid move; center token
 				circles[draggingCircle].center = [r.x, r.y];
 			}
-			
-			
+
+
 			// end
 			draggingCircle = null;
 			return;
@@ -352,7 +352,7 @@ function canInteractWithMap() {
 
 // Variables and constants
 const server_url = `http://{server_ip}`;
-const ws_url = `ws://${server_ip }/ws/notifications/`; 
+const ws_url = `ws://${server_ip }/ws/notifications/`;
 
 // Initialize WebSocket connection
 const initializeDjangoChannels = (ws_url) => {
@@ -368,7 +368,7 @@ const initializeDjangoChannels = (ws_url) => {
     socket.onmessage = (event) => {
 		// console output
 		console.log("Handling received message:", event.data);
-		
+
 		// parse JSON
         let data = JSON.parse(event.data);
 
@@ -464,7 +464,7 @@ const initializeDjangoChannels = (ws_url) => {
 				$(data.selector).text(data.text);
 				$(data.selector).removeClass("hide");
 				return;
-				
+
 			case "successful-create-game":
 				$('#waiting-to-start').addClass("hide");
 				your_turn = your_character == data.first_char_turn;
@@ -499,7 +499,7 @@ const initializeDjangoChannels = (ws_url) => {
 					$(`.select-character.character-${data.characters_chosen[i]}`).addClass("unselectable");
 				}
 				return;
-				
+
 			case "successful-register":
 				$("#login-popup-error").addClass("hide");
 				$("#register-popup-error").addClass("hide");
@@ -507,7 +507,7 @@ const initializeDjangoChannels = (ws_url) => {
 				your_username = data.username;
 				$("#cl-character-selection-wrapper").removeClass("hide");
 				for (let i = 0; i < data.characters_chosen; i++) {
-					$(`.select-character.character-${data.characters_chosen[i]}`).addClass("unselectable");	
+					$(`.select-character.character-${data.characters_chosen[i]}`).addClass("unselectable");
 				}
 				return;
 
@@ -547,7 +547,7 @@ const initializeDjangoChannels = (ws_url) => {
                 // unhide win popup
                 $("#cl-win-wrapper").removeClass('hide');
                 return;
-			
+
 			case "lose":
 				// unhide lose popup
 				$("#cl-lose-wrapper").removeClass('hide');
@@ -564,7 +564,7 @@ const initializeDjangoChannels = (ws_url) => {
 					cross_out(c);
                 }
                 $('#cl-cards-wrapper').removeClass('hide');
-			
+
 			case "invalid-action":
                 $('#cl-action-invalid-wrapper').removeClass('hide');
                 return;
@@ -629,7 +629,7 @@ $("form").on("submit", function(e) {
 		$("#login-password").val("");
 		return;
 	}
-	
+
 	// register form
 	if ($(this).attr("id") == "register-form") {
 		sendMessageToBackend(socket, `register ${$("#register-username").val()} ${$("#register-password").val()} ${$("#register-confirm").val()}`);
@@ -658,16 +658,16 @@ $("form").on("submit", function(e) {
     // action chosen
     if ($(this).attr("id") == "valid-actions-form") {
         // make a check to see if suggestion is valid
-        if ($("#selected_action").equals("move")) {
+        if ($(".selected_action:checked").attr("id", "selected_move")) {
             $('#cl-actions-wrapper').addClass('hide');
             sendMessageToBackend(socket, `validMoves`);
         }
-        elif ($("#selected_action").equals("suggestion"))
+        elif ($(".selected_action:checked").attr("id", "selected_suggestion"))
         {
             $('#cl-actions-wrapper').addClass('hide');
             sendMessageToBackend(socket, `suggestion`);
         }
-            elif ($("#selected_action").equals("accusation"))
+            elif ($(".selected_action:checked").attr("id", "selected_accusation"))
         {
             $('#cl-actions-wrapper').addClass('hide');
             sendMessageToBackend(socket, `accusation`);
@@ -758,20 +758,20 @@ $(".select-character").on("click", function() {
 // returns true if the character move is to a valid room
 // returns false if the character move is not to a valid room
 function checkValidCharacterMove(circle, newKey) {
-	// return valid move if we aren't enforce valid moves	
+	// return valid move if we aren't enforce valid moves
 	// or if the circle being moved is not a character (e.g., is a weapon)
 	if (!enforce_valid_character_move || circle.type != "character") {
 		return true;
 	}
-	
+
 	let oldKey = circle.current_place;
-	
+
 	// check if oldkey is a hallway
 	if (oldKey.include("-")) {
 		// oldKey is a hallway key
 		// ensure room is sufficiently conencted to old hallway
 		let i = oldKey.indexOf("-");
-		let room1 = str.substring(0, i); 
+		let room1 = str.substring(0, i);
 		let room2 = str.substring(i + 1);
 		if (newKey == room1) {
 			return true;
@@ -794,7 +794,7 @@ function checkValidCharacterMove(circle, newKey) {
 			// to check for secret passageway, which
 			// is the only valid move
 			let i = getRoomByKey(newKey);
-			
+
 			if (i.key == newKey) {
 				// there was a valid secret passageway
 				return true;
@@ -806,7 +806,7 @@ function checkValidCharacterMove(circle, newKey) {
 		}
 		else {
 			// ok moving into hallway from room
-			
+
 			// first, check if anyone else is already in that hallway
 			for (let i = 0; i < circles.length; i++) {
 				if ("character" != circles[i].type) {
@@ -816,10 +816,10 @@ function checkValidCharacterMove(circle, newKey) {
 					return false;
 				}
 			}
-			
+
 			// second, ensure it is sufficiently connected to old room
 			let i = newKey.indexOf("-");
-			let room1 = str.substring(0, i); 
+			let room1 = str.substring(0, i);
 			let room2 = str.substring(i + 1);
 			if (oldKey == room1) {
 				return true;
@@ -831,7 +831,7 @@ function checkValidCharacterMove(circle, newKey) {
 				return false;
 			}
 		}
-		
+
 	}
 }
 
@@ -940,7 +940,7 @@ function statusButtonChanger (control) {
 	  { status: '!', value: '\u2757' },
 	  { status: 'checked', value: '\u2705' }
 	]
-  
+
 	let index = Data.map(function (e) { return e.value }).indexOf(control.value)
 	index++
 	if ((index) >= Data.length) {
@@ -959,7 +959,7 @@ function statusButtonChanger (control) {
 		clue.removeClass('x checked')
 	}
 }
-  
+
 // Attach function to all checkboxes
 window.onload = function () {
 	const elements = document.getElementsByClassName('multi-checkbox')

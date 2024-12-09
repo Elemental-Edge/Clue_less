@@ -11,7 +11,7 @@ class Player:
         self._playerID: int = playerID
         self._playerName = "TODO"
         self._character: str = char_name
-        self._isEliminated = False
+        self._eliminated = False
         self._player_turn = Player_Turn()
         self._playerHand: Hand = Hand()
         self._currLocation: "Space" = None
@@ -26,7 +26,7 @@ class Player:
             return False
         if self._playerName != other._playerName:
             return False
-        if self._isEliminated != other._isEliminated:
+        if self._eliminated != other._isEliminated:
             return False
         if self._currLocation != other._currLocation:
             return False
@@ -97,12 +97,11 @@ class Player:
     def set_player_hand(self, hand: Hand):
         self.playerHand = hand
 
-    def set_character(self, character_name: str):
-        # TODO: Add a check to ensure a valid character name is set
-        self._character = character_name
+    def set_eliminated(self, val: bool = True):
+        self._eliminated = True
 
     def is_eliminated(self) -> bool:
-        return self._isEliminated
+        return self._eliminated
 
     def __str__(self):
         return self._character
