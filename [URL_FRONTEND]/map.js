@@ -657,7 +657,8 @@ $("form").on("submit", function(e) {
 
     // action chosen
     if ($(this).attr("id") == "valid-actions-form") {
-        // make a check to see if suggestion is valid
+        console.log("map.js line 660: " + $(".selected_action:checked").attr("id"));
+		// make a check to see if suggestion is valid
         if ($(".selected_action:checked").attr("id", "selected_move")) {
             $('#cl-actions-wrapper').addClass('hide');
             sendMessageToBackend(socket, `validMoves`);
