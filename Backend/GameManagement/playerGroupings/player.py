@@ -14,8 +14,8 @@ class Player:
         self._eliminated = False
         self._player_turn = Player_Turn()
         self._playerHand: Hand = Hand()
-        self._currLocation: "Space" = None
-        self._prevLocation: "Space" = None
+        self._currLocation: Space = None
+        self._prevLocation: Space = None
 
     def __eq__(self, other: object) -> bool:
         """Overloads the equality operator to check for space equality via
@@ -37,9 +37,9 @@ class Player:
     def receive_card_dealt(self, card: Card):
         self._playerHand.add_card(card)
 
-    def get_valid_moves(self) -> list["Space"]:
+    def get_valid_moves(self) -> list[Space]:
         # returns a list of Space objects
-        adj: list["Space"] = self._currLocation.get_adjacent_spaces()
+        adj: list[Space] = self._currLocation.get_adjacent_spaces()
 
         possible_dest = []
         # check if adjacent spaces are empty
@@ -66,16 +66,16 @@ class Player:
     def get_character(self) -> str:
         return self._character
 
-    def get_current_location(self) -> "Space":
+    def get_current_location(self) -> Space:
         return self._currLocation
 
-    def get_previous_location(self) -> "Space":
+    def get_previous_location(self) -> Space:
         return self._prevLocation
 
     def set_character(self, aCharacter: str):
         self._character = aCharacter
 
-    def set_current_location(self, sp: "Space") -> bool:
+    def set_current_location(self, sp: Space) -> bool:
         if SpaceType.HALLWAY == sp.get_space_type() and not sp.is_empty():
             return False
         if None is not self._currLocation:

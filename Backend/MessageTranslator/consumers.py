@@ -626,19 +626,52 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         )
 
                 case "endTurn":
-                    self.game_processor_instance.end_turn()
+                    try:
+                        start = self.game_processor_instance.get_current_player().get_current_location().__str__()
 
-                    # TODO: broadcast this to next player's client
-                    actions_list = self.game_processor_instance.get_valid_actions()
+                        if command[1] != self.game_processor_instance.get_current_player().get_current_location().__str__():
+                            # played moved; check if it's valid
+                            validMoves = self.game_processor_instance.get_current_player().get_valid_moves()
+                            is_valid = False
+                            for c in validMoves:
+                                if c.__str__() == command[1]:
+                                    is_valid = True
+                            if not is_valid:
+                                # invalid move
+                                return await self.send(
+                                    json.dumps(
+                                        {
+                                            "command": "reject-move-and-end-turn",
+                                            "location": start,  # TODO: need to implement toString for Actions
+                                        }
+                                    )
+                                )
+                        
+                        if start != command[1] and command[2] == "0":
+                            # player moved and its valid
+                            turn_order = self.game_processor_instance._turn_order
+                            char_obj = turn_order.get_player_object(self.your_character)
+                            self.game_processor_instance.handle_move(char_obj, command[1])
+                            
+                        self.game_processor_instance.end_turn()
 
-                    return await self.send(
-                        json.dumps(
-                            {
-                                "command": "show-valid-actions",
-                                "actions": actions_list.__str__(),  # TODO: need to implement toString for Actions
-                            }
+                        # TODO: broadcast this to next player's client
+                        actions_list = self.game_processor_instance.get_valid_actions()
+
+                        return await self.send(
+                            json.dumps(
+                                {
+                                    "command": "end-turn",
+                                    "current_char_turn": self.game_processor_instance.get_current_player().__str__(),
+                                    "actions": actions_list.__str__(),  # TODO: need to implement toString for Actions
+                                }
+                            )
                         )
-                    )
+                    except Exception as e:
+                        print(f"End Turn error message: {e.with_traceback()}")
+                        await self.send(
+                            json.dumps({"status": "error", "message": "Bad end turn request."})
+                        )
 
                 # unknown case
                 case _:
