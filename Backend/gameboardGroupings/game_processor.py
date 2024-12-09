@@ -84,6 +84,14 @@ class GameProcessor:
         self._initialize_deck()
         # initializes the deck
 
+        # Set starting position
+        self._game_board.set_starting_positions()
+
+        for player in self._available_characters:
+            player_to_add = Player(player, -1)
+            player_to_add.set_current_location(self._game_board.get_starting_position(player_to_add.get_character()))
+            self._turn_order.add_player(player_to_add)
+
     def __str__(self):
         return self._game_status
 
@@ -100,7 +108,7 @@ class GameProcessor:
         # Add all room cards
         for room in ValidRooms:
             self._main_deck.add_card(Card(room.value, CardType.ROOM))
-
+    
     def _create_case_file(self):
         """Create the case file by selecting one of each card type."""
         self._main_deck.shuffle()
@@ -140,13 +148,18 @@ class GameProcessor:
             )
 
         # Create new player
-        player = Player(player_name,self._player_lobby_count)
-        self._turn_order.add_player(player)
+        print(f"player_name: {player_name}")
+        playerObj = self._turn_order.get_player_object(player_name)
+        print(f"player object: {playerObj}")
+        playerObj.set_player_id(player_id)
+        playerObj.set_active()
         print(f"player_lobby_count {self._player_lobby_count}")
         self._player_lobby_count += 1
 
     def remove_player(self, player_id: int):
         player = self._turn_order.get_player(player_id)
+        player.set_player_id(-1)
+        player.set_active(False)
         if not player:
             raise ValueError(f"Player with ID {player_id} not found.")
         self._turn_order.remove_player(player_id)
@@ -207,17 +220,7 @@ class GameProcessor:
 
         # Start first turn
         self._game_status = GameState.IN_PROGRESS
-
-        # Set starting position
-        self._game_board.set_starting_positions()
-
-        # old code
-        # players = self._turn_order.get_turn_order()
-        # for p in players:
-        #     p.set_current_location()
-        #     p._currLocation = starting_positions[p._character]
-
-
+            
     def handle_suggestion(
         self, player: Player, aSuspect: str, aWeapon: str, aRoom: str
     ) -> Optional[tuple[Player, Hand]]:
@@ -258,7 +261,7 @@ class GameProcessor:
 
     def is_game_over(self) -> bool:
         # Check if game is over
-        active_players = self._turn_order.get_active_player_count()
+        active_players = self._turn_order.get_player_count()
         if active_players < self._min_activate_players:
             self._game_status = GameState.GAME_OVER
             return True
@@ -272,8 +275,12 @@ class GameProcessor:
     def get_valid_moves(self, player: Player) -> List[Space]:
         """Get valid moves for a player."""
         valid_moves = []
+        print("before player equality check line 275 gameprocessor")
         if player == self._turn_order.get_current_turn():
+            print("after equality check")
             valid_moves = player.get_valid_moves()
+
+        print("length of valid moves", len(valid_moves))
         return valid_moves
 
     def handle_move(self, player: Player, atargetSpace: str) -> bool:
@@ -283,6 +290,8 @@ class GameProcessor:
         if player != current_player:
             return False
         target_space = self._game_board.get_space_by_name(atargetSpace)
+        print("player", player.get_character())
+        print("target_space", target_space.__str__())
         if None is not target_space and target_space not in self.get_valid_moves(player):
             return False
 

@@ -628,9 +628,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 case "endTurn":
                     try:
                         start = self.game_processor_instance.get_current_player().get_current_location().__str__()
-
+                        
+                        """
                         if command[1] != self.game_processor_instance.get_current_player().get_current_location().__str__():
                             # played moved; check if it's valid
+                            
                             validMoves = self.game_processor_instance.get_current_player().get_valid_moves()
                             is_valid = False
                             for c in validMoves:
@@ -646,6 +648,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                         }
                                     )
                                 )
+                                """
                         
                         if start != command[1] and command[2] == "0":
                             # player moved and its valid

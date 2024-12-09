@@ -15,59 +15,59 @@ class GameBoard:
         """Creates the default Clue board layout with all rooms
         and connections"""
         # Creates all room for the default Clue board layout
-        study_room = CornerRoom(ValidRooms.STUDY)
-        self._spaces[ValidRooms.STUDY] = study_room
-        hall_room = Room(ValidRooms.HALL)
-        self._spaces[ValidRooms.HALL] = hall_room
-        lounge_room = CornerRoom(ValidRooms.LOUNGE)
-        self._spaces[ValidRooms.LOUNGE] = lounge_room
-        library_room = Room(ValidRooms.LIBRARY)
-        self._spaces[ValidRooms.LIBRARY] = library_room
-        billiard_room = Room(ValidRooms.BILLIARDS)
-        self._spaces[ValidRooms.BILLIARDS] = billiard_room
-        dining_room = Room(ValidRooms.DINING)
-        self._spaces[ValidRooms.DINING] = dining_room
-        conservatory_room = CornerRoom(ValidRooms.CONSERVATORY)
-        self._spaces[ValidRooms.CONSERVATORY] = conservatory_room
-        ballroom_room = Room(ValidRooms.BALLROOM)
-        self._spaces[ValidRooms.BALLROOM] = ballroom_room
-        kitchen_room = CornerRoom(ValidRooms.KITCHEN)
-        self._spaces[ValidRooms.KITCHEN] = kitchen_room
+        study_room = CornerRoom(ValidRooms.STUDY.value)
+        self._spaces[ValidRooms.STUDY.value] = study_room
+        hall_room = Room(ValidRooms.HALL.value)
+        self._spaces[ValidRooms.HALL.value] = hall_room
+        lounge_room = CornerRoom(ValidRooms.LOUNGE.value)
+        self._spaces[ValidRooms.LOUNGE.value] = lounge_room
+        library_room = Room(ValidRooms.LIBRARY.value)
+        self._spaces[ValidRooms.LIBRARY.value] = library_room
+        billiard_room = Room(ValidRooms.BILLIARDS.value)
+        self._spaces[ValidRooms.BILLIARDS.value] = billiard_room
+        dining_room = Room(ValidRooms.DINING.value)
+        self._spaces[ValidRooms.DINING.value] = dining_room
+        conservatory_room = CornerRoom(ValidRooms.CONSERVATORY.value)
+        self._spaces[ValidRooms.CONSERVATORY.value] = conservatory_room
+        ballroom_room = Room(ValidRooms.BALLROOM.value)
+        self._spaces[ValidRooms.BALLROOM.value] = ballroom_room
+        kitchen_room = CornerRoom(ValidRooms.KITCHEN.value)
+        self._spaces[ValidRooms.KITCHEN.value] = kitchen_room
 
         # Creats hallways between rooms
         # Horizontal hallways first (left to right)
-        study_hall = Hallway(ValidHallways.STUDY_HALL)
-        self._spaces[ValidHallways.STUDY_HALL] = study_hall
-        hall_lounge = Hallway(ValidHallways.HALLWAY_LOUNGE)
-        self._spaces[ValidHallways.HALLWAY_LOUNGE] = hall_lounge
-        library_billiard = Hallway(ValidHallways.LIBRARY_BILLIARDS)
-        self._spaces[ValidHallways.LIBRARY_BILLIARDS] = library_billiard
-        billiard_dining = Hallway(ValidHallways.BILLIARDS_DINING)
-        self._spaces[ValidHallways.BILLIARDS_DINING] = billiard_dining
-        conservatory_ballroom = Hallway(ValidHallways.CONSERVATORY_BALLROOM)
-        self._spaces[ValidHallways.CONSERVATORY_BALLROOM] = (
+        study_hall = Hallway(ValidHallways.STUDY_HALL.value)
+        self._spaces[ValidHallways.STUDY_HALL.value] = study_hall
+        hall_lounge = Hallway(ValidHallways.HALLWAY_LOUNGE.value)
+        self._spaces[ValidHallways.HALLWAY_LOUNGE.value] = hall_lounge
+        library_billiard = Hallway(ValidHallways.LIBRARY_BILLIARDS.value)
+        self._spaces[ValidHallways.LIBRARY_BILLIARDS.value] = library_billiard
+        billiard_dining = Hallway(ValidHallways.BILLIARDS_DINING.value)
+        self._spaces[ValidHallways.BILLIARDS_DINING.value] = billiard_dining
+        conservatory_ballroom = Hallway(ValidHallways.CONSERVATORY_BALLROOM.value)
+        self._spaces[ValidHallways.CONSERVATORY_BALLROOM.value] = (
             conservatory_ballroom
         )
-        ballroom_kitchen = Hallway(ValidHallways.BALLROOM_KITCHEN)
-        self._spaces[ValidHallways.BALLROOM_KITCHEN] = ballroom_kitchen
+        ballroom_kitchen = Hallway(ValidHallways.BALLROOM_KITCHEN.value)
+        self._spaces[ValidHallways.BALLROOM_KITCHEN.value] = ballroom_kitchen
 
         # Vertical hallways (top to bottom)
-        study_library = Hallway(ValidHallways.STUDY_LIBRARY)
-        self._spaces[ValidHallways.STUDY_LIBRARY] = study_library
-        library_conservatory = Hallway(ValidHallways.LIBRARY_CONSERVATORY)
-        self._spaces[ValidHallways.LIBRARY_CONSERVATORY] = (
+        study_library = Hallway(ValidHallways.STUDY_LIBRARY.value)
+        self._spaces[ValidHallways.STUDY_LIBRARY.value] = study_library
+        library_conservatory = Hallway(ValidHallways.LIBRARY_CONSERVATORY.value)
+        self._spaces[ValidHallways.LIBRARY_CONSERVATORY.value] = (
             library_conservatory
         )
-        hall_billiard = Hallway(ValidHallways.HALL_BILLARD)
-        self._spaces[ValidHallways.HALL_BILLARD] = hall_billiard
-        billiard_ballroom = Hallway(ValidHallways.BILLIARD_BALLROOM)
-        self._spaces[ValidHallways.BILLIARD_BALLROOM] = (
+        hall_billiard = Hallway(ValidHallways.HALL_BILLARD.value)
+        self._spaces[ValidHallways.HALL_BILLARD.value] = hall_billiard
+        billiard_ballroom = Hallway(ValidHallways.BILLIARD_BALLROOM.value)
+        self._spaces[ValidHallways.BILLIARD_BALLROOM.value] = (
             billiard_ballroom
         )
-        lounge_dining = Hallway(ValidHallways.LOUNGE_DINING)
-        self._spaces[ValidHallways.LOUNGE_DINING] = lounge_dining
-        dining_kitchen = Hallway(ValidHallways.DINING_KITCHEN)
-        self._spaces[ValidHallways.DINING_KITCHEN] = dining_kitchen
+        lounge_dining = Hallway(ValidHallways.LOUNGE_DINING.value)
+        self._spaces[ValidHallways.LOUNGE_DINING.value] = lounge_dining
+        dining_kitchen = Hallway(ValidHallways.DINING_KITCHEN.value)
+        self._spaces[ValidHallways.DINING_KITCHEN.value] = dining_kitchen
 
         # Connect rooms with hallways
         study_hall.add_adjacent_space(study_room)
@@ -117,28 +117,44 @@ class GameBoard:
         return self._spaces
 
     def get_space_by_name(self, space_name: str) -> Space:
+        print(f"this is the actual space_name being passed in {space_name}\n\n")
+        print(self._spaces.keys())
+        for item in self._spaces.keys():
+            if item == space_name:
+                print("***********")
         return self._spaces[space_name]
+    
+    def get_space_by_enum_value(self, space_name: str) -> Space:
+        for room in ValidRooms:
+            if space_name == room.value:
+                return self._spaces[space_name]
+            #
 
     def set_starting_positions(self):
         """sets the starting positions of"""
-        self._start_positions[ValidSuspect.SCARLET] = self.get_space_by_name(
-            ValidHallways.HALLWAY_LOUNGE
+        self._start_positions[ValidSuspect.SCARLET.value] = self.get_space_by_name(
+            ValidHallways.HALLWAY_LOUNGE.value
         )
-        self._start_positions[ValidSuspect.PLUM] = self.get_space_by_name(
-            ValidHallways.STUDY_LIBRARY
+        self._start_positions[ValidSuspect.PLUM.value] = self.get_space_by_name(
+            ValidHallways.STUDY_LIBRARY.value
         )
-        self._start_positions[ValidSuspect.MUSTARD] = self.get_space_by_name(
-            ValidHallways.LOUNGE_DINING
+        self._start_positions[ValidSuspect.MUSTARD.value] = self.get_space_by_name(
+            ValidHallways.LOUNGE_DINING.value
         )
-        self._start_positions[ValidSuspect.PEACOCK] = self.get_space_by_name(
-            ValidHallways.LIBRARY_CONSERVATORY
+        self._start_positions[ValidSuspect.PEACOCK.value] = self.get_space_by_name(
+            ValidHallways.LIBRARY_CONSERVATORY.value
         )
-        self._start_positions[ValidSuspect.GREEN] = self.get_space_by_name(
-            ValidHallways.CONSERVATORY_BALLROOM
+        self._start_positions[ValidSuspect.GREEN.value] = self.get_space_by_name(
+            ValidHallways.CONSERVATORY_BALLROOM.value
         )
-        self._start_positions[ValidSuspect.WHITE] = self.get_space_by_name(
-            ValidHallways.BALLROOM_KITCHEN
+        self._start_positions[ValidSuspect.WHITE.value] = self.get_space_by_name(
+            ValidHallways.BALLROOM_KITCHEN.value
         )
 
     def get_starting_positions(self) -> Dict[str, Space]:
         return self._start_positions
+    
+    def get_starting_position(self, character_name: str) -> Space:
+        """returns the starting space location of the character"""
+        print(f"these are the keys {self._start_positions.keys()}")
+        return self._start_positions[character_name]

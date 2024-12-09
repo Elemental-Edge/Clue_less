@@ -12,6 +12,7 @@ class Player:
         self._playerName = "TODO"
         self._character: str = char_name
         self._eliminated = False
+        self._active = False
         self._player_turn = Player_Turn()
         self._playerHand: Hand = Hand()
         self._currLocation: Space = None
@@ -24,7 +25,7 @@ class Player:
             return True
         if self._playerID != other._playerID:
             return False
-        if self._playerName != other._playerName:
+        if self._character != other._character:
             return False
         if self._eliminated != other._isEliminated:
             return False
@@ -32,27 +33,32 @@ class Player:
             return False
         if self._prevLocation != other._prevLocation:
             return False
+        if self._active != other._active:
+            return False
         return True
 
     def receive_card_dealt(self, card: Card):
-        self._playerHand.add_card(card)
+        if self._active:
+            self._playerHand.add_card(card)
 
     def get_valid_moves(self) -> list[Space]:
         # returns a list of Space objects
-        adj: list[Space] = self._currLocation.get_adjacent_spaces()
-
         possible_dest = []
-        # check if adjacent spaces are empty
-        for sp in adj:
-            if SpaceType.HALLWAY == sp.get_space_type():
-                if sp.is_empty():
-                    possible_dest.append(sp)
-            else:
-                possible_dest.append(sp)
-        return possible_dest
+        if self._active:
+            adj: list[Space] = self._currLocation.get_adjacent_spaces()
 
+            # check if adjacent spaces are empty
+            for sp in adj:
+                if SpaceType.HALLWAY == sp.get_space_type():
+                    if sp.is_empty():
+                        possible_dest.append(sp)
+                else:
+                    possible_dest.append(sp)
+        return possible_dest
+    
     def get_player_turn(self) -> Player_Turn:
-        return self._player_turn
+        if self._active:
+            return self._player_turn
 
     def get_player_name(self) -> str:
         return self._playerName
@@ -61,7 +67,8 @@ class Player:
         return self._playerID
 
     def get_hand(self) -> Hand:
-        return self._playerHand
+        if self._active:
+            return self._playerHand
 
     def get_character(self) -> str:
         return self._character
@@ -71,6 +78,12 @@ class Player:
 
     def get_previous_location(self) -> Space:
         return self._prevLocation
+    
+    def get_active(self) -> bool:
+        return self._active
+    
+    def set_active(self, val: bool = True):
+        self._active = bool
 
     def set_character(self, aCharacter: str):
         self._character = aCharacter
