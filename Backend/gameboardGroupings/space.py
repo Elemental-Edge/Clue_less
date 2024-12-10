@@ -20,7 +20,6 @@ class SpaceType(Enum):
         # Returns the SpaceType Name
         return self.name.replace("_", " ").title()
 
-
 class Space:
     def __init__(self, name: str = SPACE_NAME):
         """Constructor initializes the class."""
@@ -46,6 +45,9 @@ class Space:
                 if self._adjacent_spaces == other._adjacent_spaces:
                     return True
         return True
+
+    def get_name(self) -> str:
+        return self._name
 
     def get_player_count(self) -> int:
         """Returns the number of players in the space."""

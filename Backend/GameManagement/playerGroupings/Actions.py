@@ -90,6 +90,7 @@ class Suggestion(Actions):
         first_run: bool = True
         disprove_Player: "Player" | None = None
         for player in self._turn_order:
+            print(f"player {player.get_character()} ")
             if None is player:
                 break
             if first_run and player == self.get_player():
@@ -102,6 +103,8 @@ class Suggestion(Actions):
                 if player.get_hand().has_card(card):
                     disproveCards.add_card(card)
                     disprove_Player = player
+                    print(f"disprove_player is {disprove_Player.get_character()}")
+
             if not disproveCards.isEmpty():
                 break
 
@@ -120,7 +123,7 @@ class Move(Actions):
     def __init__(self, aTurnOrder):
         super().__init__(aTurnOrder)
 
-    def makeMove(self, aDest: "Space") -> bool:
+    def makeMove(self, aDest: Space) -> bool:
 
         if None is aDest:
             raise ValueError("Empty Destination Object Case File")

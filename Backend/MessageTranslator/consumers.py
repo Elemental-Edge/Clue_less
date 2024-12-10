@@ -38,6 +38,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         It adds the client to the 'notifications' group and accepts the connection.
         """
         try:
+
             self.channel_layer = get_channel_layer()  # Get the channel layer
             await self.channel_layer.group_add(
                 "notifications", self.channel_name
@@ -102,7 +103,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                 # LOGIN
                 case "login":
-
                     try:
                         username = command[1]
                         password = command[2]
@@ -427,11 +427,15 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 # show/update dealt cards
                 case "showDealtCards":
                     cardsStr = []
-                    for (
-                        card
-                    ) in self.game_processor_instance._turn_order.get_player_object(self.your_character).get_hand().get_hand():
+                    for card in (
+                        self.game_processor_instance._turn_order.get_player_object(
+                            self.your_character
+                        )
+                        .get_hand()
+                        .get_hand()
+                    ):
                         cardsStr.append(card.__str__())
-                    
+
                     return await self.send(
                         json.dumps({"command": "show-dealt-cards", "cards": cardsStr})
                     )
@@ -502,15 +506,17 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         else:
                             # also need to eliminate player on backend in addition to lose popup
                             # send eliminated player information
-                            eliminated_player = self.game_processor_instance.get_current_player().__str__()
+                            eliminated_player = (
+                                self.game_processor_instance.get_current_player().__str__()
+                            )
                             self.game_processor_instance.end_turn()
-                            
+
                             return await self.sendToGame(
                                 {
                                     "command": "eliminate",
                                     "eliminated": eliminated_player,
                                     "current_char_turn": self.game_processor_instance.get_current_player().__str__(),
-                                    "actions": self.game_processor_instance.get_valid_actions()
+                                    "actions": self.game_processor_instance.get_valid_actions(),
                                 }
                             )
 
@@ -519,13 +525,15 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 case "suggestion":
                     suspect = command[1]
                     weapon = command[2]
+                    room = command[3]
 
                     if suspect == "undefined" or weapon == "undefined":
                         await self.send(json.dumps({"command": "invalid-action"}))
                     else:
-                        room = (
-                            self.game_processor_instance.get_current_player().get_current_location()
+                        self.game_processor_instance.handle_move(
+                            self.game_processor_instance.get_current_player(), room
                         )
+
                         disprover, disproveCards = (
                             self.game_processor_instance.handle_suggestion(
                                 self.game_processor_instance.get_current_player(),
@@ -534,19 +542,45 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                 room,
                             )
                         )
+                        print("disproveCards: ", disproveCards)
+                        for el in disproveCards:
+                            print("disproveCards: ", el)
+                        if disprover is not None:
+                            print("disprover: ", disprover.get_character())
 
-                        # TODO: cannot-disprove popup, unhide for other players
-                        # this is incorrect: need to send this json data to the disprove player, not current player
-                        # but also the cannot-disprove info to other players
-                        await self.send(
-                            json.dumps(
-                                {
-                                    "command": "disprove-select",
-                                    "disprover": disprover.__str__(),
-                                    "disproveCards": disproveCards,
-                                }
+                        cannotDisprovePlayers = []
+                        for player in self.game_processor_instance.get_turn_order():
+                            if player != self.your_character:
+                                if player == disprover.get_character():
+                                    break
+                                cannotDisprovePlayers.append(player)
+
+                        if self.your_character in cannotDisprovePlayers:
+                            await self.send(
+                                json.dumps({"command": "cannot-disprove"})
                             )
+
+                        # await self.send(json.dumps({"command": "waiting-for-disprove"}))
+
+                        # let disprover select disprove card
+                        # if self.your_character == disprover.get_character():
+                        
+                        await self.sendToGame(
+                                # json.dumps(
+                        
+                            {
+                                "command": "disprove-select",
+                                "disprover": disprover.get_character(),
+                                "disproveCards": disproveCards,
+                                "suggester": self.your_character,
+                                "cannotDisprovePlayers": cannotDisprovePlayers
+                            }
+                                # )
                         )
+                        # else:
+                        #     # cannot-disprove popup, unhide for intervening players only
+
+                        # return
 
                         # now get valid actions
                         actions_list = self.game_processor_instance.get_valid_actions()
@@ -554,7 +588,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             json.dumps(
                                 {
                                     "command": "show-valid-actions",
-                                    "actions": actions_list.__str__(),  # TODO: need to implement toString for Actions
+                                    "actions": actions_list.__str__(),
                                 }
                             )
                         )
@@ -562,10 +596,18 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 case "disproveReceived":
                     disprover = command[1]
                     disproveCard = command[2]
-                    # TODO: handle disprove simultaneously showing cannot-disprove to relevant users and disprove-select
-                    self.game_processor_instance.handle_disprove(
-                        disprover, disproveCard
-                    )  # TODO: need to implement this method
+
+                    print("GOT HERE IN DISPROVERECEIVED")
+
+                    await self.send(
+                         json.dumps(
+                            {
+                                "command": "disproveSend",
+                                "disprover": disprover,
+                                "disproveCard": disproveCard
+                            }
+                        )
+                    )
 
                     self.game_processor_instance.end_turn()
                     # need to broadcast to all the cannot-disprove players and send command to unhide cannot-disprove
@@ -627,8 +669,12 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
                 case "endTurn":
                     try:
-                        start = self.game_processor_instance.get_current_player().get_current_location().__str__()
-                        
+                        start = (
+                            self.game_processor_instance.get_current_player()
+                            .get_current_location()
+                            .__str__()
+                        )
+
                         """
                         if command[1] != self.game_processor_instance.get_current_player().get_current_location().__str__():
                             # played moved; check if it's valid
@@ -649,13 +695,15 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                     )
                                 )
                                 """
-                        
+
                         if start != command[1] and command[2] == "0":
                             # player moved and its valid
                             turn_order = self.game_processor_instance._turn_order
                             char_obj = turn_order.get_player_object(self.your_character)
-                            self.game_processor_instance.handle_move(char_obj, command[1])
-                            
+                            self.game_processor_instance.handle_move(
+                                char_obj, command[1]
+                            )
+
                         self.game_processor_instance.end_turn()
 
                         # TODO: broadcast this to next player's client
@@ -673,7 +721,9 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     except Exception as e:
                         print(f"End Turn error message: {e.with_traceback()}")
                         await self.send(
-                            json.dumps({"status": "error", "message": "Bad end turn request."})
+                            json.dumps(
+                                {"status": "error", "message": "Bad end turn request."}
+                            )
                         )
 
                 # unknown case

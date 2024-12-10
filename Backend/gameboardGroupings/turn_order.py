@@ -97,8 +97,27 @@ class TurnOrder:
         Updates the `current` pointer to the next node in the list.
         """
         if self._current:
-            self._current = self._current.next
-            self.reset_player_turn()
+            for node in self.get_node():
+                if node.player == self._current.player:
+                    continue
+                if node.player.get_active():
+                    self._current = node
+                    self.reset_player_turn()
+                    break
+    
+    def get_node(self) -> Iterator[Player] | None:
+        if not self._head:
+            return None
+
+        current = self._current
+        first_iteration = True
+
+        while None is not current and (first_iteration or current != self._current):
+            yield current  # Yield the player at the current node
+            current = current.next
+            first_iteration = False  # After the first iteration, we set this to False
+        
+        return 
 
     def reverse_order(self):
         """
@@ -145,7 +164,6 @@ class TurnOrder:
         for player in players:
             self.add_player(player)
 
-
     def get_turn_order(self, getAll: bool = False) -> List[Player]:
         """
         Get a list of players in the current turn order.
@@ -158,15 +176,6 @@ class TurnOrder:
         for current_player in self:
             if current_player.get_active() or getAll:
                 players.append(current_player)
-            
-        # current = self._head
-        # while current != self._tail or len(players) == 0:  # Ensure full cycle
-        #     if current.player.get_active():
-        #     print(f"character {current.player.get_character()} is Active ", current.player.get_active())
-        #     players.append(current.player)
-        #     current = current.next
-        # players.append(self._tail.player)  # Add the tail player to the list
-
         return players
 
     # get active players including eliminated players
@@ -181,14 +190,9 @@ class TurnOrder:
     def get_active_not_eliminated_players(self) -> List[Player]:
 
         activate_players = []
-        print("xxx")
-        print(f"turn order is {len(self.get_turn_order())}")
         for player in self.get_turn_order():
-            print("yy")
             if not player.is_eliminated() and player.get_active():
-                print("aa")
                 activate_players.append(player)
-                print("zz")
 
         return activate_players
 
@@ -197,7 +201,6 @@ class TurnOrder:
 
     def get_size(self) -> int:
         return self._size
-
 
     def in_turn_order(self, player_id: int) -> bool:
         pass
@@ -213,10 +216,10 @@ class TurnOrder:
         if not self._head:
             return None
 
-        current = self._head
+        current = self._current
         first_iteration = True
 
-        while None is not current and (first_iteration or current != self._head):
+        while None is not current and (first_iteration or current != self._current):
             yield current.player  # Yield the player at the current node
             current = current.next
             first_iteration = False  # After the first iteration, we set this to False
@@ -249,9 +252,7 @@ class TurnOrder:
     def get_player_object(self, aCharacter: str):
         playerObj: Player = None
         turn_order = self.get_turn_order(True)
-        print(f"length of turnorder get_player_object ", len(turn_order))
         for player in turn_order:
-            print(f"length of turnorder get_player_object ", len(turn_order))
             if player.get_character() == aCharacter:
                 playerObj = player
                 break

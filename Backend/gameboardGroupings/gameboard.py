@@ -116,19 +116,18 @@ class GameBoard:
         """gets the space object associated with space name"""
         return self._spaces
 
-    def get_space_by_name(self, space_name: str) -> Space:
-        print(f"this is the actual space_name being passed in {space_name}\n\n")
-        print(self._spaces.keys())
-        for item in self._spaces.keys():
-            if item == space_name:
-                print("***********")
-        return self._spaces[space_name]
+    def get_space_by_name(self, space_name: str) -> Space | None:
+        for item in self._spaces.values():
+            itemStr : str = item.get_name()
+            if itemStr == space_name:
+                return self._spaces[space_name]
+        return None
     
     def get_space_by_enum_value(self, space_name: str) -> Space:
         for room in ValidRooms:
             if space_name == room.value:
                 return self._spaces[space_name]
-            #
+        return None
 
     def set_starting_positions(self):
         """sets the starting positions of"""
@@ -156,5 +155,4 @@ class GameBoard:
     
     def get_starting_position(self, character_name: str) -> Space:
         """returns the starting space location of the character"""
-        print(f"these are the keys {self._start_positions.keys()}")
         return self._start_positions[character_name]

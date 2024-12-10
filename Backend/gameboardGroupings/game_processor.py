@@ -132,10 +132,11 @@ class GameProcessor:
         self._main_deck.shuffle()
         while not self._main_deck.is_empty():
             for player in self._turn_order:
-                card = self._main_deck.deal()
-                if card is None:
-                    break
-                player.receive_card_dealt(card)
+                if player.get_active():
+                    card = self._main_deck.deal()
+                    if card is None:
+                        break
+                    player.receive_card_dealt(card)
 
     def add_player(self, player_name: str, player_id: int):
         """Add a new player to the game."""
@@ -148,12 +149,9 @@ class GameProcessor:
             )
 
         # Create new player
-        print(f"player_name: {player_name}")
         playerObj = self._turn_order.get_player_object(player_name)
-        print(f"player object: {playerObj}")
         playerObj.set_player_id(player_id)
         playerObj.set_active()
-        print(f"player_lobby_count {self._player_lobby_count}")
         self._player_lobby_count += 1
 
     def remove_player(self, player_id: int):
@@ -223,7 +221,7 @@ class GameProcessor:
             
     def handle_suggestion(
         self, player: Player, aSuspect: str, aWeapon: str, aRoom: str
-    ) -> Optional[tuple[Player, Hand]]:
+    ) -> Optional[tuple[Player, list[str]]]:
         """Handle a suggestion from a player."""
         current_turn = self._turn_order.get_current_turn()
         if not current_turn:
@@ -275,12 +273,9 @@ class GameProcessor:
     def get_valid_moves(self, player: Player) -> List[Space]:
         """Get valid moves for a player."""
         valid_moves = []
-        print("before player equality check line 275 gameprocessor")
         if player == self._turn_order.get_current_turn():
-            print("after equality check")
             valid_moves = player.get_valid_moves()
 
-        print("length of valid moves", len(valid_moves))
         return valid_moves
 
     def handle_move(self, player: Player, atargetSpace: str) -> bool:
@@ -290,8 +285,6 @@ class GameProcessor:
         if player != current_player:
             return False
         target_space = self._game_board.get_space_by_name(atargetSpace)
-        print("player", player.get_character())
-        print("target_space", target_space.__str__())
         if None is not target_space and target_space not in self.get_valid_moves(player):
             return False
 

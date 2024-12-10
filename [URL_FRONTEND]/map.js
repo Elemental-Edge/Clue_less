@@ -401,6 +401,7 @@ const initializeDjangoChannels = (ws_url) => {
 					$("#teaser-text").attr("char", data.character);
 					$("#waiting-to-start").removeClass("hide");
 					your_character = data.character
+					$('#character_name').text(getCircleByKey(your_character).name);
 				}
 				else if (your_character == false) {
 					// you haven't picked your character and
@@ -435,15 +436,35 @@ const initializeDjangoChannels = (ws_url) => {
 				$("#cl-cannot-disprove-wrapper").removeClass('hide');
 				return;
 
+			case "waiting-for-disprove":
+				$("#cl-waiting-for-disrpove-wrapper").removeClass('hide');
+				return;
+
 			case "disprove-select":
+				alert("IN DISPROVE-SELECT CASE")
+				$("#cl-waiting-for-disprove-wrapper").addClass('hide');
 				$("#cl-suggestion-wrapper").addClass('hide');
-				// unhide possible disprove cards
-				if (selected_character == data.disprover) { // TODO: make sure selected_character is a String of current character formatted
-					for (card in data.disproveCards) {
-						$('#disprove_' + card).removeClass('hide');
+				if (data.disprover == your_character) {
+					for (i = 0; i < data.disproveCards.length; i++) {
+						element = data.disproveCards[i]
+						$("#disprove_" + element).removeClass('hide');
 					}
 					$("#cl-disprove-wrapper").removeClass('hide');
 				}
+
+				else if (your_character in data.cannotDisprovePlayers) {
+					$("#cl-cannot-disprove-wrapper").removeClass('hide');
+				}
+
+				else {
+					$("#cl-waiting-for-disprove-wrapper").removeClass('hide');
+				}
+				return;
+			
+			case "disproveSend":
+				$(".disprover-provided").text(data.disprover);
+				$(".disprove-evidence").text(data.disproveCard);
+				$("#cl-disproven-wrapper").removeClass("hide");
 				return;
 
 			case "eliminate":
@@ -566,38 +587,6 @@ const initializeDjangoChannels = (ws_url) => {
 				}
 				return;
 
-
-            case "makeAccusation":
-                $('#cl-actions-wrapper').addClass('hide');
-                // unhide accusation popup
-                $("#cl-accusation-wrapper").removeClass('hide');
-                return;
-
-            case "makeSuggestion":
-				suggestion_this_turn = true;
-
-                $('#cl-actions-wrapper').addClass('hide');
-                // unhide suggestion popup
-                $("#cl-suggestion-wrapper").removeClass('hide');
-                // const tokenToMove = $('input[name="token_to_move"]:checked').val(); // jQuery selector for checked radio button
-                // const locationToMove = $('input[name="move_to_where"]:checked').val(); // jQuery selector for checked radio button
-                // moveCircleToRoom(getCircleByKey(tokenToMove), getRoomByKey(locationToMove));
-                // $(".cl-move-token-to-room-wrapper").addClass("hide");
-                return;
-
-            // case "show-valid-moves":
-            //     $('#cl-actions-wrapper').addClass('hide');
-            //     for (elem in data.possibleDestinations) {
-            //         $('#move_' + elem).removeClass('hide');
-            //     }
-			// 	$('#cl-move-player-wrapper').removeClass('hide');
-
-            //     $("#cl-move-token-wrapper").removeClass('hide');
-			// 	$('#disallow-map-interact').removeClass('hide');
-			// 	$('#allow-map-interact').addClass('hide');
-			// 	your_turn = true;
-			// 	return;
-
             case "win":
 				$(".popup-wrapper").addClass("hide");
 				if (data.winner == your_character) {
@@ -704,8 +693,9 @@ $("form").on("submit", function(e) {
     }
 
     // make suggestion
-    if ($(this).attr("id") == "suggestion-formn") {
-        sendMessageToBackend(socket, `suggestion ${$("#suggestion-who:checked").val()} ${$("#suggestion_with:checked").val()}`);
+    if ($(this).attr("id") == "suggestion-form") {
+		current_location = circles[getYourCharacterId()].current_place
+        sendMessageToBackend(socket, `suggestion ${$("#suggestion_who:checked").val()} ${$("#suggestion_with:checked").val()} ${current_location}`);
         return;
     }
 
@@ -723,7 +713,8 @@ $("form").on("submit", function(e) {
     }
 
     if ($(this).attr("id") == "disprove-form") {
-        sendMessageToBackend(socket, `disproveReceived ${$("#evidence:checked").val()}`);
+		alert("GOT HERE IN DISPROVE-FORM")
+        sendMessageToBackend(socket, `disproveReceived ${your_character} ${(".disprove:checked").val()}`);
         return;
     }
 

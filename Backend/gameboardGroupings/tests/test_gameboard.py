@@ -16,7 +16,7 @@ class GameboardTest(unittest.TestCase):
     def test_get_space_by_name(self):
         """Tests the look up functionality of the spaces"""
         space_billiards = self._game_board.get_space_by_name(ValidRooms.BILLIARDS.value)
-        self.assertEqual(space_billiards._name, ValidRooms.BILLIARDS)
+        self.assertEqual(space_billiards._name, ValidRooms.BILLIARDS.value)
 
     def test_get_space_by_name_invalid(self):
         """Tests the look up functionality of the spaces"""
