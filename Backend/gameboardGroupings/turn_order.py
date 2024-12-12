@@ -216,10 +216,10 @@ class TurnOrder:
         if not self._head:
             return None
 
-        current = self._current
+        current = self._current.next
         first_iteration = True
 
-        while None is not current and (first_iteration or current != self._current):
+        while None is not current and (first_iteration or current != self._current.next):
             yield current.player  # Yield the player at the current node
             current = current.next
             first_iteration = False  # After the first iteration, we set this to False

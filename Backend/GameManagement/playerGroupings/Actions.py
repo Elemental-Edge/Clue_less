@@ -93,8 +93,8 @@ class Suggestion(Actions):
             print(f"player {player.get_character()} ")
             if None is player:
                 break
-            if first_run and player == self.get_player():
-                continue
+            # if first_run and player == self.get_player():
+            #     continue
             first_run = False
             if player.is_eliminated():
                 continue
@@ -145,6 +145,23 @@ class Move(Actions):
         if not retVal:
             return False
         self.get_player().get_player_turn().set_hasMoved()
+        return True
+    
+    def makeMoveSuggestedPlayer(self, aPlayer: "Player", aDest: Space) -> bool:
+        if None is aDest:
+            raise ValueError("Empty Destination Object Case File")
+
+        current_player = aPlayer
+
+        # have player select a move
+        selected_destination = aDest
+
+        if selected_destination.get_space_type() == SpaceType.ROOM:
+            current_player.get_player_turn().set_hasEnteredRoom()
+
+        retVal = current_player.set_current_location(selected_destination)
+        if not retVal:
+            return False
         return True
 
     def __str__(self):

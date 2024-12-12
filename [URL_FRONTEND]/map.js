@@ -122,15 +122,15 @@ const circles = [
 ];
 
 const rooms = [
-	{ key: "study", name: "study", secret_passage: "kitchen", l: -0.9256756756756757, t: 0.8999999999999999, r: -0.3824324324324324, b: 0.4203703703703703},
-	{ key: "hall", name: "hall", l: -0.28648648648648645, t: 0.8999999999999999, r: 0.31486486486486487, b: 0.4203703703703703},
-	{ key: "lounge", name: "lounge", secret_passage: "conservatory", l: 0.4094594594594594, t: 0.8999999999999999, r: 0.9270270270270271, b: 0.4203703703703703},
-	{ key: "library", name: "library", l: -0.9256756756756757, t: 0.2796296296296297, r: -0.3824324324324324, b: -0.2129629629629629},
-	{ key: "billiards", name: "billiard", l: -0.28648648648648645, t: 0.2796296296296297, r: 0.31486486486486487, b: -0.2129629629629629},
-	{ key: "dining", name: "dining", l: 0.4094594594594594, t: 0.2796296296296297, r: 0.9270270270270271, b: -0.2129629629629629},
-	{ key: "conservatory", name: "conservatory", secret_passage: "lounge", l: -0.9256756756756757, t: -0.36296296296296293, r: -0.3824324324324324, b: -0.9037037037037037},
-	{ key: "ballroom", name: "ballroom", l: -0.28648648648648645, t: -0.36296296296296293, r: 0.31486486486486487, b: -0.9037037037037037},
-	{ key: "kitchen", name: "kitchen", secret_passage: "study", l: 0.4094594594594594, t: -0.36296296296296293, r: 0.9270270270270271, b: -0.9037037037037037}
+	{ key: "study", name: "Study", secret_passage: "kitchen", l: -0.9256756756756757, t: 0.8999999999999999, r: -0.3824324324324324, b: 0.4203703703703703},
+	{ key: "hall", name: "Hall", l: -0.28648648648648645, t: 0.8999999999999999, r: 0.31486486486486487, b: 0.4203703703703703},
+	{ key: "lounge", name: "Lounge", secret_passage: "conservatory", l: 0.4094594594594594, t: 0.8999999999999999, r: 0.9270270270270271, b: 0.4203703703703703},
+	{ key: "library", name: "Library", l: -0.9256756756756757, t: 0.2796296296296297, r: -0.3824324324324324, b: -0.2129629629629629},
+	{ key: "billiards", name: "Billiard's Room", l: -0.28648648648648645, t: 0.2796296296296297, r: 0.31486486486486487, b: -0.2129629629629629},
+	{ key: "dining", name: "Dining", l: 0.4094594594594594, t: 0.2796296296296297, r: 0.9270270270270271, b: -0.2129629629629629},
+	{ key: "conservatory", name: "Conservatory", secret_passage: "lounge", l: -0.9256756756756757, t: -0.36296296296296293, r: -0.3824324324324324, b: -0.9037037037037037},
+	{ key: "ballroom", name: "Ballroom", l: -0.28648648648648645, t: -0.36296296296296293, r: 0.31486486486486487, b: -0.9037037037037037},
+	{ key: "kitchen", name: "Kitchen", secret_passage: "study", l: 0.4094594594594594, t: -0.36296296296296293, r: 0.9270270270270271, b: -0.9037037037037037}
 ];
 
 const hallways = [
@@ -298,7 +298,7 @@ canvas.addEventListener('mouseup', (e) => {
 				if (y-circles[draggingCircle].radius < r.b) { yy = r.b + circles[draggingCircle].radius; } // bottom
 				if (x-circles[draggingCircle].radius < r.l) { xx = r.l + circles[draggingCircle].radius * board_aspect_ratio; } // left
 				circles[draggingCircle].center = [xx, yy];
-				circles[draggingCircle].current_place = r.name;
+				circles[draggingCircle].current_place = r.key;
 			}
 			
 			if (canMakeSuggestion() && your_turn) {
@@ -326,7 +326,7 @@ canvas.addEventListener('mouseup', (e) => {
 			else {
 				// valid move; center token
 				circles[draggingCircle].center = [r.x, r.y];
-				circles[draggingCircle].current_place = r.name;
+				circles[draggingCircle].current_place = r.key;
 			}
 
 			// end
@@ -432,40 +432,157 @@ const initializeDjangoChannels = (ws_url) => {
 
 				return;
 
-			case "cannot-disprove":
-				$("#cl-cannot-disprove-wrapper").removeClass('hide');
-				return;
-
-			case "waiting-for-disprove":
-				$("#cl-waiting-for-disrpove-wrapper").removeClass('hide');
+			case "disprove-failure":
+				$("#cl-suggestion-wrapper").addClass('hide');
+				notifyHtml(
+					`Noone could disprove ${getCircleNameFromKey(data.suggester)}!`,
+					`${getCircleNameFromKey(data.suggester)} has proposed that ${getCircleNameFromKey(data.suspect)}<br />`
+					+ `killed Mr. Boddy with the ${getCircleNameFromKey(data.weapon)} in the ${getRoomNameFromKey(data.room)}.<br />`
+					+ `Noone can prove this theory wrong!`
+				);
 				return;
 
 			case "disprove-select":
-				alert("IN DISPROVE-SELECT CASE")
 				$("#cl-waiting-for-disprove-wrapper").addClass('hide');
 				$("#cl-suggestion-wrapper").addClass('hide');
+
+				// move everything to this room on the gameboard
+				room = getRoomByKey(data.room);
+				if (data.suggester != your_character) {
+					moveCircleToRoom(getCircleByKey(data.suggester), room);
+				}
+				moveCircleToRoom(getCircleByKey(data.weapon), room);
+				moveCircleToRoom(getCircleByKey(data.suspect), room);
+
 				if (data.disprover == your_character) {
+					// you are disproving
+					$(".disprove_wrapper").addClass("hide");
 					for (i = 0; i < data.disproveCards.length; i++) {
 						element = data.disproveCards[i]
-						$("#disprove_" + element).removeClass('hide');
+						$(`.disprove_${element}_wrapper`).removeClass('hide');
 					}
+
+					if (data.cannotDisprovePlayers.length > 1) {
+						// build list of other detectives that failed to prove disprover wrong
+						detectives = [];
+						for(let i = 0; i < data.cannotDisprovePlayers.length; i++) {
+							detectives.push(getCircleNameFromKey(data.cannotDisprovePlayers[i]));
+						}
+
+						$("#disprove-text").html(
+							`Each of the following detectives failed to prove ${getCircleNameFromKey(data.suggester)}<br />`
+							+ `wrong: ` + detectives.join(", ") + "."
+						);
+
+						$("#disprove-text").removeClas("hide");
+					}
+					else {
+						$("#disprove-text").addClass("hide");
+					}
+
+					$("#disprove-suggester").val(data.suggester);
 					$("#cl-disprove-wrapper").removeClass('hide');
 				}
 
+				else if (data.suggestor == your_character) {
+					// you are the suggestor
+					$("#waiting-for-disprove-title").text("Disproven!!");
+					$("#waiting-for-disprove-text").html(
+						`${getCircleNameFromKey(data.disprover)} can prove you wrong.<br />`
+						+ `He/she is currently selecting his cards to prove you wrong.<br />`
+					);
+
+					if (data.cannotDisprovePlayers.length > 1) {
+						// build list of other detectives that failed to prove disprover wrong
+						detectives = [];
+						for(let i = 0; i < data.cannotDisprovePlayers.length; i++) {
+							detectives.push(getCircleNameFromKey(data.cannotDisprovePlayers[i]));
+						}
+
+						$("#waiting-for-disprove-text").html(
+							$("#waiting-for-disprove-text").html()
+							+ `</br />Additionally, each of the following detectives failed`
+							+ `to prove you wrong: ` + detectives.join(", ") + "."
+						);
+					}
+
+					$("#cl-waiting-for-disprove-wrapper").removeClass('hide');
+				}
+
 				else if (your_character in data.cannotDisprovePlayers) {
-					$("#cl-cannot-disprove-wrapper").removeClass('hide');
+					// passed because they couldn't disprove
+					$("#waiting-for-disprove-title").text("You cannot disprove!");
+					$("#waiting-for-disprove-text").html(
+						`Detective, ${getCardNameByKey(data.suggestor)} has proposed that<br />` 
+						+ `${getCircleNameFromKey(data.suspect)} killed Mr. Boddy with the ${getCircleNameFromKey(data.weapon)}<br />`
+						+ `in the ${getRoomByKey(data.room).name}.  You could not prove him/her wrong.<br />`
+						+ `But ${getCircleNameFromKey(data.disprover)} could prove him/her wrong.<br />`
+					);
+
+					if (data.cannotDisprovePlayers.length > 1) {
+
+						// build list of other detectives that failed to prove disprover wrong
+						detectives = [];
+						for(let i = 0; i < data.cannotDisprovePlayers.length; i++) {
+							if (data.cannotDisprovePlayers[i] != your_character) {
+								detectives.push(getCircleNameFromKey(data.cannotDisprovePlayers[i]));
+							}
+						}
+
+						$("#waiting-for-disprove-text").html(
+							$("#waiting-for-disprove-text").html()
+							+ `</br />Additionally, each of the following detectives failed`
+							+ `to prove him/her wrong: ` + detectives.join(", ") + "."
+						);
+					}
+
+					$("#cl-waiting-for-disprove-wrapper").removeClass('hide');
 				}
 
 				else {
+					// were not involved in disprove
+					$("#waiting-for-disprove-title").text(`${getCircleNameFromKey(data.disprover)} disproved ${getCircleNameFromKey(data.suggester)}`);
+					$("#waiting-for-disprove-text").html(
+						`Detective, ${getCardNameByKey(data.suggestor)} has proposed that<br />` 
+						+ `${getCircleNameFromKey(data.suspect)} killed Mr. Boddy with the ${getCircleNameFromKey(data.weapon)}<br />`
+						+ `in the ${getRoomByKey(data.room).name}.  ${getCircleNameFromKey(data.disprover)} proved him/her wrong.<br />`
+						+ `You were never given the opprotunity to prove him/her wrong.<br />`
+					);
+
+					if (data.cannotDisprovePlayers.length > 1) {
+
+						// build list of detectives that failed to prove disprover wrong
+						detectives = [];
+						for(let i = 0; i < data.cannotDisprovePlayers.length; i++) {
+							detectives.push(getCircleNameFromKey(data.cannotDisprovePlayers[i]));
+						}
+
+						$("#waiting-for-disprove-text").html(
+							$("#waiting-for-disprove-text").html()
+							+ `</br />Each of the following detectives failed`
+							+ `to prove him/her wrong: ` + detectives.join(", ") + "."
+						);
+					}
+
 					$("#cl-waiting-for-disprove-wrapper").removeClass('hide');
 				}
 				return;
 			
 			case "disproveSend":
-				$(".disprover-provided").text(data.disprover);
-				$(".disprove-evidence").text(data.disproveCard);
-				$("#cl-disproven-wrapper").removeClass("hide");
-				return;
+				if (your_character == data.suggester) {
+					// you turn just ended
+					$(".disprover-provided").text(getCircleNameFromKey(data.disprover));
+					$(".disprove-evidence").text(getCardNameByKey(data.disproveCard));
+					$("#cl-disproven-wrapper").removeClass("hide");
+				}
+				else if (your_character == data.disprover) {
+					// you were the disprover
+					$("#cl-disprove-wrapper").addClass("hide");
+				}
+
+				// check for current turn
+				return processEndTurnReceived(data);
+
 
 			case "eliminate":
 				your_turn = your_character == data.current_char_turn;
@@ -499,24 +616,7 @@ const initializeDjangoChannels = (ws_url) => {
 				return;
 
 			case "end-turn":
-				your_turn = your_character == data.current_char_turn;
-				// someone else was wrong
-
-				if (your_turn) {
-					// it's your turn
-					$("#someone-elses-turn").addClass("hide");
-					$("#your-turn-menu").removeClass("hide");
-					processActions(data.actions);
-					notify(`Your Turn`, `Detective, take your turn.`);
-					starting_place = circles[getYourCharacterId()].current_place;
-				}
-				else {
-					// not your turn
-					$(".players-turn-inner").text(getCircleByKey(data.current_char_turn).name);
-					$("#someone-elses-turn").removeClass("hide");
-					$("#your-turn-menu").addClass("hide");
-				}
-				return;
+				return processEndTurnReceived(data);
 
 
 			case "game-in-progress":
@@ -713,8 +813,7 @@ $("form").on("submit", function(e) {
     }
 
     if ($(this).attr("id") == "disprove-form") {
-		alert("GOT HERE IN DISPROVE-FORM")
-        sendMessageToBackend(socket, `disproveReceived ${your_character} ${(".disprove:checked").val()}`);
+        sendMessageToBackend(socket, `disproveReceived ${$("#disprove-suggester").val()} ${$(".disprove:checked").val()}`);
         return;
     }
 
@@ -885,6 +984,23 @@ function endTurn() {
 	sendMessageToBackend(socket, `endTurn ${circles[getYourCharacterId()].current_place} ${s}`);
 }
 
+function getCardNameByKey(key) {
+	circle = getCircleByKey(key);
+	if (circle) {
+		return circle.name;
+	}
+	room = getRoomByKey(key);
+	if (room) {
+		return room.name;
+	}
+	return false;
+}
+
+function getCircleNameFromKey(key) {
+	c = getCircleByKey(key);
+	return c.name;
+}
+
 function getCircleByKey(key) {
 	for (let i = 0; i < circles.length; i++) {
 		if (key == circles[i].key) {
@@ -893,6 +1009,7 @@ function getCircleByKey(key) {
 	}
 	return null;
 }
+
 
 function getHallwayByCoords(x, y) {
 	for (let i = 0; i < hallways.length; i++) {
@@ -945,6 +1062,17 @@ function getRoomByKey(key) {
 	return null;
 }
 
+function getRoomFromCharKey(key) {
+	character = getCircleByKey(key);
+	cur_location = character.current_place;
+	return getRoomByKey(cur_location);
+}
+
+function getRoomNameFromKey(key) {
+	c = getRoomByKey(key);
+	return c.name;
+}
+
 function getYourCharacterId() {
 	for(let i = 0; i < circles.length; i++) {
 		if (circles[i].key == your_character && circles[i].type == "character") {
@@ -972,6 +1100,12 @@ function notify(title, message) {
 	$('#cl-notification-wrapper').removeClass('hide');
 }
 
+function notifyHtml(title, message) {
+	$('#notification-title').text(title);
+	$('#notification-message').html(message);
+	$('#cl-notification-wrapper').removeClass('hide');
+}
+
 function processActions(actions) {
 	for (i=0; i < actions.length; i++) {
 		if (actions[i] == "move") {
@@ -986,8 +1120,36 @@ function processActions(actions) {
 	}
 }
 
+function processEndTurnReceived(data) {
+	your_turn = your_character == data.current_char_turn;
+	
+	if (your_turn) {
+		// it's your turn
+		$("#someone-elses-turn").addClass("hide");
+		$("#your-turn-menu").removeClass("hide");
+		processActions(data.actions);
+		notify(`Your Turn`, `Detective, take your turn.`);
+		starting_place = circles[getYourCharacterId()].current_place;
+	}
+	else {
+		// not your turn
+		$(".players-turn-inner").text(getCircleByKey(data.current_char_turn).name);
+		$("#someone-elses-turn").removeClass("hide");
+		$("#your-turn-menu").addClass("hide");
+		moveCircleToRoom(getCircleByKey(last_turn), room);
+	}
+	return;
+}
+
 function resetGame() {
 	// TODO RESET GAME
+}
+
+function triggerSuggestionPopup() {
+	room = getRoomFromCharKey(your_character);
+
+	$("#suggestion_room").text(room.name);
+	$('#cl-suggestion-wrapper').removeClass('hide'); 
 }
 
 

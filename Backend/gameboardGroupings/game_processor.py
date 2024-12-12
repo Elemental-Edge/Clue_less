@@ -291,7 +291,13 @@ class GameProcessor:
         move = Move(self._turn_order)
         # Check if Accusation was correct
         return None is not move and move.makeMove(target_space)
-
+    
+    def handle_move_other(self, player: Player, atargetSpace: str) -> bool:
+        """Move a player to a new space."""
+        target_space = self._game_board.get_space_by_name(atargetSpace)
+        move = Move(self._turn_order)
+        # Check if Accusation was correct
+        return None is not move and move.makeMoveSuggestedPlayer(player, target_space)
 
     def get_game_winner(self) -> Player:
         return self._winner

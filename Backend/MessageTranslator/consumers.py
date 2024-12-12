@@ -534,6 +534,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             self.game_processor_instance.get_current_player(), room
                         )
 
+                        print(suspect)
+                        
+                        suspect_obj = self.game_processor_instance._turn_order.get_player_object(suspect)
+                        self.game_processor_instance.handle_move_other(suspect_obj, room)
+
                         disprover, disproveCards = (
                             self.game_processor_instance.handle_suggestion(
                                 self.game_processor_instance.get_current_player(),
@@ -542,47 +547,51 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                                 room,
                             )
                         )
-                        print("disproveCards: ", disproveCards)
-                        for el in disproveCards:
-                            print("disproveCards: ", el)
-                        if disprover is not None:
-                            print("disprover: ", disprover.get_character())
 
-                        cannotDisprovePlayers = []
-                        for player in self.game_processor_instance.get_turn_order():
-                            if player != self.your_character:
-                                if player == disprover.get_character():
-                                    break
-                                cannotDisprovePlayers.append(player)
-
-                        if self.your_character in cannotDisprovePlayers:
-                            await self.send(
-                                json.dumps({"command": "cannot-disprove"})
+                        if (len(disproveCards) == 0 or disprover is None or disprover.get_character() == self.your_character):
+                            # no one could prove you wrong
+                            await self.sendToGame(
+                                {
+                                    "command": "disprove-failure",
+                                    "suggester": self.your_character,
+                                    "last_turn": self.your_character,
+                                    "suspect": suspect,
+                                    "weapon": weapon,
+                                    "room": room
+                                }
                             )
+                        else:                
+                            cannotDisprovePlayers = []
+                            for player in self.game_processor_instance.get_turn_order():
+                                if player != self.your_character:
+                                    if player == disprover.get_character():
+                                        break
+                                    cannotDisprovePlayers.append(player)
 
-                        # await self.send(json.dumps({"command": "waiting-for-disprove"}))
+                            if self.your_character in cannotDisprovePlayers:
+                                await self.send(
+                                    json.dumps({"command": "cannot-disprove"})
+                                )
 
-                        # let disprover select disprove card
-                        # if self.your_character == disprover.get_character():
-                        
-                        await self.sendToGame(
-                                # json.dumps(
-                        
-                            {
-                                "command": "disprove-select",
-                                "disprover": disprover.get_character(),
-                                "disproveCards": disproveCards,
-                                "suggester": self.your_character,
-                                "cannotDisprovePlayers": cannotDisprovePlayers
-                            }
-                                # )
-                        )
-                        # else:
-                        #     # cannot-disprove popup, unhide for intervening players only
+                            # await self.send(json.dumps({"command": "waiting-for-disprove"}))
 
-                        # return
-
-                        # now get valid actions
+                            # let disprover select disprove card
+                            # if self.your_character == disprover.get_character():
+                            
+                            await self.sendToGame(
+                                {
+                                    "command": "disprove-select",
+                                    "disprover": disprover.get_character(),
+                                    "disproveCards": disproveCards,
+                                    "suggester": self.your_character,
+                                    "last_turn": self.your_character,
+                                    "cannotDisprovePlayers": cannotDisprovePlayers,
+                                    "suspect": suspect,
+                                    "weapon": weapon,
+                                    "room": room
+                                }
+                            )
+ 
                         actions_list = self.game_processor_instance.get_valid_actions()
                         return await self.send(
                             json.dumps(
@@ -594,30 +603,25 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                         )
 
                 case "disproveReceived":
-                    disprover = command[1]
+                    suggester = command[1]
                     disproveCard = command[2]
 
-                    print("GOT HERE IN DISPROVERECEIVED")
+                    self.game_processor_instance.end_turn()
 
-                    await self.send(
-                         json.dumps(
-                            {
-                                "command": "disproveSend",
-                                "disprover": disprover,
-                                "disproveCard": disproveCard
-                            }
-                        )
+                    actions_list = self.game_processor_instance.get_valid_actions()
+                    next_turn = self.game_processor_instance.get_current_player().__str__()
+
+                    return await self.sendToGame(
+                        {
+                            "command": "disproveSend",
+                            "suggester": suggester,
+                            "disprover": self.your_character,
+                            "disproveCard": disproveCard,
+                            "current_char_turn": next_turn,
+                            "actions": actions_list,
+                        }
                     )
 
-                    self.game_processor_instance.end_turn()
-                    # need to broadcast to all the cannot-disprove players and send command to unhide cannot-disprove
-                    """
-                    return await self.send(json.dumps({
-                        "command": "cannot-disprove"
-                    }))
-                    """
-
-                    return
 
                 case "validMoves":  # show valid moves
                     possibleSpaces = (
@@ -675,27 +679,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             .__str__()
                         )
 
-                        """
-                        if command[1] != self.game_processor_instance.get_current_player().get_current_location().__str__():
-                            # played moved; check if it's valid
-                            
-                            validMoves = self.game_processor_instance.get_current_player().get_valid_moves()
-                            is_valid = False
-                            for c in validMoves:
-                                if c.__str__() == command[1]:
-                                    is_valid = True
-                            if not is_valid:
-                                # invalid move
-                                return await self.send(
-                                    json.dumps(
-                                        {
-                                            "command": "reject-move-and-end-turn",
-                                            "location": start,  # TODO: need to implement toString for Actions
-                                        }
-                                    )
-                                )
-                                """
-
                         if start != command[1] and command[2] == "0":
                             # player moved and its valid
                             turn_order = self.game_processor_instance._turn_order
@@ -705,19 +688,20 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                             )
 
                         self.game_processor_instance.end_turn()
-
-                        # TODO: broadcast this to next player's client
                         actions_list = self.game_processor_instance.get_valid_actions()
+                        next_turn = self.game_processor_instance.get_current_player().__str__()
 
-                        return await self.send(
-                            json.dumps(
-                                {
-                                    "command": "end-turn",
-                                    "current_char_turn": self.game_processor_instance.get_current_player().__str__(),
-                                    "actions": actions_list.__str__(),  # TODO: need to implement toString for Actions
-                                }
-                            )
+                        return await self.sendToGame(
+                            {
+                                "command": "endTurn",
+                                "current_room": command[1],
+                                "last_turn": self.your_character,
+                                "current_char_turn": next_turn,
+                                "actions": actions_list,
+                            }
                         )
+                
+
                     except Exception as e:
                         print(f"End Turn error message: {e.with_traceback()}")
                         await self.send(
